@@ -9,4 +9,4 @@ placeholder1.markdown(TEXT1_LANDING_PAGE)
 placeholder2.image(image="dashboard.png")
 placeholder3.markdown(TEXT2_LANDING_PAGE)
 
-st.sidebar.image(image="logo_sbic_round.png")
+st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
