@@ -6,5 +6,7 @@ placeholder2 = st.empty()
 placeholder3 = st.empty()
 
 placeholder1.markdown(TEXT1_LANDING_PAGE)
-placeholder2.image("dashboard.png")
+placeholder2.image(image="dashboard.png")
 placeholder3.markdown(TEXT2_LANDING_PAGE)
+
+st.sidebar.image(image="logo_sbic_round.png")
