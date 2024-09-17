@@ -1,4 +1,0 @@
-numpy
-SQLAlchemy
-mysql-connector-python
-git+https://github.com/bettingiscool/st-paywall_fork.git@main
