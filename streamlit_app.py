@@ -17,15 +17,16 @@ from config import SPORTS, PERIODS, BOOKS, TEXT1_LANDING_PAGE, TEXT2_LANDING_PAG
 # TODO import @pyckio picks (complete database)
 # TODO private github repo (streamlit teams)
 
+if 'display_landing_page_text' not in st.session_state:
+    # Display landing page (pre login)
+    placeholder1 = st.empty()
+    placeholder2 = st.empty()
+    placeholder3 = st.empty()
 
-# Display landing page (pre login)
-placeholder1 = st.empty()
-placeholder2 = st.empty()
-placeholder3 = st.empty()
-
-placeholder1.markdown(TEXT1_LANDING_PAGE)
-placeholder2.image(image="dashboard.png", use_column_width=True)
-placeholder3.markdown(TEXT2_LANDING_PAGE)
+    placeholder1.markdown(TEXT1_LANDING_PAGE)
+    placeholder2.image(image="dashboard.png", use_column_width=True)
+    placeholder3.markdown(TEXT2_LANDING_PAGE)
+    st.session_state.display_landing_page_text = True
 
 # Fetch all active users from database
 users = set(db.get_users())
