@@ -41,6 +41,10 @@ users = set(db.get_users())
 from st_paywall import add_auth
 add_auth(required=True)
 
+placeholder1.empty()
+placeholder2.empty()
+placeholder3.empty()
+
 # Check if username is in database, otherwise append the user
 username = st.session_state.email
 if username not in users:
