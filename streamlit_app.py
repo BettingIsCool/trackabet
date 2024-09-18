@@ -1,8 +1,13 @@
+import streamlit as st
+# set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
+st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
+
 import tools
 import datetime
 import pandas as pd
-import streamlit as st
+
 import db_pinnacle_remote as db
+
 
 from config import SPORTS, PERIODS, BOOKS, TEXT1_LANDING_PAGE, TEXT2_LANDING_PAGE
 
@@ -11,7 +16,6 @@ from config import SPORTS, PERIODS, BOOKS, TEXT1_LANDING_PAGE, TEXT2_LANDING_PAG
 # TODO filter for graded/ungraded bets
 # TODO import @pyckio picks (complete database)
 
-st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
 
 # Display landing page (pre login)
 placeholder1 = st.empty()
@@ -31,6 +35,7 @@ users = set(db.get_users())
 # The original st_paywall just looks into the stripe account for ANY valid subscription for that particular user, but doesn't care if this subscription is actually valid for a specific app.
 # See also https://github.com/tylerjrichards/st-paywall/issues/75
 # Importing this fork can be done with 'git+https://github.com/bettingiscool/st-paywall_fork.git@main' in the requirements.txt file
+
 from st_paywall import add_auth
 add_auth(required=True)
 
