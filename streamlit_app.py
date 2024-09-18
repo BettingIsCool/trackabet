@@ -5,9 +5,7 @@ st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", 
 import tools
 import datetime
 import pandas as pd
-
 import db_pinnacle_remote as db
-
 
 from config import SPORTS, PERIODS, BOOKS, TEXT1_LANDING_PAGE, TEXT2_LANDING_PAGE
 
@@ -17,11 +15,12 @@ from config import SPORTS, PERIODS, BOOKS, TEXT1_LANDING_PAGE, TEXT2_LANDING_PAG
 # TODO import @pyckio picks (complete database)
 # TODO private github repo (streamlit teams)
 
+placeholder1 = st.empty()
+placeholder2 = st.empty()
+placeholder3 = st.empty()
+
 if 'display_landing_page_text' not in st.session_state:
     # Display landing page (pre login)
-    placeholder1 = st.empty()
-    placeholder2 = st.empty()
-    placeholder3 = st.empty()
 
     placeholder1.markdown(TEXT1_LANDING_PAGE)
     placeholder2.image(image="dashboard.png", use_column_width=True)
