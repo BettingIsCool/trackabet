@@ -5,6 +5,7 @@ from config import TABLE_LEAGUES, TABLE_FIXTURES, TABLE_ODDS, TABLE_RESULTS, TAB
 
 conn = st.connection('pinnacle', type='sql')
 
+
 @st.cache_data(ttl=10)
 def get_leagues(sport_id: int):
     """
