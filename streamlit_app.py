@@ -5,7 +5,7 @@
 # TODO streamlit-extras lib
 # TODO check database indexes
 # TODO st.title, header, subheader
-# TODO move dasboard filters to top right (also dekete button)
+# TODO move dashboard filters to top right (also dekete button)
 # TODO add support for amaerican odds
 # TODO support for different time zones (save settings in database, also save dec/american)
 # TODO track-a-ber by bettingiscool + version number (itslic) upper/lower sidebar
@@ -34,7 +34,7 @@ if 'display_landing_page_text' not in st.session_state:
     placeholder3.markdown(TEXT2_LANDING_PAGE)
 
     # Fetch all active users from database
-    users = set(db.get_users())
+    st.session_state.users = set(db.get_users())
 
     st.session_state.display_landing_page_text = True
 
@@ -54,9 +54,9 @@ placeholder3.empty()
 
 # Check if username is in database, otherwise append the user
 username = st.session_state.email
-if username not in users:
+if username not in st.session_state.users:
     db.append_user(data={'username': username})
-    users.add(username)
+    st.session_state.users.add(username)
 
 # Initialize bets_to_be_deleted & dataframe
 bets_to_be_deleted, df = set(), set()
