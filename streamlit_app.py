@@ -1,3 +1,16 @@
+# TODO explain header columns (either as a legend or as a tooltip)
+# TODO filter for graded/ungraded bets
+# TODO import @pyckio picks (complete database) + compare if results match
+# TODO private github repo (streamlit teams)
+# TODO streamlit-extras lib
+# TODO check database indexes
+# TODO st.title, header, subheader
+# TODO move dasboard filters to top right (also dekete button)
+# TODO add support for amaerican odds
+# TODO support for different time zones (save settings in database, also save dec/american)
+# TODO track-a-ber by bettingiscool + version number (itslic) upper/lower sidebar
+# TODO default date filter = today
+
 import streamlit as st
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
 st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
@@ -9,26 +22,21 @@ import db_pinnacle_remote as db
 
 from config import SPORTS, PERIODS, BOOKS, TEXT1_LANDING_PAGE, TEXT2_LANDING_PAGE
 
-# TODO explain header columns (either as a legend or as a tooltip)
-# TODO script runs top-to-bottom on EVERY user interaction, exlude unnecessary tasks (i.e. get_users(), display landing_page_text, etc.)
-# TODO filter for graded/ungraded bets
-# TODO import @pyckio picks (complete database)
-# TODO private github repo (streamlit teams)
-
 placeholder1 = st.empty()
 placeholder2 = st.empty()
 placeholder3 = st.empty()
 
 if 'display_landing_page_text' not in st.session_state:
-    # Display landing page (pre login)
 
+    # Display landing page (pre login)
     placeholder1.markdown(TEXT1_LANDING_PAGE)
     placeholder2.image(image="dashboard.png", use_column_width=True)
     placeholder3.markdown(TEXT2_LANDING_PAGE)
-    st.session_state.display_landing_page_text = True
 
-# Fetch all active users from database
-users = set(db.get_users())
+    # Fetch all active users from database
+    users = set(db.get_users())
+
+    st.session_state.display_landing_page_text = True
 
 # Add google authentication (only users with a valid stripe subscription can log in
 # Username must match the registered email-address at stripe
@@ -200,7 +208,7 @@ selected_sports = f"({','.join(selected_sports)})"
 
 if selected_sports != '()':
     user_unique_bookmakers = db.get_user_unique_bookmakers(username=username, sports=selected_sports)
-    selected_bookmakers = st.sidebar.multiselect(label='Bookmakers', options=sorted(user_unique_bookmakers), default=user_unique_bookmakers)
+    selected_bookmakers = st.multiselect(label='Bookmakers', options=sorted(user_unique_bookmakers), default=user_unique_bookmakers)
     selected_bookmakers = [f"'{s}'" for s in selected_bookmakers]
     selected_bookmakers = f"({','.join(selected_bookmakers)})"
 
