@@ -110,16 +110,16 @@ def get_user_unique_bet_status(username: str, sports: str, bookmakers: str, tags
 
 
 @st.cache_data(ttl=10)
-def get_user_unique_starts(username: str, sports: str, bookmakers: str, tags: str, status: str):
+def get_user_unique_starts(username: str, sports: str, bookmakers: str, tags: str, bet_status: str):
     """
     :param username: User's name for which unique starts are to be retrieved
     :param sports: Comma separated string of sport names
     :param bookmakers: Comma separated string of bookmaker names
     :param tags: Comma separated string of tags
-    :param status: Comma separated string of bet statuses
+    :param bet_status: Comma separated string of bet statuses
     :return: List of distinct starts associated with the given user and filters
     """
-    return conn.query(f"SELECT DISTINCT(starts) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags} AND bet_status IN {status}", ttl=600)['starts'].tolist()
+    return conn.query(f"SELECT DISTINCT(starts) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags} AND bet_status IN {bet_status}", ttl=600)['starts'].tolist()
 
 
 def append_user(data: dict):
