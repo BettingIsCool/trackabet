@@ -218,7 +218,7 @@ if selected_sports != '()':
         if selected_tags != '()':
             user_unique_bet_status = db.get_user_unique_bet_status(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags)
             with col4:
-                selected_bet_status = st.multiselect(label='Tags', options=sorted(user_unique_bet_status), default=user_unique_bet_status)
+                selected_bet_status = st.multiselect(label='Status', options=sorted(user_unique_bet_status), default=user_unique_bet_status)
             selected_bet_status = [f"'{s}'" for s in selected_bet_status]
             selected_bet_status = f"({','.join(selected_bet_status)})"
 
@@ -227,9 +227,9 @@ if selected_sports != '()':
 
                 if user_unique_starts is not None:
                     with col5:
-                        selected_date_from = st.date_input(label='Select start date', value=min(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the start date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
+                        selected_date_from = st.date_input(label='Start', value=min(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the start date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
                     with col6:
-                        selected_date_to = st.date_input(label='Select end date', value=max(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the end date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
+                        selected_date_to = st.date_input(label='End', value=max(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the end date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
 
                     bets = db.get_bets(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, date_from=selected_date_from, date_to=selected_date_to)
                     bets_df = pd.DataFrame(data=bets)
