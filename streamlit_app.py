@@ -208,7 +208,7 @@ with col1:
 
 user_unique_sports = db.get_user_unique_sports(username=username)
 with col3:
-    selected_sports = st.multiselect(options=sorted(user_unique_sports), default=user_unique_sports, placeholder='Select a sport')
+    selected_sports = st.multiselect(label="", options=sorted(user_unique_sports), default=user_unique_sports, placeholder='Select a sport')
 selected_sports = [f"'{s}'" for s in selected_sports]
 selected_sports = f"({','.join(selected_sports)})"
 
