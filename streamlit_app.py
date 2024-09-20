@@ -10,6 +10,9 @@
 # TODO support for different time zones (save settings in database, also save dec/american)
 # TODO track-a-ber by bettingiscool + version number (itslic) upper/lower sidebar
 # TODO default date filter = today
+# TODO dataframe order by starts DESC, graph ORDER BY starts ASC
+# TODO image not showing on landing page
+# TODO introduce luck factor/rating/comment
 
 import streamlit as st
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
@@ -65,7 +68,7 @@ bets_to_be_deleted, df = set(), set()
 st.sidebar.title(f"Welcome {username}")
 
 # Adding a bet
-st.sidebar.write('Add a bet')
+st.sidebar.subheader('Add a bet')
 
 # User needs to select sport & date range before fixtures are being fetched from the database
 selected_sport = st.sidebar.selectbox(label='Select sport', options=SPORTS.keys(), index=None, placeholder='Start typing...', help='41 unique sports supported.')
@@ -197,24 +200,29 @@ if selected_sport is not None:
                                                 st.cache_data.clear()
 
 
+col1, col2, col3, col4 = st.columns(4)
+
 # Apply filter to recorded bets
-st.sidebar.write('Apply filters to your bets')
-st.button('Refresh Table', on_click=tools.refresh_table)
+with col1:
+    st.button('Refresh Table', on_click=tools.refresh_table)
 
 user_unique_sports = db.get_user_unique_sports(username=username)
-selected_sports = st.sidebar.multiselect(label='Sports', options=sorted(user_unique_sports), default=user_unique_sports)
+with col2:
+    selected_sports = st.multiselect(label='Sports', options=sorted(user_unique_sports), default=user_unique_sports)
 selected_sports = [f"'{s}'" for s in selected_sports]
 selected_sports = f"({','.join(selected_sports)})"
 
 if selected_sports != '()':
     user_unique_bookmakers = db.get_user_unique_bookmakers(username=username, sports=selected_sports)
-    selected_bookmakers = st.multiselect(label='Bookmakers', options=sorted(user_unique_bookmakers), default=user_unique_bookmakers)
+    with col3:
+        selected_bookmakers = st.multiselect(label='Bookmakers', options=sorted(user_unique_bookmakers), default=user_unique_bookmakers)
     selected_bookmakers = [f"'{s}'" for s in selected_bookmakers]
     selected_bookmakers = f"({','.join(selected_bookmakers)})"
 
     if selected_bookmakers != '()':
         user_unique_tags = db.get_user_unique_tags(username=username, sports=selected_sports, bookmakers=selected_bookmakers)
-        selected_tags = st.sidebar.multiselect(label='Tags', options=sorted(user_unique_tags), default=user_unique_tags)
+        with col4:
+            selected_tags = st.multiselect(label='Tags', options=sorted(user_unique_tags), default=user_unique_tags)
         selected_tags = [f"'{s}'" for s in selected_tags]
         selected_tags = f"({','.join(selected_tags)})"
 
