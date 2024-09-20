@@ -192,11 +192,11 @@ if selected_sport is not None:
                                                 db.append_bet(data=data)
                                                 st.cache_data.clear()
 
-col1, col2, col3, col4, col5 = st.columns([1, 1, 6, 6, 6])
+col1, col2, col3, col4, col5 = st.columns([1, 1, 5, 5, 5])
 
 # Apply filter to recorded bets
 with col1:
-    st.button('Refresh Table', on_click=tools.refresh_table)
+    st.button('Refresh', on_click=tools.refresh_table)
 
 user_unique_sports = db.get_user_unique_sports(username=username)
 with col3:
@@ -238,7 +238,7 @@ if selected_sports != '()':
 
 if bets_to_be_deleted:
     with col2:
-        st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
+        st.button('Delete', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
 if len(df) > 0:
 
