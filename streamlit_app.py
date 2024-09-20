@@ -233,7 +233,7 @@ if selected_sports != '()':
 
                 bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
 
-col4 = st.columns(1)
+col4, col5 = st.columns(2)
 
 with col4:
     st.button('Refresh', on_click=tools.refresh_table)
