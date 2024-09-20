@@ -106,7 +106,7 @@ def get_user_unique_bet_status(username: str, sports: str, bookmakers: str, tags
     :param tags: The tags that categorize the bets for which the status is being requested.
     :return: A list of unique bet statuses for the given user, filtered by sports, bookmakers, and tags.
     """
-    return conn.query(f"SELECT DISTINCT(bet_status) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags}", ttl=600)['tag'].tolist()
+    return conn.query(f"SELECT DISTINCT(bet_status) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags}", ttl=600)['bet_status'].tolist()
 
 
 @st.cache_data(ttl=10)
