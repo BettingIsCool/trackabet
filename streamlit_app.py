@@ -23,22 +23,17 @@ import datetime
 import pandas as pd
 import db_pinnacle_remote as db
 
-from config import SPORTS, PERIODS, BOOKS, TEXT1_LANDING_PAGE, TEXT2_LANDING_PAGE
+from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
 placeholder1 = st.empty()
-placeholder2 = st.empty()
-placeholder3 = st.empty()
 
 if 'display_landing_page_text' not in st.session_state:
 
     # Display landing page (pre login)
-    placeholder1.markdown(TEXT1_LANDING_PAGE)
-    placeholder2.image(image="dashboard.png", use_column_width=True)
-    placeholder3.markdown(TEXT2_LANDING_PAGE)
+    placeholder1.markdown(TEXT_LANDING_PAGE)
 
     # Fetch all active users from database
     st.session_state.users = set(db.get_users())
-
     st.session_state.display_landing_page_text = True
 
 # Add google authentication (only users with a valid stripe subscription can log in
@@ -52,8 +47,6 @@ from st_paywall import add_auth
 add_auth(required=True)
 
 placeholder1.empty()
-placeholder2.empty()
-placeholder3.empty()
 
 # Check if username is in database, otherwise append the user
 username = st.session_state.email
@@ -199,8 +192,7 @@ if selected_sport is not None:
                                                 db.append_bet(data=data)
                                                 st.cache_data.clear()
 
-
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3, col4, col5 = st.columns(1, 1, 2, 2, 2)
 
 # Apply filter to recorded bets
 with col1:

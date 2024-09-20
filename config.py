@@ -1,6 +1,6 @@
 TABLE_LEAGUES, TABLE_FIXTURES, TABLE_ODDS, TABLE_RESULTS, TABLE_BETS, TABLE_USERS = 'leagues', 'fixtures', 'odds', 'results', 'bets', 'users'
 
-TEXT1_LANDING_PAGE = """
+TEXT_LANDING_PAGE = """
 
 ## **TRACK-A-BET. Track your bets efficiently.**
 
@@ -31,10 +31,6 @@ TEXT1_LANDING_PAGE = """
 👉 Tag your bets and apply it as a filter for future analysis.
 
 👉 Performance graph showing actual vs expected profits.
-
-"""
-
-TEXT2_LANDING_PAGE = """
 
 #### ⚠️ WHAT THIS TOOL CAN NOT DO ⚠️
 It can not track special bets. Hence if you're mainly betting prop markets & exotic derivatives then this tool is not for you.
