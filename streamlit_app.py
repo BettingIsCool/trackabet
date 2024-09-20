@@ -200,28 +200,28 @@ if selected_sport is not None:
                                                 st.cache_data.clear()
 
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 
 # Apply filter to recorded bets
 with col1:
     st.button('Refresh Table', on_click=tools.refresh_table)
 
 user_unique_sports = db.get_user_unique_sports(username=username)
-with col2:
-    selected_sports = st.multiselect(label='Sports', options=sorted(user_unique_sports), default=user_unique_sports)
+with col3:
+    selected_sports = st.multiselect(label=None, options=sorted(user_unique_sports), default=user_unique_sports, placeholder='Select a sport')
 selected_sports = [f"'{s}'" for s in selected_sports]
 selected_sports = f"({','.join(selected_sports)})"
 
 if selected_sports != '()':
     user_unique_bookmakers = db.get_user_unique_bookmakers(username=username, sports=selected_sports)
-    with col3:
+    with col4:
         selected_bookmakers = st.multiselect(label='Bookmakers', options=sorted(user_unique_bookmakers), default=user_unique_bookmakers)
     selected_bookmakers = [f"'{s}'" for s in selected_bookmakers]
     selected_bookmakers = f"({','.join(selected_bookmakers)})"
 
     if selected_bookmakers != '()':
         user_unique_tags = db.get_user_unique_tags(username=username, sports=selected_sports, bookmakers=selected_bookmakers)
-        with col4:
+        with col5:
             selected_tags = st.multiselect(label='Tags', options=sorted(user_unique_tags), default=user_unique_tags)
         selected_tags = [f"'{s}'" for s in selected_tags]
         selected_tags = f"({','.join(selected_tags)})"
@@ -245,7 +245,8 @@ if selected_sports != '()':
                 bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
 
 if bets_to_be_deleted:
-    st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
+    with col2:
+        st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
 if len(df) > 0:
 
