@@ -192,7 +192,7 @@ if selected_sport is not None:
                                                 db.append_bet(data=data)
                                                 st.cache_data.clear()
 
-col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 2, 2])
+col1, col2, col3, col4, col5 = st.columns([1, 1, 4, 4, 4])
 
 # Apply filter to recorded bets
 with col1:
