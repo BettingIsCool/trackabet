@@ -98,15 +98,28 @@ def get_user_unique_tags(username: str, sports: str, bookmakers: str):
 
 
 @st.cache_data(ttl=10)
-def get_user_unique_starts(username: str, sports: str, bookmakers: str, tags: str):
+def get_user_unique_bet_status(username: str, sports: str, bookmakers: str, tags: str):
     """
-    :param username: The username of the user whose unique starts are being queried.
-    :param sports: A comma-separated string of sports to filter the starts.
-    :param bookmakers: A comma-separated string of bookmakers to filter the starts.
-    :param tags: A comma-separated string of tags to filter the starts.
-    :return: A list of unique start times that match the given filters.
+    :param username: The username of the individual for whom the unique bet status is being queried.
+    :param sports: The specific sports that are being considered for the bet status.
+    :param bookmakers: The bookmakers associated with the bets that are being queried.
+    :param tags: The tags that categorize the bets for which the status is being requested.
+    :return: A list of unique bet statuses for the given user, filtered by sports, bookmakers, and tags.
     """
-    return conn.query(f"SELECT DISTINCT(starts) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags}", ttl=600)['starts'].tolist()
+    return conn.query(f"SELECT DISTINCT(bet_status) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags}", ttl=600)['tag'].tolist()
+
+
+@st.cache_data(ttl=10)
+def get_user_unique_starts(username: str, sports: str, bookmakers: str, tags: str, status: str):
+    """
+    :param username: User's name for which unique starts are to be retrieved
+    :param sports: Comma separated string of sport names
+    :param bookmakers: Comma separated string of bookmaker names
+    :param tags: Comma separated string of tags
+    :param status: Comma separated string of bet statuses
+    :return: List of distinct starts associated with the given user and filters
+    """
+    return conn.query(f"SELECT DISTINCT(starts) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags} AND bet_status IN {status}", ttl=600)['starts'].tolist()
 
 
 def append_user(data: dict):

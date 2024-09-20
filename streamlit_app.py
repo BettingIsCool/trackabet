@@ -192,7 +192,7 @@ if selected_sport is not None:
                                                 db.append_bet(data=data)
                                                 st.cache_data.clear()
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4, col5, col6 = st.columns([6, 6, 6, 1, 1, 1])
 
 # Apply filter to recorded bets
 user_unique_sports = db.get_user_unique_sports(username=username)
@@ -216,31 +216,37 @@ if selected_sports != '()':
         selected_tags = f"({','.join(selected_tags)})"
 
         if selected_tags != '()':
-            user_unique_starts = db.get_user_unique_starts(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags)
+            user_unique_bet_status = db.get_user_unique_bet_status(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags)
+            with col4:
+                selected_bet_status = st.multiselect(label='Tags', options=sorted(user_unique_bet_status), default=user_unique_bet_status)
+            selected_bet_status = [f"'{s}'" for s in selected_bet_status]
+            selected_bet_status = f"({','.join(selected_bet_status)})"
 
-            if user_unique_starts is not None:
-                selected_date_from = st.sidebar.date_input(label='Select start date', value=min(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the start date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
-                selected_date_to = st.sidebar.date_input(label='Select end date', value=max(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the end date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
+            if selected_bet_status != '()':
+                user_unique_starts = db.get_user_unique_starts(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, bet_status=selected_bet_status)
 
-                bets = db.get_bets(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, date_from=selected_date_from, date_to=selected_date_to)
-                bets_df = pd.DataFrame(data=bets)
-                bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
-                bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]
+                if user_unique_starts is not None:
+                    with col5:
+                        selected_date_from = st.sidebar.date_input(label='Select start date', value=min(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the start date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
+                    with col6:
+                        selected_date_to = st.sidebar.date_input(label='Select end date', value=max(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the end date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
 
-                # Apply font & background colors to cells, apply number formatting
-                styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{:,.3f}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{:,.3f}'.format, 'CLS_TRUE': '{:,.3f}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
-                df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False)}, disabled=['TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
+                    bets = db.get_bets(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, date_from=selected_date_from, date_to=selected_date_to)
+                    bets_df = pd.DataFrame(data=bets)
+                    bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
+                    bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]
 
-                bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
+                    # Apply font & background colors to cells, apply number formatting
+                    styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{:,.3f}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{:,.3f}'.format, 'CLS_TRUE': '{:,.3f}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
+                    df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False)}, disabled=['TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
 
-col4, col5 = st.columns(2)
+                    bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
 
-with col4:
-    st.button('Refresh', on_click=tools.refresh_table)
-
+# Place Refresh & Delete button below dataframe
+# Delete button will only be visible if at least one event is selected
+st.button('Refresh', on_click=tools.refresh_table)
 if bets_to_be_deleted:
-    with col4:
-        st.button('Delete', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
+    st.button('Delete', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
 if len(df) > 0:
 
