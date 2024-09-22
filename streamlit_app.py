@@ -36,7 +36,8 @@ if 'display_landing_page_text' not in st.session_state:
 
     # Fetch all active users from database
     st.write(db.get_users())
-    st.session_state.users, st.session_state.odds_display, st.session_state.timezone = set(db.get_users())
+    st.session_state.users = set(db.get_users())
+    st.session_state.odds_display, st.session_state.timezone = db.get_user_config(username=st.session_state.email)
     st.session_state.display_landing_page_text = True
 
 

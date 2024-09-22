@@ -41,7 +41,7 @@ def get_users():
     :return: List of usernames retrieved from the database TABLE_USERS.
     :rtype: list
     """
-    return conn.query(f"SELECT username, odds_display, timezone FROM {TABLE_USERS}")['username'].tolist()
+    return conn.query(f"SELECT username FROM {TABLE_USERS}")['username'].tolist()
 
 
 @st.cache_data(ttl=10)
@@ -128,10 +128,10 @@ def append_user(data: dict):
     :param data: Dictionary containing user data with the key 'username'.
     :return: None
     """
-    query = f"INSERT INTO {TABLE_USERS} (username) VALUES(:username)"
+    query = f"INSERT INTO {TABLE_USERS} (username, odds_display, timezone) VALUES(:username, :odds_display, :timezone)"
 
     with conn.session as session:
-        session.execute(text(query), params=dict(username=data['username']))
+        session.execute(text(query), params=dict(username=data['username'], odds_display='Decimal', timezone='Europe/London'))
         session.commit()
 
 
@@ -166,3 +166,11 @@ def update_user_config(username: str, odds_display: str):
     with conn.session as session:
         session.execute(text(query))
         session.commit()
+
+
+@st.cache_data(ttl=10)
+def get_user_config(username: str):
+
+    return conn.query(f"SELECT odds_display, timezone FROM {TABLE_USERS} WHERE username = '{username}'", ttl=600)
+
+
