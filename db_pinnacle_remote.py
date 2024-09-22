@@ -130,7 +130,7 @@ def append_user(data: dict):
     query = f"INSERT INTO {TABLE_USERS} (username) VALUES(:username)"
 
     with conn.session as session:
-        session.execute(text(query), params=dict(username = data['username']))
+        session.execute(text(query), params=dict(username=data['username']))
         session.commit()
 
 
@@ -142,7 +142,7 @@ def append_bet(data: dict):
     query = f"INSERT INTO {TABLE_BETS} (user, tag, starts, sport_id, sport_name, league_id, league_name, event_id, runner_home, runner_away, market, period, period_name, side, side_name, raw_line, line, odds, stake, bookmaker, bet_status, score_home, score_away, profit, cls_odds, true_cls, cls_limit, ev, clv, bet_added) VALUES(:user, :tag, :starts, :sport_id, :sport_name, :league_id, :league_name, :event_id, :runner_home, :runner_away, :market, :period, :period_name, :side, :side_name, :raw_line, :line, :odds, :stake, :bookmaker, :bet_status, :score_home, :score_away, :profit, :cls_odds, :true_cls, :cls_limit, :ev, :clv, :bet_added)"
 
     with conn.session as session:
-        session.execute(text(query), params=dict(user = data['user'], tag = data['tag'], starts = data['starts'], sport_id = data['sport_id'], sport_name = data['sport_name'], league_id = data['league_id'], league_name = data['league_name'], event_id = data['event_id'], runner_home = data['runner_home'], runner_away = data['runner_away'], market = data['market'], period = data['period'], period_name = data['period_name'], side = data['side'], side_name = data['side_name'], raw_line = data['raw_line'], line = data['line'], odds = data['odds'], stake = data['stake'], bookmaker = data['bookmaker'], bet_status = data['bet_status'], score_home = data['score_home'], score_away = data['score_away'], profit = data['profit'], cls_odds = data['cls_odds'], true_cls = data['true_cls'], cls_limit = data['cls_limit'], ev = data['ev'], clv = data['clv'], bet_added = data['bet_added']))
+        session.execute(text(query), params=dict(user=data['user'], tag=data['tag'], starts=data['starts'], sport_id=data['sport_id'], sport_name=data['sport_name'], league_id=data['league_id'], league_name=data['league_name'], event_id=data['event_id'], runner_home=data['runner_home'], runner_away=data['runner_away'], market=data['market'], period=data['period'], period_name=data['period_name'], side=data['side'], side_name=data['side_name'], raw_line=data['raw_line'], line=data['line'], odds=data['odds'], stake=data['stake'], bookmaker=data['bookmaker'], bet_status=data['bet_status'], score_home=data['score_home'], score_away=data['score_away'], profit=data['profit'], cls_odds=data['cls_odds'], true_cls=data['true_cls'], cls_limit=data['cls_limit'], ev=data['ev'], clv=data['clv'], bet_added=data['bet_added']))
         session.commit()
 
 
@@ -156,3 +156,18 @@ def delete_bet(id: int):
     with conn.session as session:
         session.execute(text(query))
         session.commit()
+
+
+#import pytz
+
+#fixtures = get_fixtures(sport_id=29, date_from=datetime(year=2022, month=2, day=2), date_to=datetime(year=2022, month=2, day=2))
+
+#for fixture in fixtures.itertuples():
+#    local = fixture.starts.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(selected_timezone))
+
+
+
+#    print(local, fixture.runner_home, fixture.runner_away)
+
+
+#

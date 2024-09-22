@@ -12,6 +12,7 @@
 # TODO add 'sort rows by clicking on the column header'
 # TODO add average odds
 
+import pytz
 import streamlit as st
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
 st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
@@ -60,7 +61,15 @@ st.sidebar.title(f"Welcome {username}")
 
 # Adding a bet
 odds_display = st.sidebar.radio("Display Odds", ['Decimal', 'American'], index=0)
+selected_timezone = st.sidebar.selectbox(label='Select timezone', options=pytz.common_timezones, index=None)
+
+option = st.selectbox(
+    "How would you like to be contacted?",
+    ("Email", "Home phone", "Mobile phone"),
+)
 st.sidebar.subheader('Add a bet')
+
+local = fixture.starts.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(selected_timezone))
 
 # User needs to select sport & date range before fixtures are being fetched from the database
 selected_sport = st.sidebar.selectbox(label='Select sport', options=SPORTS.keys(), index=None, placeholder='Start typing...', help='41 unique sports supported.')
