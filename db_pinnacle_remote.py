@@ -167,7 +167,6 @@ def update_user_config(username: str, odds_display: str):
         session.commit()
 
 
-@st.cache_data(ttl=10)
 def get_user_odds_display(username: str):
 
-    st.write(conn.query(f"SELECT odds_display FROM {TABLE_USERS} WHERE username = '{username}'", ttl=600)['odds_display'][0])
+    st.write(conn.query(f"SELECT odds_display FROM {TABLE_USERS} WHERE username = '{username}'")['odds_display'][0])
