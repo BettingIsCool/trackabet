@@ -240,7 +240,7 @@ if selected_sports != '()':
                     bets_df = pd.DataFrame(data=bets)
 
                     # Convert datetimes to user timezone
-                    st.write(type(bets_df.starts))
+                    st.write(type(bets_df.starts[0]))
                     #bets_df.starts = bets_df.starts.apply(tools.convert_to_timezone(dt=bets_df.starts, to_timezone=selected_timezone))
                     #bets_df.bet_added = bets_df.bet_added.apply(tools.convert_to_timezone(dt=bets_df.bet_added, to_timezone=selected_timezone))
                     #.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(to_timezone))
