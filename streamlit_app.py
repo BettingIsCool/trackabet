@@ -49,6 +49,7 @@ from st_paywall import add_auth
 add_auth(required=True)
 
 if 'odds_display' not in st.session_state or 'timezone' not in st.session_state:
+    st.write(db.get_user_config(username=st.session_state.email))
     st.session_state.odds_display, st.session_state.timezone = db.get_user_config(username=st.session_state.email)
 
 placeholder1.empty()
