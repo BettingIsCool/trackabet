@@ -68,7 +68,7 @@ st.sidebar.title(f"Welcome {username}")
 # Adding a bet
 odds_display = st.sidebar.radio("Display Odds", ['Decimal', 'American'], index=0)
 if st.session_state.odds_display != odds_display:
-    db_pinnacle_remote.update_user_config(username=username, odds_display=odds_display)
+    db.update_user_config(username=username, odds_display=odds_display)
     st.session_state.odds_display = odds_display
 
 selected_timezone = st.sidebar.selectbox(label='Select timezone', options=pytz.common_timezones, index=None)
