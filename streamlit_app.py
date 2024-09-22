@@ -48,9 +48,6 @@ if 'display_landing_page_text' not in st.session_state:
 from st_paywall import add_auth
 add_auth(required=True)
 
-if 'odds_display' not in st.session_state:
-    st.session_state.odds_display = db.get_user_odds_display(username=st.session_state.email)
-
 placeholder1.empty()
 
 # Check if username is in database, otherwise append the user
@@ -58,6 +55,11 @@ username = st.session_state.email
 if username not in st.session_state.users:
     db.append_user(data={'username': username})
     st.session_state.users.add(username)
+
+# Set odds format
+if 'odds_display' not in st.session_state:
+    st.session_state.odds_display = db.get_user_odds_display(username=st.session_state.email)
+
 
 # Initialize bets_to_be_deleted & dataframe
 bets_to_be_deleted, df = set(), set()
