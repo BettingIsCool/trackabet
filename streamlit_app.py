@@ -38,7 +38,9 @@ if 'display_landing_page_text' not in st.session_state:
     st.session_state.users = set(db.get_users())
     st.session_state.display_landing_page_text = True
 
-    # Get user-specific odds_display
+    st.session_state.odds_display = 'Decimal'
+
+
 
 # Add google authentication (only users with a valid stripe subscription can log in
 # Username must match the registered email-address at stripe
