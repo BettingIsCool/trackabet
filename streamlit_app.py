@@ -69,7 +69,7 @@ option = st.selectbox(
 )
 st.sidebar.subheader('Add a bet')
 
-local = fixture.starts.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(selected_timezone))
+#local = fixture.starts.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(selected_timezone))
 
 # User needs to select sport & date range before fixtures are being fetched from the database
 selected_sport = st.sidebar.selectbox(label='Select sport', options=SPORTS.keys(), index=None, placeholder='Start typing...', help='41 unique sports supported.')
