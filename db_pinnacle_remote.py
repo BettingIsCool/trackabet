@@ -169,4 +169,4 @@ def update_user_config(username: str, odds_display: str):
 
 def get_user_odds_display(username: str):
 
-    st.write(conn.query(f"SELECT odds_display FROM {TABLE_USERS} WHERE username = '{username}'").tolist())
+    st.write(conn.query(f"SELECT odds_display FROM {TABLE_USERS} WHERE username = '{username}'")['odds_display'].tolist())
