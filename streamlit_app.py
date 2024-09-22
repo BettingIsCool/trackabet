@@ -48,9 +48,8 @@ if 'display_landing_page_text' not in st.session_state:
 from st_paywall import add_auth
 add_auth(required=True)
 
-if 'odds_display' not in st.session_state or 'timezone' not in st.session_state:
-    db.get_user_config(username=st.session_state.email)
-    st.session_state.odds_display, st.session_state.timezone = db.get_user_config(username=st.session_state.email)
+if 'odds_display' not in st.session_state:
+    st.session_state.odds_display = db.get_user_odds_display(username=st.session_state.email)
 
 placeholder1.empty()
 
