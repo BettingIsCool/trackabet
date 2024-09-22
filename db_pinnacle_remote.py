@@ -170,4 +170,4 @@ def update_user_config(username: str, odds_display: str):
 @st.cache_data(ttl=10)
 def get_user_config(username: str):
 
-    st.write(conn.query(f"SELECT odds_display, timezone FROM {TABLE_USERS} WHERE username = '{username}'", ttl=600)).to_dict('records')
+    st.write(conn.query(f"SELECT odds_display, timezone FROM {TABLE_USERS} WHERE username = '{username}'", ttl=600)).tolist()
