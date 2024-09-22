@@ -66,7 +66,7 @@ bets_to_be_deleted, df = set(), set()
 st.sidebar.title(f"Welcome {username}")
 
 # Adding a bet
-odds_display = st.sidebar.radio("Display Odds", ['Decimal', 'American'], index=0)
+odds_display = st.sidebar.radio("Display Odds", ['Decimal', 'American'], index=st.session_state.odds_display)
 if st.session_state.odds_display != odds_display:
     db.update_user_config(username=username, odds_display=odds_display)
     st.session_state.odds_display = odds_display
