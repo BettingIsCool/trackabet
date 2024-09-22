@@ -52,7 +52,6 @@ placeholder1.empty()
 # Check if username is in database, otherwise append the user
 if 'users_fetched' not in st.session_state:
     tools.refresh_table()
-    st.write(set(db.get_users()))
     if username not in set(db.get_users()):
         db.append_user(data={'username': username})
     st.session_state.users_fetched = True
@@ -159,7 +158,7 @@ if selected_sport is not None:
                                 selected_line = st.sidebar.selectbox(label='Select line', options=line_options.keys(), index=None, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
 
                             if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
-                                if odds_display == 'American':
+                                if st.session_state.odds_display == 'American':
                                     odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1)
                                 else:
                                     american_odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
@@ -267,7 +266,7 @@ if selected_sports != '()':
                     bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]
 
                     # Apply font & background colors to cells, apply number formatting
-                    if odds_display == 'American':
+                    if st.session_state.odds_display == 'American':
                         bets_df.ODDS = bets_df.ODDS.apply(tools.get_american_odds)
                         bets_df.CLS = bets_df.CLS.apply(tools.get_american_odds)
                         bets_df.CLS_TRUE = bets_df.CLS_TRUE.apply(tools.get_american_odds)
