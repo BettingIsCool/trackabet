@@ -159,7 +159,11 @@ def delete_bet(id: int):
 
 
 def update_user_config(username: str, odds_display: str):
-
+    """
+    :param username: The username of the user whose configuration is to be updated.
+    :param odds_display: The new value for the user's odds display setting.
+    :return: None
+    """
     query = f"UPDATE {TABLE_USERS} SET odds_display = '{odds_display}' WHERE username = '{username}'"
 
     with conn.session as session:
@@ -168,5 +172,16 @@ def update_user_config(username: str, odds_display: str):
 
 
 def get_user_odds_display(username: str):
-
+    """
+    :param username: The username of the user whose odds display is being retrieved.
+    :return: A list of odds displays associated with the given username.
+    """
     return conn.query(f"SELECT odds_display FROM {TABLE_USERS} WHERE username = '{username}'")['odds_display'].tolist()
+
+
+def get_user_timezone(username: str):
+    """
+    :param username: The username of the user whose timezone information is to be retrieved
+    :return: The timezone information of the specified user
+    """
+    return conn.query(f"SELECT timezone FROM {TABLE_USERS} WHERE username = '{username}'")['timezone'].tolist()

@@ -60,6 +60,8 @@ if 'users_fetched' not in st.session_state:
 # Set odds format
 if 'odds_display' not in st.session_state:
     st.session_state.odds_display = db.get_user_odds_display(username=username)[0]
+if 'timezone' not in st.session_state:
+    st.session_state.timezone = db.get_user_timezone(username=username)[0]
 
 # Initialize bets_to_be_deleted & dataframe
 bets_to_be_deleted, df = set(), set()
@@ -68,7 +70,6 @@ bets_to_be_deleted, df = set(), set()
 st.sidebar.title(f"Welcome {username}")
 
 # Create a radio button for Decimal/American odds format
-st.write(st.session_state.odds_display)
 odds_display_options = ['Decimal', 'American']
 odds_display = st.sidebar.radio(label="Odds Format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
 if st.session_state.odds_display != odds_display:
