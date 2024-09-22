@@ -41,7 +41,7 @@ def get_users():
     :return: List of usernames retrieved from the database TABLE_USERS.
     :rtype: list
     """
-    return conn.query(f"SELECT username FROM {TABLE_USERS}")['username'].tolist()
+    return conn.query(f"SELECT username, odds_display, timezone FROM {TABLE_USERS}")['username'].tolist()
 
 
 @st.cache_data(ttl=10)
