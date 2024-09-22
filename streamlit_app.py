@@ -58,8 +58,7 @@ if username not in st.session_state.users:
 
 # Set odds format
 if 'odds_display' not in st.session_state:
-    st.write(username)
-    st.session_state.odds_display = db.get_user_odds_display(username=username)
+    st.session_state.odds_display = db.get_user_odds_display(username=username)[0]
 
 # Initialize bets_to_be_deleted & dataframe
 bets_to_be_deleted, df = set(), set()
