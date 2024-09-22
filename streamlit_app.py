@@ -140,7 +140,8 @@ if selected_sport is not None:
                                 if odds_display == 'American':
                                     odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1)
                                 else:
-                                    odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
+                                    american_odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
+                                    odds = tools.get_decimal_odds(american_odds=american_odds)
 
                                 if odds:
                                     stake = st.sidebar.number_input("Enter stake", min_value=0.01, value=1.00, step=1.00, format="%0.2f")
@@ -235,6 +236,9 @@ if selected_sports != '()':
 
                     bets = db.get_bets(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, date_from=selected_date_from, date_to=selected_date_to)
                     bets_df = pd.DataFrame(data=bets)
+
+                    bets_df.cls_odds = bets_df.cls_odds.apply(tools.get_american_odds)
+
                     bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
                     bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]
 
