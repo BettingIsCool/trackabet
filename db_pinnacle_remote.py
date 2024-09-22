@@ -170,4 +170,4 @@ def update_user_config(username: str, odds_display: str):
 @st.cache_data(ttl=10)
 def get_user_odds_display(username: str):
 
-    return conn.query(f"SELECT odds_display FROM {TABLE_USERS} WHERE username = '{username}'", ttl=600)
+    return conn.query(f"SELECT odds_display FROM {TABLE_USERS} WHERE username = '{username}'", ttl=600)['odds_display'][0]
