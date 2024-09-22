@@ -35,6 +35,7 @@ if 'display_landing_page_text' not in st.session_state:
     placeholder1.markdown(TEXT_LANDING_PAGE)
 
     # Fetch all active users from database
+    st.write(db.get_users())
     st.session_state.users, st.session_state.odds_display, st.session_state.timezone = set(db.get_users())
     st.session_state.display_landing_page_text = True
 
