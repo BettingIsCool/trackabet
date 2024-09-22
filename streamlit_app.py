@@ -138,7 +138,7 @@ if selected_sport is not None:
 
                             if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
                                 if odds_display == 'American':
-                                    odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1, format="%0f")
+                                    odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1)
                                 else:
                                     odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
 
