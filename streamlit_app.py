@@ -240,8 +240,10 @@ if selected_sports != '()':
                     bets_df = pd.DataFrame(data=bets)
 
                     # Convert datetimes to user timezone
-                    bets_df.starts = bets_df.starts.apply(tools.convert_to_timezone(dt=bets_df.starts, to_timezone=selected_timezone))
-                    bets_df.bet_added = bets_df.bet_added.apply(tools.convert_to_timezone(dt=bets_df.bet_added, to_timezone=selected_timezone))
+                    st.write(type(bets_df.starts))
+                    #bets_df.starts = bets_df.starts.apply(tools.convert_to_timezone(dt=bets_df.starts, to_timezone=selected_timezone))
+                    #bets_df.bet_added = bets_df.bet_added.apply(tools.convert_to_timezone(dt=bets_df.bet_added, to_timezone=selected_timezone))
+                    #.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(to_timezone))
 
                     bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
                     bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]

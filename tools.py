@@ -86,8 +86,3 @@ def get_decimal_odds(american_odds: int):
     :rtype: float
     """
     return american_odds / 100 + 1 if american_odds >= 0 else - 100 / american_odds + 1
-
-
-def convert_to_timezone(dt: datetime, to_timezone: str):
-
-    return dt.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(to_timezone))

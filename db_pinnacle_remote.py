@@ -156,18 +156,3 @@ def delete_bet(id: int):
     with conn.session as session:
         session.execute(text(query))
         session.commit()
-
-
-#import pytz
-
-#fixtures = get_fixtures(sport_id=29, date_from=datetime(year=2022, month=2, day=2), date_to=datetime(year=2022, month=2, day=2))
-
-#for fixture in fixtures.itertuples():
-#    local = fixture.starts.replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(selected_timezone))
-
-
-
-#    print(local, fixture.runner_home, fixture.runner_away)
-
-
-#
