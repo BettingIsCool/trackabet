@@ -66,6 +66,7 @@ bets_to_be_deleted, df = set(), set()
 st.sidebar.title(f"Welcome {username}")
 
 # Create a radio button for Decimal/American odds format
+st.write(st.session_state.odds_display)
 odds_display_options = ['Decimal', 'American']
 odds_display = st.sidebar.radio(label="Odds Format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
 if st.session_state.odds_display != odds_display:
