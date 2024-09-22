@@ -1,18 +1,16 @@
 # TODO explain header columns (either as a legend or as a tooltip)
-# TODO filter for graded/ungraded bets
+# TODO check if bet_status filter works for 'na' & 'HL'
 # TODO import @pyckio picks (complete database) + compare if results match
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO check database indexes
-# TODO st.title, header, subheader
-# TODO move dashboard filters to top right (also dekete button)
 # TODO add support for amaerican odds
 # TODO support for different time zones (save settings in database, also save dec/american)
 # TODO track-a-ber by bettingiscool + version number (itslic) upper/lower sidebar
-# TODO default date filter = today
-# TODO dataframe order by starts DESC, graph ORDER BY starts ASC
 # TODO image not showing on landing page
-# TODO introduce luck factor/rating/comment
+# TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
+# TODO add 'sort rows by clicking on the column header'
+# TODO add average odds
 
 import streamlit as st
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
@@ -61,6 +59,7 @@ bets_to_be_deleted, df = set(), set()
 st.sidebar.title(f"Welcome {username}")
 
 # Adding a bet
+odds_display = st.sidebar.radio("Display Odds", ['Decimal', 'American'], index=0)
 st.sidebar.subheader('Add a bet')
 
 # User needs to select sport & date range before fixtures are being fetched from the database
@@ -138,7 +137,10 @@ if selected_sport is not None:
                                 selected_line = st.sidebar.selectbox(label='Select line', options=line_options.keys(), index=None, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
 
                             if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
-                                odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
+                                if odds_display == 'American':
+                                    odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1, format="%0f")
+                                else:
+                                    odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
 
                                 if odds:
                                     stake = st.sidebar.number_input("Enter stake", min_value=0.01, value=1.00, step=1.00, format="%0.2f")
@@ -218,7 +220,7 @@ if selected_sports != '()':
         if selected_tags != '()':
             user_unique_bet_status = db.get_user_unique_bet_status(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags)
             with col4:
-                selected_bet_status = st.multiselect(label='Status', options=sorted(user_unique_bet_status), default=user_unique_bet_status)
+                selected_bet_status = st.multiselect(label='Status', options=sorted(user_unique_bet_status), default=user_unique_bet_status, help='Select the bet status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded')
             selected_bet_status = [f"'{s}'" for s in selected_bet_status]
             selected_bet_status = f"({','.join(selected_bet_status)})"
 
@@ -244,9 +246,9 @@ if selected_sports != '()':
 
 # Place Refresh & Delete button below dataframe
 # Delete button will only be visible if at least one event is selected
-st.button('Refresh', on_click=tools.refresh_table)
+st.button('Refresh dashboard', on_click=tools.refresh_table)
 if bets_to_be_deleted:
-    st.button('Delete', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
+    st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
 if len(df) > 0:
 
