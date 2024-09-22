@@ -51,6 +51,7 @@ placeholder1.empty()
 
 # Check if username is in database, otherwise append the user
 if 'users_fetched' not in st.session_state:
+    tools.refresh_table()
     st.write(set(db.get_users()))
     if username not in set(db.get_users()):
         db.append_user(data={'username': username})
