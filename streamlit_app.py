@@ -14,7 +14,6 @@
 
 
 import streamlit as st
-import db_pinnacle_remote
 
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
 st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
