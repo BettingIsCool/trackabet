@@ -1,6 +1,5 @@
 import streamlit as st
 from sqlalchemy import text
-from sqlalchemy import update
 from datetime import datetime
 from config import TABLE_LEAGUES, TABLE_FIXTURES, TABLE_ODDS, TABLE_RESULTS, TABLE_BETS, TABLE_USERS
 
@@ -172,5 +171,3 @@ def update_user_config(username: str, odds_display: str):
 def get_user_config(username: str):
 
     return conn.query(f"SELECT odds_display, timezone FROM {TABLE_USERS} WHERE username = '{username}'", ttl=600)
-
-

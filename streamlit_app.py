@@ -12,14 +12,14 @@
 # TODO add 'sort rows by clicking on the column header'
 # TODO add average odds
 
-import pytz
-import streamlit as st
 
+import streamlit as st
 import db_pinnacle_remote
 
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
 st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
 
+import pytz
 import tools
 import datetime
 import pandas as pd
@@ -37,7 +37,6 @@ if 'display_landing_page_text' not in st.session_state:
     # Fetch all active users from database
     st.session_state.users = set(db.get_users())
     st.session_state.display_landing_page_text = True
-
 
 
 # Add google authentication (only users with a valid stripe subscription can log in
