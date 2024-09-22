@@ -32,9 +32,6 @@ if 'display_landing_page_text' not in st.session_state:
 
     # Display landing page (pre login)
     placeholder1.markdown(TEXT_LANDING_PAGE)
-
-    # Fetch all active users from database
-    st.session_state.users = set(db.get_users())
     st.session_state.display_landing_page_text = True
 
 
@@ -48,13 +45,15 @@ if 'display_landing_page_text' not in st.session_state:
 from st_paywall import add_auth
 add_auth(required=True)
 
+username = st.session_state.email
+
 placeholder1.empty()
 
 # Check if username is in database, otherwise append the user
-username = st.session_state.email
-if username not in st.session_state.users:
-    db.append_user(data={'username': username})
-    st.session_state.users.add(username)
+if 'users_fetched' not in st.session_state:
+    if username not in set(db.get_users()):
+        db.append_user(data={'username': username})
+    st.session_state.users_fetched = True
 
 # Set odds format
 if 'odds_display' not in st.session_state:
