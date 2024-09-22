@@ -36,6 +36,7 @@ if 'display_landing_page_text' not in st.session_state:
 
     # Fetch all active users from database
     st.session_state.users = set(db.get_users())
+    st.session_state.display_landing_page_text = True
 
 
 
