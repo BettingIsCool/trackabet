@@ -35,10 +35,8 @@ if 'display_landing_page_text' not in st.session_state:
     placeholder1.markdown(TEXT_LANDING_PAGE)
 
     # Fetch all active users from database
-    st.write(db.get_users())
     st.session_state.users = set(db.get_users())
-    st.session_state.odds_display, st.session_state.timezone = db.get_user_config(username=st.session_state.email)
-    st.session_state.display_landing_page_text = True
+
 
 
 # Add google authentication (only users with a valid stripe subscription can log in
@@ -50,6 +48,9 @@ if 'display_landing_page_text' not in st.session_state:
 
 from st_paywall import add_auth
 add_auth(required=True)
+
+if 'odds_display' not in st.session_state or 'timezone' not in st.session_state:
+    st.session_state.odds_display, st.session_state.timezone = db.get_user_config(username=st.session_state.email)
 
 placeholder1.empty()
 
