@@ -71,12 +71,17 @@ st.sidebar.title(f"Welcome {username}")
 
 # Create a radio button for Decimal/American odds format
 odds_display_options = ['Decimal', 'American']
-odds_display = st.sidebar.radio(label="Odds Format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
-if st.session_state.odds_display != odds_display:
-    db.update_user_config(username=username, odds_display=odds_display)
-    st.session_state.odds_display = odds_display
+selected_odds_display = st.sidebar.radio(label="Odds Format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
+if st.session_state.odds_display != selected_odds_display:
+    db.update_user_odds_display(username=username, odds_display=selected_odds_display)
+    st.session_state.odds_display = selected_odds_display
 
-selected_timezone = st.sidebar.selectbox(label='Select timezone', options=pytz.common_timezones, index=None)
+timezone_options = pytz.common_timezones
+selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
+if st.session_state.timezone != selected_timezone:
+    db.update_user_timezone(username=username, timezone=selected_timezone)
+    st.session_state.odds_display = selected_timezone
+
 st.sidebar.subheader('Add a bet')
 
 # User needs to select sport & date range before fixtures are being fetched from the database
