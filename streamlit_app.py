@@ -14,6 +14,9 @@
 
 import pytz
 import streamlit as st
+
+import db_pinnacle_remote
+
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
 st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
 
@@ -34,6 +37,8 @@ if 'display_landing_page_text' not in st.session_state:
     # Fetch all active users from database
     st.session_state.users = set(db.get_users())
     st.session_state.display_landing_page_text = True
+
+    # Get user-specific odds_display
 
 # Add google authentication (only users with a valid stripe subscription can log in
 # Username must match the registered email-address at stripe
@@ -61,6 +66,10 @@ st.sidebar.title(f"Welcome {username}")
 
 # Adding a bet
 odds_display = st.sidebar.radio("Display Odds", ['Decimal', 'American'], index=0)
+if st.session_state.odds_display != odds_display:
+    db_pinnacle_remote.update_user_config(username=username, odds_display=odds_display)
+    st.session_state.odds_display = odds_display
+
 selected_timezone = st.sidebar.selectbox(label='Select timezone', options=pytz.common_timezones, index=None)
 st.sidebar.subheader('Add a bet')
 
@@ -240,12 +249,8 @@ if selected_sports != '()':
                     bets_df = pd.DataFrame(data=bets)
 
                     # Convert datetimes to user timezone
-                    #st.write(type(bets_df.starts[0]))
-
-                    #bets_df.starts = bets_df.starts.apply(tools.convert_to_timezone(dt=bets_df.starts, to_timezone=selected_timezone))
-                    #bets_df.bet_added = bets_df.bet_added.apply(tools.convert_to_timezone(dt=bets_df.bet_added, to_timezone=selected_timezone))
-                    #bets_df.starts = bets_df.starts.to_pydatetime().replace(tzinfo=pytz.timezone('Europe/Vienna')).astimezone(pytz.timezone(selected_timezone))
                     bets_df.starts = bets_df.starts.dt.tz_localize('Europe/Vienna').dt.tz_convert(selected_timezone).dt.tz_localize(None)
+                    bets_df.bet_added = bets_df.bet_added.dt.tz_localize('Europe/Vienna').dt.tz_convert(selected_timezone).dt.tz_localize(None)
 
                     bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
                     bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]

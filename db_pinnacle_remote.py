@@ -1,5 +1,6 @@
 import streamlit as st
 from sqlalchemy import text
+from sqlalchemy import update
 from datetime import datetime
 from config import TABLE_LEAGUES, TABLE_FIXTURES, TABLE_ODDS, TABLE_RESULTS, TABLE_BETS, TABLE_USERS
 
@@ -152,6 +153,15 @@ def delete_bet(id: int):
     :return: None
     """
     query = f"DELETE FROM {TABLE_BETS} WHERE id = {id}"
+
+    with conn.session as session:
+        session.execute(text(query))
+        session.commit()
+
+
+def update_user_config(username: str, odds_display: str):
+
+    query = f"UPDATE {TABLE_USERS} SET odds_display = '{odds_display}' WHERE username = '{username}'"
 
     with conn.session as session:
         session.execute(text(query))
