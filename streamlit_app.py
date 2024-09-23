@@ -1,18 +1,20 @@
 
 
 
-# TODO explain header columns (either as a legend or as a tooltip)
+
 # TODO check if bet_status filter works for 'na' & 'HL'
 # TODO import @pyckio picks (complete database) + compare if results match
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO check database indexes
-# TODO track-a-ber by bettingiscool + version number (itslic) upper/lower sidebar
 # TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
 # TODO add 'sort rows by clicking on the column header'
 # TODO add average odds
+
 # TODO Don't allow writing/searching in timezone selectbox (this could lead to error)
 # TODO doublecheck error when switching decimal/american (maybe multiple tabs open)
+# TODO tooltip for column headers (i.e. streamlit-aggrid)
+
 
 import streamlit as st
 
@@ -67,15 +69,16 @@ if 'timezone' not in st.session_state:
 bets_to_be_deleted, df = set(), set()
 
 # Welcome message in the sidebar
-st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.0.0")
+st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.2.24")
 st.sidebar.title(f"Welcome {username}")
 
 # Create a radio button for Decimal/American odds format
 odds_display_options = ['Decimal', 'American']
-selected_odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
-if st.session_state.odds_display != selected_odds_display:
-    db.update_user_odds_display(username=username, odds_display=selected_odds_display)
-    st.session_state.odds_display = selected_odds_display
+if st.session_state.odds_display in odds_display_options:
+    selected_odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
+    if st.session_state.odds_display != selected_odds_display:
+        db.update_user_odds_display(username=username, odds_display=selected_odds_display)
+        st.session_state.odds_display = selected_odds_display
 
 timezone_options = pytz.common_timezones
 selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
