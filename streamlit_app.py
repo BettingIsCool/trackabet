@@ -25,12 +25,6 @@ import db_pinnacle_remote as db
 
 from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
-
-@st.cache_resource()
-def get_active_session(username):
-    return st.session_state.session_id
-
-
 placeholder1 = st.empty()
 
 if 'display_landing_page_text' not in st.session_state:
@@ -60,21 +54,16 @@ if 'users_fetched' not in st.session_state:
     if username not in set(db.get_users()):
         db.append_user(data={'username': username})
 
-    # experimental
+    # Create session token
     else:
-        st.session_state.user_id = username
         st.session_state.session_id = username + '_' + str(datetime.datetime.now())
-        get_active_session.clear()
-    # experimental - end
+        tools.get_active_session.clear()
 
     st.session_state.users_fetched = True
 
-# experimental
-if st.session_state.session_id == get_active_session(st.session_state.user_id):
-    st.success('You are currently logged in')
-    st.write('Session ID: ', st.session_state.session_id)
-    st.button('Useless button')
-# experimental - end
+# Allow only ONE session per user
+# See https://discuss.streamlit.io/t/right-way-to-manage-same-user-opening-multiple-sessions/25608
+if st.session_state.session_id == tools.get_active_session():
 
     # Set odds format
     if 'odds_display' not in st.session_state:
@@ -332,7 +321,6 @@ if st.session_state.session_id == get_active_session(st.session_state.user_id):
 
         chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "CLV": cum_clv}, columns=["bet_no", "Actual P/L", "CLV"])
         st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "CLV"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
-
 
     st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
 

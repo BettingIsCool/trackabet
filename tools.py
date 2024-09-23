@@ -86,3 +86,11 @@ def get_decimal_odds(american_odds: int):
     :rtype: float
     """
     return american_odds / 100 + 1 if american_odds >= 0 else - 100 / american_odds + 1
+
+
+@st.cache_resource()
+def get_active_session():
+    """
+    :return: The session ID of the active session for the specified user.
+    """
+    return st.session_state.session_id
