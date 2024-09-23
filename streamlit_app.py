@@ -67,6 +67,7 @@ if 'timezone' not in st.session_state:
 bets_to_be_deleted, df = set(), set()
 
 # Welcome message in the sidebar
+st.sidebar.markdown("🖥  Track-A-Bet by BettingIsCool v1.0.0")
 st.sidebar.title(f"Welcome {username}")
 
 # Create a radio button for Decimal/American odds format
@@ -311,5 +312,5 @@ if len(df) > 0:
     chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "CLV": cum_clv}, columns=["bet_no", "Actual P/L", "CLV"])
     st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "CLV"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
 
-st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.0.0")
+
 st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
