@@ -84,8 +84,9 @@ if st.session_state.session_id == tools.get_active_session():
         db.update_user_odds_display(username=username, odds_display=selected_odds_display)
         placeholder1.success('Preferences changed successfully!')
         time.sleep(2)
-        st.session_state.odds_display = selected_odds_display
         tools.clear_cache()
+        st.session_state.odds_display = selected_odds_display
+
 
     timezone_options = pytz.common_timezones
     selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
