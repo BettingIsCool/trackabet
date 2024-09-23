@@ -68,6 +68,8 @@ if st.session_state.session_id == tools.get_active_session():
     if 'timezone' not in st.session_state:
         st.session_state.timezone = db.get_user_timezone(username=username)[0]
 
+    st.write(st.session_state.odds_display)
+
     # Initialize bets_to_be_deleted & dataframe
     bets_to_be_deleted, df = set(), set()
 
