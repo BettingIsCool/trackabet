@@ -44,7 +44,7 @@ username = st.session_state.email
 
 placeholder1.empty()
 
-st.write(placeholder1)
+st.write(type(placeholder1))
 
 # Check if username is in database, otherwise append the user
 if 'users_fetched' not in st.session_state:
