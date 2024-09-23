@@ -67,7 +67,6 @@ if 'users_fetched' not in st.session_state:
         get_active_session.clear()
     # experimental - end
 
-
     st.session_state.users_fetched = True
 
 # experimental
@@ -336,3 +335,8 @@ if st.session_state.session_id == get_active_session(st.session_state.user_id):
 
 
     st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
+
+else:
+    st.info('Your session has expired')
+    for key in st.session_state.keys():
+        del st.session_state[key]
