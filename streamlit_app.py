@@ -5,6 +5,7 @@
 # TODO streamlit-extras lib
 # TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
 # TODO add 'sort rows by clicking on the column header'
+# TODO add explanation for export
 # TODO add average odds
 # TODO tooltip for column headers (i.e. streamlit-aggrid)
 
@@ -73,13 +74,6 @@ if st.session_state.session_id == tools.get_active_session():
     # Welcome message in the sidebar
     st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.3.28")
     st.sidebar.title(f"Welcome {username}")
-
-    # Create a radio button for Decimal/American odds format
-    odds_display_options = ['Decimal', 'American']
-    st.session_state.odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display), horizontal=True, on_change=db.set_user_odds_display, args=(username, placeholder1), key='odds_display_key')
-
-    timezone_options = pytz.common_timezones
-    st.session_state.timezone = st.sidebar.selectbox(label="Select timezone", options=timezone_options, index=timezone_options.index(st.session_state.timezone), on_change=db.set_user_timezone, args=(username, placeholder1), key='timezone_key')
 
     st.sidebar.subheader('Add a bet')
 
@@ -314,6 +308,14 @@ if st.session_state.session_id == tools.get_active_session():
         st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "CLV"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
 
     st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
+
+    # Create a radio button for Decimal/American odds format
+    odds_display_options = ['Decimal', 'American']
+    st.session_state.odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display), horizontal=True, on_change=db.set_user_odds_display, args=(username, placeholder1), key='odds_display_key')
+
+    # Create selectbox for timezone
+    timezone_options = pytz.common_timezones
+    st.session_state.timezone = st.sidebar.selectbox(label="Select timezone", options=timezone_options, index=timezone_options.index(st.session_state.timezone), on_change=db.set_user_timezone, args=(username, placeholder1), key='timezone_key')
 
 else:
     st.info('Your session has expired')
