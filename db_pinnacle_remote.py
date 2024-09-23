@@ -139,7 +139,7 @@ def delete_bet(id: int):
         session.commit()
 
 
-def set_user_odds_display(username: str, placeholder: str):
+def set_user_odds_display(username: str, placeholder: st.delta_generator.DeltaGenerator):
 
     st.session_state.odds_display = st.session_state.odds_display_key
 
