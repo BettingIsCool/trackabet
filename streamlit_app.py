@@ -1,7 +1,4 @@
 
-# TODO limit to ONE session per user, i.e. https://discuss.streamlit.io/t/using-st-cache-resource-to-limit-streamlit-concurrent-users/56545
-
-
 # TODO check if bet_status filter works for 'na' & 'HL'
 # TODO import @pyckio picks (complete database) + compare if results match
 # TODO private github repo (streamlit teams)
@@ -32,7 +29,6 @@ if 'display_landing_page_text' not in st.session_state:
     # Display landing page (pre login)
     placeholder1.markdown(TEXT_LANDING_PAGE)
     st.session_state.display_landing_page_text = True
-
 
 # Add google authentication (only users with a valid stripe subscription can log in
 # Username must match the registered email-address at stripe
@@ -226,7 +222,9 @@ if st.session_state.session_id == tools.get_active_session():
 
                                                 if bet_added:
                                                     db.append_bet(data=data)
+                                                    placeholder1.success('Bet added successfully!')
                                                     st.cache_data.clear()
+                                                    placeholder1.empty()
 
     col1, col2, col3, col4, col5, col6 = st.columns([4, 4, 5, 4, 2, 2])
 
