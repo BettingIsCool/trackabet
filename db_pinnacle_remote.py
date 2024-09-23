@@ -138,7 +138,7 @@ def delete_bet(id: int):
         session.commit()
 
 
-def update_user_odds_display(username: str, odds_display: str):
+def set_user_odds_display(username: str, odds_display: str):
     """
     :param username: The username of the user whose configuration is to be updated.
     :param odds_display: The new value for the user's odds display setting.
@@ -149,6 +149,8 @@ def update_user_odds_display(username: str, odds_display: str):
     with conn.session as session:
         session.execute(text(query))
         session.commit()
+
+    st.session_state.odds_display = st.session_state.odds_display_key
 
 
 def update_user_timezone(username: str, timezone: str):
