@@ -15,7 +15,7 @@ def delete_bets(bets_to_be_deleted: set):
     st.cache_data.clear()
 
 
-def refresh_table():
+def clear_cache():
     """
     Clears the cached data for Streamlit application.
 

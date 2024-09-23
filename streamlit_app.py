@@ -46,7 +46,7 @@ placeholder1.empty()
 
 # Check if username is in database, otherwise append the user
 if 'users_fetched' not in st.session_state:
-    tools.refresh_table()
+    tools.clear_cache()
     if username not in set(db.get_users()):
         db.append_user(data={'username': username})
 
@@ -83,7 +83,9 @@ if st.session_state.session_id == tools.get_active_session():
     if st.session_state.odds_display != selected_odds_display:
         db.update_user_odds_display(username=username, odds_display=selected_odds_display)
         placeholder1.success('Preferences changed successfully!')
+        time.sleep(2)
         st.session_state.odds_display = selected_odds_display
+        tools.clear_cache()
 
     timezone_options = pytz.common_timezones
     selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
@@ -292,7 +294,7 @@ if st.session_state.session_id == tools.get_active_session():
 
     # Place Refresh & Delete button below dataframe
     # Delete button will only be visible if at least one event is selected
-    st.button('Refresh dashboard', on_click=tools.refresh_table)
+    st.button('Refresh dashboard', on_click=tools.clear_cache)
     if bets_to_be_deleted:
         st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
