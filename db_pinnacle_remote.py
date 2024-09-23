@@ -140,7 +140,11 @@ def delete_bet(id: int):
 
 
 def set_user_odds_display(username: str, placeholder: st.delta_generator.DeltaGenerator):
-
+    """
+    :param username: The username of the user whose odds display setting is being updated.
+    :param placeholder: A Streamlit DeltaGenerator object used to display success messages.
+    :return: None
+    """
     st.session_state.odds_display = st.session_state.odds_display_key
 
     query = f"UPDATE {TABLE_USERS} SET odds_display = '{st.session_state.odds_display}' WHERE username = '{username}'"
@@ -154,17 +158,23 @@ def set_user_odds_display(username: str, placeholder: st.delta_generator.DeltaGe
     placeholder.empty()
 
 
-def update_user_timezone(username: str, timezone: str):
+def set_user_timezone(username: str, placeholder: st.delta_generator.DeltaGenerator):
     """
-    :param username: The username of the user whose timezone needs to be updated.
-    :param timezone: The new timezone to be set for the given user.
+    :param username: The username of the user whose timezone is being updated.
+    :param placeholder: A DeltaGenerator instance used for displaying success messages.
     :return: None
     """
+    st.session_state.timezone = st.session_state.timezone_key
+
     query = f"UPDATE {TABLE_USERS} SET timezone = '{timezone}' WHERE username = '{username}'"
 
     with conn.session as session:
         session.execute(text(query))
         session.commit()
+
+    placeholder.success('Timezone changed successfully!')
+    time.sleep(2)
+    placeholder.empty()
 
 
 def get_user_odds_display(username: str):

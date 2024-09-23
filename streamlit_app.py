@@ -64,7 +64,6 @@ if st.session_state.session_id == tools.get_active_session():
     # Set odds format
     if 'odds_display' not in st.session_state:
         st.session_state.odds_display = db.get_user_odds_display(username=username)[0]
-        st.write(st.session_state.odds_display)
     if 'timezone' not in st.session_state:
         st.session_state.timezone = db.get_user_timezone(username=username)[0]
 
@@ -72,7 +71,7 @@ if st.session_state.session_id == tools.get_active_session():
     bets_to_be_deleted, df = set(), set()
 
     # Welcome message in the sidebar
-    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.3.26")
+    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.3.28")
     st.sidebar.title(f"Welcome {username}")
 
     # Create a radio button for Decimal/American odds format
@@ -80,12 +79,7 @@ if st.session_state.session_id == tools.get_active_session():
     st.session_state.odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display), horizontal=True, on_change=db.set_user_odds_display, args=(username, placeholder1), key='odds_display_key')
 
     timezone_options = pytz.common_timezones
-    selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
-    if st.session_state.timezone != selected_timezone:
-        db.update_user_timezone(username=username, timezone=selected_timezone)
-        placeholder1.success('Timezone changed successfully!')
-        time.sleep(2)
-        st.session_state.timezone = selected_timezone
+    st.session_state.timezone = st.sidebar.radio(label="Select timezone", options=timezone_options, index=timezone_options.index(st.session_state.timezone), on_change=db.set_user_timezone, args=(username, placeholder1), key='timezone_key')
 
     st.sidebar.subheader('Add a bet')
 
