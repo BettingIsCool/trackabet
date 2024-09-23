@@ -75,7 +75,7 @@ if st.session_state.session_id == tools.get_active_session():
     bets_to_be_deleted, df = set(), set()
 
     # Welcome message in the sidebar
-    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.2.24")
+    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.3.24")
     st.sidebar.title(f"Welcome {username}")
 
     # Create a radio button for Decimal/American odds format
