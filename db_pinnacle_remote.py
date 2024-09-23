@@ -1,3 +1,4 @@
+import time
 import streamlit as st
 from sqlalchemy import text
 from datetime import datetime
@@ -138,17 +139,7 @@ def delete_bet(id: int):
         session.commit()
 
 
-def set_user_odds_display(username: str, odds_display: str):
-    #"""
-    #:param username: The username of the user whose configuration is to be updated.
-    #:param odds_display: The new value for the user's odds display setting.
-    #:return: None
-    #"""
-    #query = f"UPDATE {TABLE_USERS} SET odds_display = '{odds_display}' WHERE username = '{username}'"
-
-    #with conn.session as session:
-    #    session.execute(text(query))
-    #    session.commit()
+def set_user_odds_display(username: str, placeholder: str):
 
     st.session_state.odds_display = st.session_state.odds_display_key
 
@@ -157,6 +148,10 @@ def set_user_odds_display(username: str, odds_display: str):
     with conn.session as session:
         session.execute(text(query))
         session.commit()
+
+    placeholder.success('Odds format changed successfully!')
+    time.sleep(2)
+    placeholder.empty()
 
 
 def update_user_timezone(username: str, timezone: str):
