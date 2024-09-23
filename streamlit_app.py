@@ -1,17 +1,18 @@
+
+
+
 # TODO explain header columns (either as a legend or as a tooltip)
 # TODO check if bet_status filter works for 'na' & 'HL'
 # TODO import @pyckio picks (complete database) + compare if results match
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO check database indexes
-# TODO add support for amaerican odds
-# TODO support for different time zones (save settings in database, also save dec/american)
 # TODO track-a-ber by bettingiscool + version number (itslic) upper/lower sidebar
-# TODO image not showing on landing page
 # TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
 # TODO add 'sort rows by clicking on the column header'
 # TODO add average odds
-
+# TODO Don't allow writing/searching in timezone selectbox (this could lead to error)
+# TODO doublecheck error when switching decimal/american (maybe multiple tabs open)
 
 import streamlit as st
 
@@ -70,7 +71,7 @@ st.sidebar.title(f"Welcome {username}")
 
 # Create a radio button for Decimal/American odds format
 odds_display_options = ['Decimal', 'American']
-selected_odds_display = st.sidebar.radio(label="Odds Format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
+selected_odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
 if st.session_state.odds_display != selected_odds_display:
     db.update_user_odds_display(username=username, odds_display=selected_odds_display)
     st.session_state.odds_display = selected_odds_display
@@ -310,4 +311,5 @@ if len(df) > 0:
     chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "CLV": cum_clv}, columns=["bet_no", "Actual P/L", "CLV"])
     st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "CLV"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
 
+st.markdown("🖥 Track-A-Bet by BettingIsCool v1.0.0")
 st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
