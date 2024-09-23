@@ -75,11 +75,13 @@ if st.session_state.session_id == tools.get_active_session():
     st.sidebar.title(f"Welcome {username}")
 
     # Create a radio button for Decimal/American odds format
+    st.sidebar.write(st.session_state.odds_display)
     odds_display_options = ['Decimal', 'American']
     selected_odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
     if st.session_state.odds_display != selected_odds_display:
         db.update_user_odds_display(username=username, odds_display=selected_odds_display)
     st.session_state.odds_display = selected_odds_display
+    st.sidebar.write(st.session_state.odds_display)
 
     timezone_options = pytz.common_timezones
     selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
