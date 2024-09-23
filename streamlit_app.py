@@ -3,7 +3,6 @@
 # TODO import @pyckio picks (complete database) + compare if results match
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
-# TODO check database indexes
 # TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
 # TODO add 'sort rows by clicking on the column header'
 # TODO add average odds
@@ -14,6 +13,7 @@ import streamlit as st
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
 st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", layout="wide", initial_sidebar_state="expanded")
 
+import time
 import pytz
 import tools
 import datetime
@@ -71,23 +71,21 @@ if st.session_state.session_id == tools.get_active_session():
     bets_to_be_deleted, df = set(), set()
 
     # Welcome message in the sidebar
-    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.3.24")
+    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.3.26")
     st.sidebar.title(f"Welcome {username}")
 
     # Create a radio button for Decimal/American odds format
     odds_display_options = ['Decimal', 'American']
-    if st.session_state.odds_display in odds_display_options:
-        selected_odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
-        if st.session_state.odds_display != selected_odds_display:
-            db.update_user_odds_display(username=username, odds_display=selected_odds_display)
-            st.session_state.odds_display = selected_odds_display
+    selected_odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display))
+    if st.session_state.odds_display != selected_odds_display:
+        db.update_user_odds_display(username=username, odds_display=selected_odds_display)
+        st.session_state.odds_display = selected_odds_display
 
     timezone_options = pytz.common_timezones
-    if st.session_state.timezone in timezone_options:
-        selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
-        if st.session_state.timezone != selected_timezone:
-            db.update_user_timezone(username=username, timezone=selected_timezone)
-            st.session_state.odds_display = selected_timezone
+    selected_timezone = st.sidebar.selectbox(label='Select timezone', options=timezone_options, index=timezone_options.index(st.session_state.timezone))
+    if st.session_state.timezone != selected_timezone:
+        db.update_user_timezone(username=username, timezone=selected_timezone)
+        st.session_state.timezone = selected_timezone
 
     st.sidebar.subheader('Add a bet')
 
@@ -224,8 +222,7 @@ if st.session_state.session_id == tools.get_active_session():
                                                     db.append_bet(data=data)
                                                     placeholder1.success('Bet added successfully!')
                                                     st.cache_data.clear()
-                                                    import time
-                                                    time.sleep(1)
+                                                    time.sleep(2)
                                                     placeholder1.empty()
 
     col1, col2, col3, col4, col5, col6 = st.columns([4, 4, 5, 4, 2, 2])
@@ -271,8 +268,8 @@ if st.session_state.session_id == tools.get_active_session():
                         bets_df = pd.DataFrame(data=bets)
 
                         # Convert datetimes to user timezone
-                        bets_df.starts = bets_df.starts.dt.tz_localize('Europe/Vienna').dt.tz_convert(selected_timezone).dt.tz_localize(None)
-                        bets_df.bet_added = bets_df.bet_added.dt.tz_localize('Europe/Vienna').dt.tz_convert(selected_timezone).dt.tz_localize(None)
+                        bets_df.starts = bets_df.starts.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
+                        bets_df.bet_added = bets_df.bet_added.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
 
                         bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
                         bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]

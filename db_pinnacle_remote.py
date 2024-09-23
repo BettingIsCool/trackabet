@@ -35,14 +35,6 @@ def get_odds(event_id: int):
     return conn.query(f"SELECT period, market, line, odds1, odds0, odds2 FROM {TABLE_ODDS} WHERE event_id = {event_id}", ttl=600)
 
 
-def get_users():
-    """
-    :return: List of usernames retrieved from the database TABLE_USERS.
-    :rtype: list
-    """
-    return conn.query(f"SELECT username FROM {TABLE_USERS}")['username'].tolist()
-
-
 @st.cache_data(ttl=10)
 def get_bets(username: str, sports: str, bookmakers: str, tags: str, date_from: datetime, date_to: datetime):
     """
@@ -122,18 +114,6 @@ def get_user_unique_starts(username: str, sports: str, bookmakers: str, tags: st
     return conn.query(f"SELECT DISTINCT(starts) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags} AND bet_status IN {bet_status}", ttl=600)['starts'].tolist()
 
 
-def append_user(data: dict):
-    """
-    :param data: Dictionary containing user data with the key 'username'.
-    :return: None
-    """
-    query = f"INSERT INTO {TABLE_USERS} (username, odds_display, timezone) VALUES(:username, :odds_display, :timezone)"
-
-    with conn.session as session:
-        session.execute(text(query), params=dict(username=data['username'], odds_display='Decimal', timezone='Europe/London'))
-        session.commit()
-
-
 def append_bet(data: dict):
     """
     :param data: A dictionary containing the betting information to be inserted into the database. The keys in the dictionary should include 'user', 'tag', 'starts', 'sport_id', 'sport_name', 'league_id', 'league_name', 'event_id', 'runner_home', 'runner_away', 'market', 'period', 'period_name', 'side', 'side_name', 'raw_line', 'line', 'odds', 'stake', 'bookmaker', 'bet_status', 'score_home', 'score_away', 'profit', 'cls_odds', 'true_cls', 'cls_limit', 'ev', 'clv', and 'bet_added'.
@@ -198,3 +178,24 @@ def get_user_timezone(username: str):
     :return: The timezone information of the specified user
     """
     return conn.query(f"SELECT timezone FROM {TABLE_USERS} WHERE username = '{username}'")['timezone'].tolist()
+
+
+def append_user(data: dict):
+    """
+    :param data: Dictionary containing user data with the key 'username'.
+    :return: None
+    """
+    query = f"INSERT INTO {TABLE_USERS} (username, odds_display, timezone) VALUES(:username, :odds_display, :timezone)"
+
+    with conn.session as session:
+        session.execute(text(query), params=dict(username=data['username'], odds_display='Decimal', timezone='Europe/London'))
+        session.commit()
+
+
+def get_users():
+    """
+    :return: List of usernames retrieved from the database TABLE_USERS.
+    :rtype: list
+    """
+    return conn.query(f"SELECT username FROM {TABLE_USERS}")['username'].tolist()
+
