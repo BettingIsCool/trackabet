@@ -166,7 +166,7 @@ def set_user_timezone(username: str, placeholder: st.delta_generator.DeltaGenera
     """
     st.session_state.timezone = st.session_state.timezone_key
 
-    query = f"UPDATE {TABLE_USERS} SET timezone = '{timezone}' WHERE username = '{username}'"
+    query = f"UPDATE {TABLE_USERS} SET timezone = '{st.session_state.timezone}' WHERE username = '{username}'"
 
     with conn.session as session:
         session.execute(text(query))

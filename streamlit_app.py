@@ -79,7 +79,7 @@ if st.session_state.session_id == tools.get_active_session():
     st.session_state.odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display), horizontal=True, on_change=db.set_user_odds_display, args=(username, placeholder1), key='odds_display_key')
 
     timezone_options = pytz.common_timezones
-    st.session_state.timezone = st.sidebar.radio(label="Select timezone", options=timezone_options, index=timezone_options.index(st.session_state.timezone), on_change=db.set_user_timezone, args=(username, placeholder1), key='timezone_key')
+    st.session_state.timezone = st.sidebar.selectbox(label="Select timezone", options=timezone_options, index=timezone_options.index(st.session_state.timezone), on_change=db.set_user_timezone, args=(username, placeholder1), key='timezone_key')
 
     st.sidebar.subheader('Add a bet')
 
