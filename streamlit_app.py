@@ -224,6 +224,8 @@ if st.session_state.session_id == tools.get_active_session():
                                                     db.append_bet(data=data)
                                                     placeholder1.success('Bet added successfully!')
                                                     st.cache_data.clear()
+                                                    import time
+                                                    time.sleep(1)
                                                     placeholder1.empty()
 
     col1, col2, col3, col4, col5, col6 = st.columns([4, 4, 5, 4, 2, 2])
