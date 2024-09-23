@@ -67,7 +67,7 @@ if 'timezone' not in st.session_state:
 bets_to_be_deleted, df = set(), set()
 
 # Welcome message in the sidebar
-st.sidebar.markdown("🖥  Track-A-Bet by BettingIsCool v1.0.0")
+st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.0.0")
 st.sidebar.title(f"Welcome {username}")
 
 # Create a radio button for Decimal/American odds format
