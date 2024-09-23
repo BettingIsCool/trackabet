@@ -139,18 +139,24 @@ def delete_bet(id: int):
 
 
 def set_user_odds_display(username: str, odds_display: str):
-    """
-    :param username: The username of the user whose configuration is to be updated.
-    :param odds_display: The new value for the user's odds display setting.
-    :return: None
-    """
-    query = f"UPDATE {TABLE_USERS} SET odds_display = '{odds_display}' WHERE username = '{username}'"
+    #"""
+    #:param username: The username of the user whose configuration is to be updated.
+    #:param odds_display: The new value for the user's odds display setting.
+    #:return: None
+    #"""
+    #query = f"UPDATE {TABLE_USERS} SET odds_display = '{odds_display}' WHERE username = '{username}'"
+
+    #with conn.session as session:
+    #    session.execute(text(query))
+    #    session.commit()
+
+    st.session_state.odds_display = st.session_state.odds_display_key
+
+    query = f"UPDATE {TABLE_USERS} SET odds_display = '{st.session_state.odds_display}' WHERE username = '{username}'"
 
     with conn.session as session:
         session.execute(text(query))
         session.commit()
-
-    st.session_state.odds_display = st.session_state.odds_display_key
 
 
 def update_user_timezone(username: str, timezone: str):
