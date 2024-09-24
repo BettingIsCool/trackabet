@@ -14,6 +14,10 @@ TEXT_LANDING_PAGE = """
 
 👉 Automatic grading of your bets, including scorelines.
 
+👉 RATING from A - F measuring the quality of your bets.
+
+👉 LUCK FACTOR from -3 to +3 giving you an idea of how lucky/unlucky you were with the results of your bets.
+
 👉 41 unique sports, 15159 unique leagues supported.
 
 👉 1.5 million fixtures and growing.
