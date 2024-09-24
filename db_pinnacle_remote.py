@@ -37,7 +37,7 @@ def get_odds(event_id: int):
 
 
 @st.cache_data(ttl=10)
-def get_bets(username: str, sports: str, bookmakers: str, tags: str, date_from: datetime, date_to: datetime):
+def get_bets(username: str, sports: str, bookmakers: str, tags: str, bet_status: str, date_from: datetime, date_to: datetime):
     """
     :param username: The username of the individual placing the bets.
     :param sports: A string specifying which sports to include in the query.
@@ -47,7 +47,7 @@ def get_bets(username: str, sports: str, bookmakers: str, tags: str, date_from: 
     :param date_to: The end date for filtering bets.
     :return: A list of dictionaries containing bet details filtered by the given criteria.
     """
-    return conn.query(f"SELECT delete_bet, id, tag, starts, sport_name, league_name, runner_home, runner_away, market, period_name, side_name, line, odds, stake, bookmaker, bet_status, score_home, score_away, profit, cls_odds, true_cls, cls_limit, ev, clv, bet_added FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag in {tags} AND DATE(starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(starts) <= '{date_to.strftime('%Y-%m-%d')}' ORDER BY starts", ttl=600).to_dict('records')
+    return conn.query(f"SELECT delete_bet, id, tag, starts, sport_name, league_name, runner_home, runner_away, market, period_name, side_name, line, odds, stake, bookmaker, bet_status, score_home, score_away, profit, cls_odds, true_cls, cls_limit, ev, clv, bet_added FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag in {tags} AND bet_status in {bet_status} AND DATE(starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(starts) <= '{date_to.strftime('%Y-%m-%d')}' ORDER BY starts", ttl=600).to_dict('records')
 
 
 @st.cache_data(ttl=10)

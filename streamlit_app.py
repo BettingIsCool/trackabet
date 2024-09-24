@@ -256,7 +256,7 @@ if st.session_state.session_id == tools.get_active_session():
                         with col6:
                             selected_date_to = st.date_input(label='End', value=max(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the end date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
 
-                        bets = db.get_bets(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, date_from=selected_date_from, date_to=selected_date_to)
+                        bets = db.get_bets(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, bet_status=selected_bet_status, date_from=selected_date_from, date_to=selected_date_to)
                         bets_df = pd.DataFrame(data=bets)
 
                         # Convert datetimes to user timezone
@@ -308,11 +308,11 @@ if st.session_state.session_id == tools.get_active_session():
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
         if st.session_state.odds_display == 'Decimal':
-            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{round(weighted_average_odds, 2):g}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * act_roi, 2):+g}%]")
+            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{round(weighted_average_odds, 2):g}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * act_roi, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
         else:
-            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=weighted_average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]")
+            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=weighted_average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
 
-        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})]")
+        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - EXP ROI (CLV): {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})]", help='The LUCK FACTOR gives you an idea how lucky/unlucky you have been with the results of your bets. This figure ranges from -3 (extremely unlucky) to +3 (extremely lucky) and is measured by how many standard deviations your actual roi is away from the mean.')
 
         cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
         for index, row in df.iterrows():
