@@ -225,6 +225,7 @@ if st.session_state.session_id == tools.get_active_session():
     selected_sports = [f"'{s}'" for s in selected_sports]
     selected_sports = f"({','.join(selected_sports)})"
 
+    weighted_average_odds = 1.00
     if selected_sports != '()':
         user_unique_bookmakers = db.get_user_unique_bookmakers(username=username, sports=selected_sports)
         with col2:
@@ -265,6 +266,12 @@ if st.session_state.session_id == tools.get_active_session():
                         bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
                         bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]
 
+                        # Calculate weighhted average odds (using decimal odds)
+                        sumprod_odds_stake = 0.00
+                        for index, row in bets_df.iterrows():
+                            sumprod_odds_stake += row['ODDS'] * row['STAKE']
+                        weighted_average_odds = sumprod_odds_stake / bets_df['STAKE'].sum()
+
                         # Apply font & background colors to cells, apply number formatting
                         if st.session_state.odds_display == 'American':
                             bets_df.ODDS = bets_df.ODDS.apply(tools.get_american_odds)
@@ -292,13 +299,11 @@ if st.session_state.session_id == tools.get_active_session():
         sum_ev = df['EXP_WIN'].sum()
         act_roi = sum_profit / turnover
         clv = sum_ev / turnover
-        average_odds = df['ODDS'].mean()
-        implied_win_percentage = (clv + 1) / average_odds
-        st.write(implied_win_percentage)
-        yield_standard_deviation = average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
+
+        implied_win_percentage = (clv + 1) / weighted_average_odds
+        yield_standard_deviation = weighted_average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
         luck_factor, comment_luck_factor, color_luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
         format_luck_factor = 'g' if luck_factor == 0 else '+g'
-
 
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
