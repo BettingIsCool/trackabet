@@ -288,19 +288,21 @@ if st.session_state.session_id == tools.get_active_session():
         turnover = df.loc[df['ST'] != 'na', 'STAKE'].sum()
         sum_profit = df['P/L'].sum()
         sum_ev = df['EXP_WIN'].sum()
+        act_roi = sum_profit / turnover
         clv = sum_ev / turnover
         average_odds = df['ODDS'].mean()
         implied_win_percentage = (clv + 1) / average_odds
         yield_standard_deviation = average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
+        luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
 
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
         if st.session_state.odds_display == 'Decimal':
-            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{round(average_odds, 2):g}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]")
+            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{round(average_odds, 2):g}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * act_roi, 2):+g}%]")
         else:
             st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]")
 
-        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%] - STD DEV: {yield_standard_deviation}")
+        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%] - STD DEV: {luck_factor}")
 
         cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
         for index, row in df.iterrows():

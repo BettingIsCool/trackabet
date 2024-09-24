@@ -88,9 +88,28 @@ def get_decimal_odds(american_odds: int):
     return american_odds / 100 + 1 if american_odds >= 0 else - 100 / american_odds + 1
 
 
+def get_luck_factor(std_dev: float, act_roi: float, clv: float):
+
+    if act_roi < clv - 3 * std_dev:
+        return -3
+    elif act_roi < clv - 2 * std_dev:
+        return -2
+    elif act_roi < clv - std_dev:
+        return -1
+    elif act_roi > clv + 3 * std_dev:
+        return 3
+    elif act_roi > clv + 2 * std_dev:
+        return 2
+    elif act_roi > clv + std_dev:
+        return 1
+    else:
+        return 0
+
+
 @st.cache_resource()
 def get_active_session():
     """
     :return: The session ID of the active session for the specified user.
     """
     return st.session_state.session_id
+
