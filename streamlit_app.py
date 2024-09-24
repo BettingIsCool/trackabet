@@ -1,4 +1,6 @@
-
+# TODO weighted odds
+# TODO check filter functionality
+# TODO bet_status filter doesnt work
 # TODO check if bet_status filter works for 'na' & 'HL'
 # TODO import @pyckio picks (complete database) + compare if results match
 # TODO private github repo (streamlit teams)
@@ -295,6 +297,7 @@ if st.session_state.session_id == tools.get_active_session():
         yield_standard_deviation = average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
         luck_factor, comment_luck_factor, color_luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
         format_luck_factor = 'g' if luck_factor == 0 else '+g'
+        st.write(implied_win_percentage)
 
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
