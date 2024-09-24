@@ -1,5 +1,8 @@
 
-# The app will also incude a rating from A (extraordinary) to F (very poor) and is based on the expected roi.
+# The app will also come with a RATING from A (excellent) to F (terrible) based on clv. This gives you information about the quality of your bets, i.e. if your bets are +ev on average or not. Arguably the most important figure.
+
+# Could be helpful
+
 # \nRATING indicates the quality of your bets, i.e. if they are +ev on average or not. This figure ranges from A (excellent) to F (very poor) and is based on the expected roi. This is the most important figure and should be monitored constantly.
 
 

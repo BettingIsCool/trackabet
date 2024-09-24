@@ -113,13 +113,13 @@ def get_rating(clv: float):
     elif clv >= 0.025:
         return 'B', 'very good', 'green'
     elif clv > 0:
-        return 'C', 'solid', 'yellow'
+        return 'C', 'solid', 'green'
     elif clv < -0.1:
         return 'F', 'terrible', 'red'
     elif clv < -0.025:
         return 'E', 'poor', 'red'
     else:
-        return 'D', 'not good enough', 'orange'
+        return 'D', 'not good enough', 'red'
 
 
 @st.cache_resource()
