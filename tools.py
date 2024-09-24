@@ -91,19 +91,19 @@ def get_decimal_odds(american_odds: int):
 def get_luck_factor(std_dev: float, act_roi: float, clv: float):
 
     if act_roi < clv - 3 * std_dev:
-        return -3
+        return -3, 'extremely unlucky', 'red'
     elif act_roi < clv - 2 * std_dev:
-        return -2
+        return -2, 'very unlucky', 'red'
     elif act_roi < clv - std_dev:
-        return -1
+        return -1, 'unlucky', 'red'
     elif act_roi > clv + 3 * std_dev:
-        return 3
+        return 3, 'extremely lucky', 'green'
     elif act_roi > clv + 2 * std_dev:
-        return 2
+        return 2, 'very lucky', 'green'
     elif act_roi > clv + std_dev:
-        return 1
+        return 1, 'lucky', 'green'
     else:
-        return 0
+        return 0, 'normal', 'gray'
 
 
 @st.cache_resource()
