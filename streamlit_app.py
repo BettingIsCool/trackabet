@@ -73,7 +73,7 @@ if st.session_state.session_id == tools.get_active_session():
     bets_to_be_deleted, df = set(), set()
 
     # Welcome message in the sidebar
-    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.3.28")
+    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.4.28")
     st.sidebar.title(f"Welcome {username}")
 
     st.sidebar.subheader('Add a bet')
@@ -296,7 +296,7 @@ if st.session_state.session_id == tools.get_active_session():
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
         st.subheader(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%] - EXP_WIN: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%]")
-        st.subheader(f"STD DEV: {yield_standard_deviation}")
+        st.write(f"STD DEV: {yield_standard_deviation}")
 
         cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
         for index, row in df.iterrows():
