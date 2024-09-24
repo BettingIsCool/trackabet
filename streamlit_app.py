@@ -4,10 +4,10 @@
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
-# TODO add 'sort rows by clicking on the column header'
-# TODO add explanation for export
 # TODO add average odds
 # TODO tooltip for column headers (i.e. streamlit-aggrid)
+# TODO bet size filter
+# TODO tutorial video (explanation for export, 'sort rows by clicking on the column header')
 
 import streamlit as st
 
@@ -16,6 +16,7 @@ st.set_page_config(page_title="Track-A-Bet by BettingIsCool", page_icon="🦈", 
 
 import time
 import pytz
+import math
 import tools
 import datetime
 import pandas as pd
@@ -280,18 +281,22 @@ if st.session_state.session_id == tools.get_active_session():
     if bets_to_be_deleted:
         st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
+    # Display stats
     if len(df) > 0:
 
-        # Display cumulative stats
         bet_count = len(df[df['ST'] != 'na'])
         turnover = df.loc[df['ST'] != 'na', 'STAKE'].sum()
         sum_profit = df['P/L'].sum()
         sum_ev = df['EXP_WIN'].sum()
         clv = sum_ev / turnover
+        average_odds = df['ODDS'].mean()
+        implied_win_percentage = (clv + 1) / average_odds
+        yield_standard_deviation = average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
 
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
-        st.header(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%] - EXP_WIN: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%]")
+        st.subheader(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%] - EXP_WIN: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%]")
+        st.subheader(f"STD DEV: {yield_standard_deviation}")
 
         cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
         for index, row in df.iterrows():
