@@ -211,4 +211,3 @@ def get_users():
     :rtype: list
     """
     return conn.query(f"SELECT username FROM {TABLE_USERS}")['username'].tolist()
-
