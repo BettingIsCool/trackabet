@@ -106,6 +106,22 @@ def get_luck_factor(std_dev: float, act_roi: float, clv: float):
         return 0, 'normal', 'gray'
 
 
+def get_rating(clv: float):
+
+    if clv >= 0.1:
+        return 'A', 'excellent', 'green'
+    elif clv >= 0.025:
+        return 'B', 'very good', 'green'
+    elif clv > 0:
+        return 'C', 'solid', 'yellow'
+    elif clv < -0.1:
+        return 'F', 'terrible', 'red'
+    elif clv < -0.025:
+        return 'E', 'poor', 'red'
+    else:
+        return 'D', 'not good enough', 'orange'
+
+
 @st.cache_resource()
 def get_active_session():
     """

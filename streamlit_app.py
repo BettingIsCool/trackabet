@@ -1,18 +1,16 @@
-# TODO st.column_config.Column
+
 # The app will also incude a rating from A (extraordinary) to F (very poor) and is based on the expected roi.
 # \nRATING indicates the quality of your bets, i.e. if they are +ev on average or not. This figure ranges from A (excellent) to F (very poor) and is based on the expected roi. This is the most important figure and should be monitored constantly.
 
 
 # This means even if your actual ROI is very bad, but  you could still receive an A rating (this will) and vice versa
 
-# TODO check filter functionality
-# TODO bet_status filter doesnt work
-# TODO check if bet_status filter works for 'na' & 'HL'
+
 # TODO import @pyckio picks (complete database) + compare if results match
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
-# TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
-# TODO tooltip for column headers (i.e. streamlit-aggrid)
+
+
 # TODO bet size filter
 # TODO tutorial video (explanation for export, 'sort rows by clicking on the column header')
 
@@ -310,6 +308,8 @@ if st.session_state.session_id == tools.get_active_session():
         luck_factor, comment_luck_factor, color_luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
         format_luck_factor = 'g' if luck_factor == 0 else '+g'
 
+        rating, comment_rating, color_rating = tools.get_rating(clv=clv)
+
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
         if st.session_state.odds_display == 'Decimal':
@@ -317,7 +317,7 @@ if st.session_state.session_id == tools.get_active_session():
         else:
             st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=weighted_average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
 
-        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - EXP ROI (CLV): {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})]", help='LUCK FACTOR gives you an idea of how lucky/unlucky you were with the results of your bets. This figure ranges from -3 (extremely unlucky) to +3 (extremely lucky) and is measured by how many standard deviations your actual roi is away from the mean. RATING indicates the quality of your bets, i.e. if they are +ev on average or not. This figure ranges from A (excellent) to F (very poor) and is based on the expected roi. This is the most important figure and should be monitored constantly.')
+        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - EXP ROI (CLV): {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})] - RATING: :{color_rating}[{rating}] :{color_rating}[({comment_rating})]", help='LUCK FACTOR gives you an idea of how lucky/unlucky you were with the results of your bets. This figure ranges from -3 (extremely unlucky) to +3 (extremely lucky) and is measured by how many standard deviations your actual roi is away from the mean. RATING indicates the quality of your bets, i.e. if they are +ev on average or not. This figure ranges from A (excellent) to F (very poor) and is based on the expected roi. This is the most important figure and should be monitored constantly.')
 
         cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
         for index, row in df.iterrows():
