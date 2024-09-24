@@ -294,6 +294,7 @@ if st.session_state.session_id == tools.get_active_session():
         implied_win_percentage = (clv + 1) / average_odds
         yield_standard_deviation = average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
         luck_factor, comment_luck_factor, color_luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
+        format_luck_factor = 'g' if luck_factor == 0 else '+g'
 
         color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
@@ -302,7 +303,7 @@ if st.session_state.session_id == tools.get_active_session():
         else:
             st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]")
 
-        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:+g}] :{color_luck_factor}[({comment_luck_factor})]")
+        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - CLV: {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})]")
 
         cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
         for index, row in df.iterrows():
