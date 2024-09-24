@@ -117,9 +117,9 @@ def get_rating(clv: float):
     elif clv < -0.1:
         return 'F', 'terrible', 'red'
     elif clv < -0.025:
-        return 'E', 'poor', 'red'
+        return 'E', 'very poor', 'red'
     else:
-        return 'D', 'not good enough', 'red'
+        return 'D', 'poor', 'red'
 
 
 @st.cache_resource()
@@ -128,4 +128,3 @@ def get_active_session():
     :return: The session ID of the active session for the specified user.
     """
     return st.session_state.session_id
-

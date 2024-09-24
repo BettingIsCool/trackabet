@@ -7,3 +7,9 @@ track-a-bet_email.txt
 track-a-bet_twitter.txt
 /.streamlit/secrets.toml
 dashboard.png
++import_pyckio_picks.py
+my_sql.py
+db_pyckio_local.py
+db_pinnacle_local.py
+db_pinnacle_remote2.py
+config_local.py
