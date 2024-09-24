@@ -1,4 +1,4 @@
-# TODO weighted odds
+# TODO st.column_config.Column
 # TODO check filter functionality
 # TODO bet_status filter doesnt work
 # TODO check if bet_status filter works for 'na' & 'HL'
@@ -6,7 +6,6 @@
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO introduce luck factor/rating/comment (rated by standard deviations away from mean)
-# TODO add average odds
 # TODO tooltip for column headers (i.e. streamlit-aggrid)
 # TODO bet size filter
 # TODO tutorial video (explanation for export, 'sort rows by clicking on the column header')
@@ -280,7 +279,7 @@ if st.session_state.session_id == tools.get_active_session():
                             styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{0:g}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{0:g}'.format, 'CLS_TRUE': '{0:g}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
                         else:
                             styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{:,.3f}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{:,.3f}'.format, 'CLS_TRUE': '{:,.3f}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
-                        df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False)}, disabled=['TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
+                        df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.Column("ST", help="W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded")}, disabled=['TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
 
                         bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
 
@@ -312,7 +311,7 @@ if st.session_state.session_id == tools.get_active_session():
         else:
             st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=weighted_average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
 
-        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - EXP ROI (CLV): {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})]", help='The LUCK FACTOR gives you an idea how lucky/unlucky you have been with the results of your bets. This figure ranges from -3 (extremely unlucky) to +3 (extremely lucky) and is measured by how many standard deviations your actual roi is away from the mean.')
+        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - EXP ROI (CLV): {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})]", help='LUCK FACTOR gives you an idea of how lucky/unlucky you were with the results of your bets. This figure ranges from -3 (extremely unlucky) to +3 (extremely lucky) and is measured by how many standard deviations your actual roi is away from the mean.')
 
         cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
         for index, row in df.iterrows():
