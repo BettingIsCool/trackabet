@@ -1,11 +1,10 @@
-# TODO custom csv upload (spreadsheet for data validation, AI assisted event mapping), see https://medium.com/@shrinath.suresh/ai-powered-schema-mapping-95f596d31590
 # TODO you could also track chasing steamers bets (announce to all chasing steamers members)
 # TODO move pinnacle.replica2/pinnacle.trackabet to streamlit.trackabet (clean up)
-# TODO Minimum 10 picks for RATING
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO bet size filter
 # TODO tutorial video (explanation for export, 'sort rows by clicking on the column header', american/decimal, timezone, filter clear all with 'x' then re-add)
+# TODO custom csv upload (spreadsheet for data validation, AI assisted event mapping), see https://medium.com/@shrinath.suresh/ai-powered-schema-mapping-95f596d31590
 
 import streamlit as st
 
@@ -152,10 +151,11 @@ if st.session_state.session_id == tools.get_active_session():
 
                                 if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
                                     if st.session_state.odds_display == 'American':
-                                        odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1)
-                                    else:
-                                        american_odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
+                                        american_odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1)
                                         odds = tools.get_decimal_odds(american_odds=american_odds)
+                                    else:
+                                        odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
+
 
                                     if odds:
                                         stake = st.sidebar.number_input("Enter stake", min_value=0.01, value=1.00, step=1.00, format="%0.2f")
