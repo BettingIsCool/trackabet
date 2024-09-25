@@ -1,3 +1,4 @@
+# TODO custom csv upload (spreadsheet for data validation, AI assisted event mapping)
 # TODO you could also track chasing steamers bets (announce to all chasing steamers members)
 # TODO move pinnacle.replica2/pinnacle.trackabet to streamlit.trackabet (clean up)
 # TODO Minimum 10 picks for RATING
@@ -322,8 +323,8 @@ if st.session_state.session_id == tools.get_active_session():
                 cum_clv.append(cur_clv)
                 cum_bets.append(cur_bets)
 
-        chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "CLV": cum_clv}, columns=["bet_no", "Actual P/L", "CLV"])
-        st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "CLV"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
+        chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "Expected P/L": cum_clv}, columns=["bet_no", "Actual P/L", "Expected P/L"])
+        st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "Expected P/L"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
 
     st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
 

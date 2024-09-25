@@ -62,7 +62,7 @@ def get_text_colouring(sum_profit: float, sum_ev: float):
         color_ev = ':green'
     elif sum_ev < 0:
         color_clv = ':red'
-        color_ev = ':green'
+        color_ev = ':red'
 
     return color_profit, color_clv, color_ev
 
