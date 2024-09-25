@@ -256,7 +256,12 @@ if st.session_state.session_id == tools.get_active_session():
                         bets_df = pd.DataFrame(data=bets)
 
                         # Convert datetimes to user timezone
-                        bets_df.starts = bets_df.starts.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
+                        try:
+                            bets_df.starts = bets_df.starts.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
+                        except:
+                            bets_df.starts = (bets_df.starts + pd.DateOffset(hours=1)).dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
+
+
                         bets_df.bet_added = bets_df.bet_added.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
 
                         bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
