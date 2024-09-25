@@ -1,4 +1,4 @@
-# TODO custom csv upload (spreadsheet for data validation, AI assisted event mapping)
+# TODO custom csv upload (spreadsheet for data validation, AI assisted event mapping), see https://medium.com/@shrinath.suresh/ai-powered-schema-mapping-95f596d31590
 # TODO you could also track chasing steamers bets (announce to all chasing steamers members)
 # TODO move pinnacle.replica2/pinnacle.trackabet to streamlit.trackabet (clean up)
 # TODO Minimum 10 picks for RATING
@@ -256,17 +256,17 @@ if st.session_state.session_id == tools.get_active_session():
                         bets_df = pd.DataFrame(data=bets)
 
                         # Convert datetimes to user timezone
+                        # There is a possibility that the conversion fails if the timestamp falls into a time change
+                        # See https://github.com/streamlit/streamlit/issues/1288
                         try:
                             bets_df.starts = bets_df.starts.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
-                        except:
+                        except Exception as ex:
                             pass
 
                         try:
                             bets_df.bet_added = bets_df.bet_added.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
-                        except:
+                        except Exception as ex:
                             pass
-
-
 
                         bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
                         bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]
@@ -285,6 +285,7 @@ if st.session_state.session_id == tools.get_active_session():
                             styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{0:g}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{0:g}'.format, 'CLS_TRUE': '{0:g}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
                         else:
                             styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{:,.3f}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{:,.3f}'.format, 'CLS_TRUE': '{:,.3f}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
+                            pd.set_option("styler.render.max_elements", 3321350)
                         df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.Column("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded"), "TAG": st.column_config.Column("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc."), "SH": st.column_config.Column("SH", help="Score Home"), "SA": st.column_config.Column("SA", help="Score Away"), "STARTS": st.column_config.Column("STARTS", help="Event starting time"), "SPORT": st.column_config.Column("SPORT", help="Sport"), "LEAGUE": st.column_config.Column("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.Column("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.Column("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.Column("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.Column("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.Column("SIDE", help="Selection"), "LINE": st.column_config.Column("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.Column("ODDS", help="Obtained price"), "STAKE": st.column_config.Column("STAKE", help="Risk amount"), "BOOK": st.column_config.Column("BOOK", help="Bookmaker"), "P/L": st.column_config.Column("P/L", help="Actual profit"), "CLS": st.column_config.Column("CLS", help="Closing price"), "CLS_TRUE": st.column_config.Column("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.Column("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.Column("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.Column("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.Column("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
 
                         bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
@@ -306,34 +307,35 @@ if st.session_state.session_id == tools.get_active_session():
         clv = sum_ev / turnover
 
         implied_win_percentage = (clv + 1) / weighted_average_odds
-        yield_standard_deviation = weighted_average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
-        luck_factor, comment_luck_factor, color_luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
-        format_luck_factor = 'g' if luck_factor == 0 else '+g'
+        if implied_win_percentage > 0:
+            yield_standard_deviation = weighted_average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
+            luck_factor, comment_luck_factor, color_luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
+            format_luck_factor = 'g' if luck_factor == 0 else '+g'
 
-        rating, comment_rating, color_rating = tools.get_rating(clv=clv)
+            rating, comment_rating, color_rating = tools.get_rating(clv=clv)
 
-        color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
+            color_profit, color_clv, color_ev = tools.get_text_colouring(sum_profit=sum_profit, sum_ev=sum_ev)
 
-        if st.session_state.odds_display == 'Decimal':
-            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{round(weighted_average_odds, 2):g}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * act_roi, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
-        else:
-            st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=weighted_average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
+            if st.session_state.odds_display == 'Decimal':
+                st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{round(weighted_average_odds, 2):g}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * act_roi, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
+            else:
+                st.title(f"BETS: :gray[{bet_count}] - TURNOVER: :gray[{int(turnover)}] - Ø-ODDS: :gray[{int(tools.get_american_odds(decimal_odds=weighted_average_odds))}] - P/L: {color_profit}[{round(sum_profit, 2):+g}] - ROI: {color_profit}[{round(100 * sum_profit / turnover, 2):+g}%]", help='Ø-ODDS are the average odds weighted by stake, i.e. if you have a bet at 2.0 with stake €200 and another bet at 3.0 with stake €100 then your weighted average odds are 2.33')
 
-        st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - EXP ROI (CLV): {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})] - RATING: :{color_rating}[{rating}] :{color_rating}[({comment_rating})]", help='LUCK FACTOR gives you an idea of how lucky/unlucky you were with the results of your bets. This figure ranges from -3 (extremely unlucky) to +3 (extremely lucky) and is measured by how many standard deviations your actual roi is away from the mean. RATING indicates the quality of your bets, i.e. if they are +ev on average or not. This figure ranges from A (excellent) to F (terrible) and is based on the expected roi. This is the most important figure and should be monitored closely.')
+            st.subheader(f"EXP P/L: {color_ev}[{round(sum_ev, 2):+g}] - EXP ROI (CLV): {color_clv}[{round(100 * clv, 2):+g}%] - LUCK FACTOR: :{color_luck_factor}[{luck_factor:{format_luck_factor}}] :{color_luck_factor}[({comment_luck_factor})] - RATING: :{color_rating}[{rating}] :{color_rating}[({comment_rating})]", help='LUCK FACTOR gives you an idea of how lucky/unlucky you were with the results of your bets. This figure ranges from -3 (extremely unlucky) to +3 (extremely lucky) and is measured by how many standard deviations your actual roi is away from the mean. RATING indicates the quality of your bets, i.e. if they are +ev on average or not. This figure ranges from A (excellent) to F (terrible) and is based on the expected roi. This is the most important figure and should be monitored closely.')
 
-        cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
-        for index, row in df.iterrows():
-            if row['ST'] != 'na':
-                cur_profit += row['P/L']
-                cur_clv += row['EXP_WIN']
-                cur_bets += 1
+            cum_profit, cum_clv, cum_bets, cur_profit, cur_clv, cur_bets = list(), list(), list(), 0.00, 0.00, 0
+            for index, row in df.iterrows():
+                if row['ST'] != 'na':
+                    cur_profit += row['P/L']
+                    cur_clv += row['EXP_WIN']
+                    cur_bets += 1
 
-                cum_profit.append(cur_profit)
-                cum_clv.append(cur_clv)
-                cum_bets.append(cur_bets)
+                    cum_profit.append(cur_profit)
+                    cum_clv.append(cur_clv)
+                    cum_bets.append(cur_bets)
 
-        chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "Expected P/L": cum_clv}, columns=["bet_no", "Actual P/L", "Expected P/L"])
-        st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "Expected P/L"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
+            chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "Expected P/L": cum_clv}, columns=["bet_no", "Actual P/L", "Expected P/L"])
+            st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "Expected P/L"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
 
     st.sidebar.image(image="logo_sbic_round.png", use_column_width='auto')
 
