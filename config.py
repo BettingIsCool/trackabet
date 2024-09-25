@@ -36,11 +36,13 @@ TEXT_LANDING_PAGE = """
 
 👉 Performance graph showing actual vs expected profits.
 
+👉 Do not get fooled by randomness ever again. Use clv as the ultimate predictor of your profitability.
+
 #### ⚠️ WHAT THIS TOOL CAN NOT DO ⚠️
 It can not track special bets. Hence if you're mainly betting prop markets & exotic derivatives then this tool is not for you.
 
 #### ❓ WHY WOULD I WANT YET ANOTHER BET TRACKER ❓
-**Because it calculates your clv/edge accurately. Probably THE most important thing you want to know if you want to be a long-term winner.**
+**Because it calculates your clv/edge accurately. Probably THE most important thing to know if you want to be a long-term winner.**
 
 A basic requirement to profitable betting is to log your bets. At a bare minimum you want to log EVERY BET and know your overall P/L + ROI for each strategy/model you follow.
 

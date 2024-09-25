@@ -1,6 +1,3 @@
-import pytz
-from datetime import datetime
-
 import streamlit as st
 import db_pinnacle_remote as db
 
@@ -89,7 +86,12 @@ def get_decimal_odds(american_odds: int):
 
 
 def get_luck_factor(std_dev: float, act_roi: float, clv: float):
-
+    """
+    :param std_dev: The standard deviation of the return on investment (ROI).
+    :param act_roi: The actual return on investment.
+    :param clv: The expected customer lifetime value.
+    :return: A tuple containing the luck factor (int), a describing string (str), and a color indicator (str).
+    """
     if act_roi < clv - 3 * std_dev:
         return -3, 'extremely unlucky', 'red'
     elif act_roi < clv - 2 * std_dev:
@@ -107,7 +109,10 @@ def get_luck_factor(std_dev: float, act_roi: float, clv: float):
 
 
 def get_rating(clv: float):
-
+    """
+    :param clv: Customer lifetime value as a floating-point number.
+    :return: A tuple containing the rating (str), description (str), and color (str).
+    """
     if clv >= 0.1:
         return 'A', 'excellent', 'green'
     elif clv >= 0.025:

@@ -1,3 +1,6 @@
+# TODO you could also track chasing steamers bets (announce to all chasing steamers members)
+# TODO move pinnacle.replica2/pinnacle.trackabet to streamlit.trackabet (clean up)
+# TODO Minimum 10 picks for RATING
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO bet size filter
