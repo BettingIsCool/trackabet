@@ -150,4 +150,4 @@ def tz_diff(date, tz1, tz2):
     :rtype: float
     """
     date = pd.to_datetime(date)
-    return (tz1.localize(date) - tz2.localize(date).astimezone(tz1)).seconds / 3600
+    return (tz1.localize(date) - tz2.localize(date).astimezone(tz1)).seconds / 3600 - 24
