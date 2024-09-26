@@ -1,3 +1,4 @@
+# import re
 # TODO refactoring
 # TODO check if cached get_fixtures get updated with new events
 # TODO timezone change also in dropdown lists
@@ -100,7 +101,7 @@ if st.session_state.session_id == tools.get_active_session():
                 event_options, event_details = dict(), dict()
                 for index, row in events.iterrows():
                     if row['event_id'] not in event_options.keys():
-                        starts_converted_to_timezone = pytz.timezone('Europe/Vienna').localize(row['starts'].floor('Min')).astimezone(pytz.timezone(st.session_state.timezone)).replace(tzinfo=None)
+                        starts_converted_to_timezone = pytz.timezone('Europe/Vienna').localize(row['starts']).astimezone(pytz.timezone(st.session_state.timezone)).replace(tzinfo=None).strftime('%Y-%m-%d %H:%M')
                         event_options.update({row['event_id']: f"{starts_converted_to_timezone} {row['league_name'].upper()} {row['runner_home']} - {row['runner_away']}"})
                         event_details.update({row['event_id']: {'starts': row['starts'], 'league_id': row['league_id'], 'league_name': row['league_name'], 'runner_home': row['runner_home'], 'runner_away': row['runner_away']}})
                 selected_event_id = st.sidebar.selectbox(label='Select event', options=event_options.keys(), index=None, format_func=lambda x: event_options.get(x), placeholder='Start typing...', help='Start searching your fixture by typing any league, home team, away team. Only fixtures with available odds are listed.')
