@@ -1,4 +1,4 @@
-# TODO no need to db.get_bets() all the time
+# TODO increase cache for get_fixtures
 # TODO timezone change also in dropdown lists
 # TODO # This query returns the fixtures without checking for odds & results availability
 #     # return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' AND o.event_id = f.event_id AND r.event_id = f.event_id ORDER BY f.starts", ttl=600)
