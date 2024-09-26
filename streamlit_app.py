@@ -95,15 +95,15 @@ if st.session_state.session_id == tools.get_active_session():
 
                 offset = tools.tz_diff(home='Europe/Vienna', away=st.session_state.timezone, on=None)
 
-                selected_from_date_converted_into_timezone = datetime.datetime.combine(selected_from_date, datetime.datetime.min.time()) - datetime.timedelta(hours=int(offset))
-                selected_to_date_converted_into_timezone = datetime.datetime.combine(selected_to_date, datetime.datetime.min.time()) - datetime.timedelta(hours=int(offset))
+                selected_from_date_in_user_timezone = datetime.datetime.combine(selected_from_date, datetime.datetime.min.time())
+                selected_to_date_in_user_timezone = datetime.datetime.combine(selected_to_date, datetime.datetime.min.time())
 
-                st.write(selected_from_date_converted_into_timezone)
-                st.write(selected_to_date_converted_into_timezone)
+                st.write(selected_from_date_in_user_timezone)
+                st.write(selected_to_date_in_user_timezone)
 
                 datetime.datetime.combine(selected_from_date, datetime.datetime.min.time())
 
-                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date_converted_into_timezone - datetime.timedelta(hours=int(offset)), date_to=selected_to_date_converted_into_timezone - datetime.timedelta(hours=int(offset)))
+                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date_in_user_timezone - datetime.timedelta(hours=int(offset)), date_to=selected_to_date_in_user_timezone - datetime.timedelta(hours=int(offset)))
 
                 st.write(f"Runtime get_fixtures: {round(time.time() - runtime_start, 3)} seconds.")
 
