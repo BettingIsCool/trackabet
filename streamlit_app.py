@@ -95,10 +95,10 @@ if st.session_state.session_id == tools.get_active_session():
 
                 offset = tools.tz_diff(home='Europe/Vienna', away=st.session_state.timezone, on=None)
 
-                st.write(selected_from_date + datetime.timedelta(hours=int(offset)))
-                st.write(selected_to_date + datetime.timedelta(hours=int(offset)))
+                st.write(selected_from_date - datetime.timedelta(hours=int(offset)))
+                st.write(selected_to_date - datetime.timedelta(hours=int(offset)))
 
-                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date + datetime.timedelta(hours=int(offset)), date_to=selected_to_date + datetime.timedelta(hours=int(offset)))
+                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date - datetime.timedelta(hours=int(offset)), date_to=selected_to_date - datetime.timedelta(hours=int(offset)))
 
                 st.write(f"Runtime get_fixtures: {round(time.time() - runtime_start, 3)} seconds.")
 
