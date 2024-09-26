@@ -26,8 +26,7 @@ def get_fixtures(sport_id: int, date_from: datetime, date_to: datetime):
     """
 
     # This query returns the fixtures including if odds & results are actually available
-    st.write(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE o.event_id = f.event_id AND r.event_id = f.event_id AND f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d %H:%M:%S')}' AND DATE(f.starts) < DATE_ADD('{date_to.strftime('%Y-%m-%d %H:%M:%S')}', INTERVAL 1 DAY) ORDER BY f.starts")
-    return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE o.event_id = f.event_id AND r.event_id = f.event_id AND f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d %H:%M:%S')}' AND DATE(f.starts) < DATE_ADD('{date_to.strftime('%Y-%m-%d %H:%M:%S')}', INTERVAL 1 DAY) ORDER BY f.starts")
+    return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE o.event_id = f.event_id AND r.event_id = f.event_id AND f.sport_id = {sport_id} AND f.starts >= '{date_from.strftime('%Y-%m-%d %H:%M:%S')}' AND f.starts < DATE_ADD('{date_to.strftime('%Y-%m-%d %H:%M:%S')}', INTERVAL 1 DAY) ORDER BY f.starts")
 
     # This query returns the fixtures without checking for odds & results availability
     # return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' AND o.event_id = f.event_id AND r.event_id = f.event_id ORDER BY f.starts")
