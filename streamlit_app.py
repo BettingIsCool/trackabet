@@ -1,7 +1,5 @@
-# import re
 # TODO refactoring
 # TODO check if cached get_fixtures get updated with new events
-# TODO timezone change also in dropdown lists
 # TODO # This query returns the fixtures without checking for odds & results availability
 #     # return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' AND o.event_id = f.event_id AND r.event_id = f.event_id ORDER BY f.starts", ttl=600)
 # TODO check all queries (with explain) and indexes & try to make them faster
@@ -97,7 +95,10 @@ if st.session_state.session_id == tools.get_active_session():
 
                 offset = tools.tz_diff(home='Europe/Vienna', away=st.session_state.timezone, on=None)
 
-                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date - datetime.timedelta(hours=int(offset)), date_to=selected_to_date - datetime.timedelta(hours=int(offset)))
+                st.write(selected_from_date + datetime.timedelta(hours=int(offset)))
+                st.write(selected_to_date + datetime.timedelta(hours=int(offset)))
+
+                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date + datetime.timedelta(hours=int(offset)), date_to=selected_to_date + datetime.timedelta(hours=int(offset)))
 
                 st.write(f"Runtime get_fixtures: {round(time.time() - runtime_start, 3)} seconds.")
 
