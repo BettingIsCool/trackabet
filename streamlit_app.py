@@ -94,7 +94,8 @@ if st.session_state.session_id == tools.get_active_session():
             # This string is what users see in the dropdown menu
             if selected_to_date:
                 runtime_start = time.time()
-                offset = datetime.datetime.now(pytz.timezone(st.session_state.timezone)).utcoffset().total_seconds() / 3600
+
+                offset = tools.tz_diff(selected_from_date.strftime('%Y-%m-%d'), pytz.timezone('Europe/Vienna'), pytz.timezone(st.session_state.timezone))
 
                 st.write(offset)
 

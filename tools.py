@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+import pandas as pd
 import streamlit as st
 import db_pinnacle_remote as db
 
@@ -135,3 +136,18 @@ def get_active_session():
     :return: The session ID of the active session for the specified user.
     """
     return st.session_state.session_id
+
+
+def tz_diff(date, tz1, tz2):
+    """
+    :param date: The date and time for which the timezone difference is to be calculated.
+    :type date: str or datetime-like
+    :param tz1: The first timezone to compare.
+    :type tz1: pytz.timezone
+    :param tz2: The second timezone to compare.
+    :type tz2: pytz.timezone
+    :return: The difference in hours between tz1 and tz2 for the given date.
+    :rtype: float
+    """
+    date = pd.to_datetime(date)
+    return (tz1.localize(date) - tz2.localize(date).astimezone(tz1)).seconds / 3600
