@@ -1,9 +1,9 @@
-# TODO increase cache for get_fixtures
+# TODO refactoring
+# TODO check if cached get_fixtures get updated with new events
 # TODO timezone change also in dropdown lists
 # TODO # This query returns the fixtures without checking for odds & results availability
 #     # return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' AND o.event_id = f.event_id AND r.event_id = f.event_id ORDER BY f.starts", ttl=600)
-# TODO check all queries (with explain) and indexes & try to make them faster / switch to storage-optimized
-# TODO you could also track chasing steamers bets (announce to all chasing steamers members)
+# TODO check all queries (with explain) and indexes & try to make them faster
 # TODO move pinnacle.replica2/pinnacle.trackabet to streamlit.trackabet (clean up)
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
@@ -94,12 +94,13 @@ if st.session_state.session_id == tools.get_active_session():
             if selected_to_date:
                 runtime_start = time.time()
                 events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date, date_to=selected_to_date)
-                st.write(f"Runtime get_fixtures: {time.time() - runtime_start}")
+
+                st.write(f"Runtime get_fixtures: {round(time.time() - runtime_start, 3)} seconds.")
 
                 event_options, event_details = dict(), dict()
                 for index, row in events.iterrows():
                     if row['event_id'] not in event_options.keys():
-                        event_options.update({row['event_id']: f"{row['starts']} {row['league_name'].upper()} {row['runner_home']} - {row['runner_away']}"})
+                        event_options.update({row['event_id']: f"{pytz.timezone('Europe/Vienna').localize(row['starts']).astimezone(pytz.timezone(st.session_state.timezone))} {row['league_name'].upper()} {row['runner_home']} - {row['runner_away']}"})
                         event_details.update({row['event_id']: {'starts': row['starts'], 'league_id': row['league_id'], 'league_name': row['league_name'], 'runner_home': row['runner_home'], 'runner_away': row['runner_away']}})
                 selected_event_id = st.sidebar.selectbox(label='Select event', options=event_options.keys(), index=None, format_func=lambda x: event_options.get(x), placeholder='Start typing...', help='Start searching your fixture by typing any league, home team, away team. Only fixtures with available odds are listed.')
 
@@ -215,7 +216,7 @@ if st.session_state.session_id == tools.get_active_session():
                                                     db.append_bet(data=data)
                                                     placeholder1.success('Bet added successfully!')
                                                     st.cache_data.clear()
-                                                    time.sleep(2)
+                                                    time.sleep(1.5)
                                                     placeholder1.empty()
 
     col1, col2, col3, col4, col5, col6 = st.columns([4, 4, 5, 4, 2, 2])
