@@ -95,7 +95,7 @@ if st.session_state.session_id == tools.get_active_session():
             if selected_to_date:
                 runtime_start = time.time()
 
-                offset = tools.tz_diff(home='Europe/Vienna', away=st.session_state.timezone, on=selected_from_date)
+                offset = tools.tz_diff(home='Europe/Vienna', away=st.session_state.timezone, on=None)
 
                 st.write(offset)
 
