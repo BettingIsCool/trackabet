@@ -16,7 +16,7 @@ def get_leagues(sport_id: int):
     return conn.query(f"SELECT league_id, league_name FROM {TABLE_LEAGUES} WHERE sport_id = {sport_id}", ttl=600)
 
 
-@st.cache_data()
+@st.cache_data(ttl=10)
 def get_fixtures(sport_id: int, date_from: datetime, date_to: datetime):
     """
     :param sport_id: The ID of the sport for which fixtures are to be retrieved.
