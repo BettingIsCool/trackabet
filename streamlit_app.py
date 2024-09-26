@@ -94,8 +94,8 @@ if st.session_state.session_id == tools.get_active_session():
             # This string is what users see in the dropdown menu
             if selected_to_date:
                 runtime_start = time.time()
-                selected_from_date_converted_to_timezone = pytz.timezone(st.session_state.timezone).localize(selected_from_date.datetime(selected_from_date.year, selected_from_date.month, selected_from_date.day)).astimezone(pytz.timezone('Europe/Vienna'))
-                selected_to_date_converted_to_timezone = pytz.timezone(st.session_state.timezone).localize(selected_to_date.datetime(selected_from_date.year, selected_from_date.month, selected_from_date.day)).astimezone(pytz.timezone('Europe/Vienna'))
+                selected_from_date_converted_to_timezone = pytz.timezone(st.session_state.timezone).localize(datetime.datetime(selected_from_date.year, selected_from_date.month, selected_from_date.day)).astimezone(pytz.timezone('Europe/Vienna'))
+                selected_to_date_converted_to_timezone = pytz.timezone(st.session_state.timezone).localize(datetime.datetime(selected_from_date.year, selected_from_date.month, selected_from_date.day)).astimezone(pytz.timezone('Europe/Vienna'))
 
                 st.write(selected_from_date_converted_to_timezone)
 
