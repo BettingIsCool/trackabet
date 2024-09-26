@@ -98,6 +98,9 @@ if st.session_state.session_id == tools.get_active_session():
                 selected_from_date_converted_into_timezone = datetime.datetime.combine(selected_from_date, datetime.datetime.min.time()) - datetime.timedelta(hours=int(offset))
                 selected_to_date_converted_into_timezone = datetime.datetime.combine(selected_to_date, datetime.datetime.min.time()) - datetime.timedelta(hours=int(offset))
 
+                st.write(selected_from_date_converted_into_timezone)
+                st.write(selected_to_date_converted_into_timezone)
+
                 datetime.datetime.combine(selected_from_date, datetime.datetime.min.time())
 
                 events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date_converted_into_timezone - datetime.timedelta(hours=int(offset)), date_to=selected_to_date_converted_into_timezone - datetime.timedelta(hours=int(offset)))
