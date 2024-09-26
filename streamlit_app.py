@@ -94,12 +94,11 @@ if st.session_state.session_id == tools.get_active_session():
             # This string is what users see in the dropdown menu
             if selected_to_date:
                 runtime_start = time.time()
-                selected_from_date_converted_to_timezone = pytz.timezone(st.session_state.timezone).localize(datetime.datetime(selected_from_date.year, selected_from_date.month, selected_from_date.day)).astimezone(pytz.timezone('Europe/Vienna'))
-                selected_to_date_converted_to_timezone = pytz.timezone(st.session_state.timezone).localize(datetime.datetime(selected_to_date.year, selected_to_date.month, selected_to_date.day)).astimezone(pytz.timezone('Europe/Vienna'))
+                offset = datetime.datetime.now(pytz.timezone(st.session_state.timezone)).utcoffset().total_seconds() / 3600
 
-                st.write(selected_from_date_converted_to_timezone)
+                st.write(offset)
 
-                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date_converted_to_timezone, date_to=selected_to_date_converted_to_timezone)
+                events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date, date_to=selected_to_date)
 
                 st.write(f"Runtime get_fixtures: {round(time.time() - runtime_start, 3)} seconds.")
 
