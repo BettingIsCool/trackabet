@@ -1,4 +1,5 @@
 # TODO no need to db.get_bets() all the time
+# TODO timezone change also in dropdown lists
 # TODO # This query returns the fixtures without checking for odds & results availability
 #     # return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' AND o.event_id = f.event_id AND r.event_id = f.event_id ORDER BY f.starts", ttl=600)
 # TODO check all queries (with explain) and indexes & try to make them faster / switch to storage-optimized
@@ -91,7 +92,9 @@ if st.session_state.session_id == tools.get_active_session():
             # The event_options dictionary represents the event as a concatenated string (starts - league_name - runner_home - runner_away) with the event_id as key
             # This string is what users see in the dropdown menu
             if selected_to_date:
+                runtime_start = time.time()
                 events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=selected_from_date, date_to=selected_to_date)
+                st.write(f"Runtime get_fixtures: {time.time() - runtime_start}")
 
                 event_options, event_details = dict(), dict()
                 for index, row in events.iterrows():
@@ -159,7 +162,6 @@ if st.session_state.session_id == tools.get_active_session():
                                         odds = tools.get_decimal_odds(american_odds=american_odds)
                                     else:
                                         odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
-
 
                                     if odds:
                                         stake = st.sidebar.number_input("Enter stake", min_value=0.01, value=1.00, step=1.00, format="%0.2f")
