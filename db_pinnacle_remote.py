@@ -7,16 +7,16 @@ from config import TABLE_LEAGUES, TABLE_FIXTURES, TABLE_ODDS, TABLE_RESULTS, TAB
 conn = st.connection('pinnacle', type='sql')
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_leagues(sport_id: int):
     """
     :param sport_id: The ID of the sport for which leagues are to be retrieved.
     :return: A list of tuples containing league IDs and league names for the given sport.
     """
-    return conn.query(f"SELECT league_id, league_name FROM {TABLE_LEAGUES} WHERE sport_id = {sport_id}", ttl=600)
+    return conn.query(f"SELECT league_id, league_name FROM {TABLE_LEAGUES} WHERE sport_id = {sport_id}")
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_fixtures(sport_id: int, date_from: datetime, date_to: datetime):
     """
     :param sport_id: The ID of the sport for which fixtures are to be retrieved.
@@ -26,22 +26,22 @@ def get_fixtures(sport_id: int, date_from: datetime, date_to: datetime):
     """
 
     # This query returns the fixtures including if odds & results are actually available
-    return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE o.event_id = f.event_id AND r.event_id = f.event_id AND f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' ORDER BY f.starts", ttl=600)
+    return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE o.event_id = f.event_id AND r.event_id = f.event_id AND f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' ORDER BY f.starts")
 
     # This query returns the fixtures without checking for odds & results availability
     # return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' AND o.event_id = f.event_id AND r.event_id = f.event_id ORDER BY f.starts")
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_odds(event_id: int):
     """
     :param event_id: Identifier for the event to fetch odds for
     :return: Query result containing period, market, line, odds1, odds0, and odds2 for the specified event
     """
-    return conn.query(f"SELECT period, market, line, odds1, odds0, odds2 FROM {TABLE_ODDS} WHERE event_id = {event_id}", ttl=600)
+    return conn.query(f"SELECT period, market, line, odds1, odds0, odds2 FROM {TABLE_ODDS} WHERE event_id = {event_id}")
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_bets(username: str, sports: str, bookmakers: str, tags: str, bet_status: str, date_from: datetime, date_to: datetime):
     """
     :param username: The username of the individual placing the bets.
@@ -52,39 +52,39 @@ def get_bets(username: str, sports: str, bookmakers: str, tags: str, bet_status:
     :param date_to: The end date for filtering bets.
     :return: A list of dictionaries containing bet details filtered by the given criteria.
     """
-    return conn.query(f"SELECT delete_bet, id, tag, starts, sport_name, league_name, runner_home, runner_away, market, period_name, side_name, line, odds, stake, bookmaker, bet_status, score_home, score_away, profit, cls_odds, true_cls, cls_limit, ev, clv, bet_added FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag in {tags} AND bet_status in {bet_status} AND DATE(starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(starts) <= '{date_to.strftime('%Y-%m-%d')}' ORDER BY starts", ttl=600).to_dict('records')
+    return conn.query(f"SELECT delete_bet, id, tag, starts, sport_name, league_name, runner_home, runner_away, market, period_name, side_name, line, odds, stake, bookmaker, bet_status, score_home, score_away, profit, cls_odds, true_cls, cls_limit, ev, clv, bet_added FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag in {tags} AND bet_status in {bet_status} AND DATE(starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(starts) <= '{date_to.strftime('%Y-%m-%d')}' ORDER BY starts").to_dict('records')
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_user_unique_sports(username: str):
     """
     :param username: The username for whom unique sports are to be fetched.
     :return: A list of unique sport names that the user has placed bets on.
     """
-    return conn.query(f"SELECT DISTINCT(sport_name) FROM {TABLE_BETS} WHERE user = '{username}'", ttl=600)['sport_name'].tolist()
+    return conn.query(f"SELECT DISTINCT(sport_name) FROM {TABLE_BETS} WHERE user = '{username}'")['sport_name'].tolist()
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_user_unique_leagues(username: str, sports: str):
     """
     :param username: The username of the user whose unique leagues are to be fetched.
     :param sports: A string representing the sports categories to filter the leagues.
     :return: A list of unique league names associated with the user and filtered by the specified sports.
     """
-    return conn.query(f"SELECT DISTINCT(league_name) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports}", ttl=600)['league_name'].tolist()
+    return conn.query(f"SELECT DISTINCT(league_name) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports}")['league_name'].tolist()
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_user_unique_bookmakers(username: str, sports: str):
     """
     :param username: The username of the user whose unique bookmakers are being retrieved.
     :param sports: A string representing the sports categories to filter bets by.
     :return: A list of unique bookmakers that the specified user has placed bets with in the given sports categories.
     """
-    return conn.query(f"SELECT DISTINCT(bookmaker) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports}", ttl=600)['bookmaker'].tolist()
+    return conn.query(f"SELECT DISTINCT(bookmaker) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports}")['bookmaker'].tolist()
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_user_unique_tags(username: str, sports: str, bookmakers: str):
     """
     :param username: The username of the user whose unique tags are being queried.
@@ -92,10 +92,10 @@ def get_user_unique_tags(username: str, sports: str, bookmakers: str):
     :param bookmakers: A string containing the bookmaker names to filter the query.
     :return: A list of unique tags associated with the provided username, filtered by the specified sports and bookmakers.
     """
-    return conn.query(f"SELECT DISTINCT(tag) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers}", ttl=600)['tag'].tolist()
+    return conn.query(f"SELECT DISTINCT(tag) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers}")['tag'].tolist()
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_user_unique_bet_status(username: str, sports: str, bookmakers: str, tags: str):
     """
     :param username: The username of the individual for whom the unique bet status is being queried.
@@ -104,10 +104,10 @@ def get_user_unique_bet_status(username: str, sports: str, bookmakers: str, tags
     :param tags: The tags that categorize the bets for which the status is being requested.
     :return: A list of unique bet statuses for the given user, filtered by sports, bookmakers, and tags.
     """
-    return conn.query(f"SELECT DISTINCT(bet_status) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags}", ttl=600)['bet_status'].tolist()
+    return conn.query(f"SELECT DISTINCT(bet_status) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags}")['bet_status'].tolist()
 
 
-@st.cache_data(ttl=10)
+@st.cache_data()
 def get_user_unique_starts(username: str, sports: str, bookmakers: str, tags: str, bet_status: str):
     """
     :param username: User's name for which unique starts are to be retrieved
@@ -117,7 +117,7 @@ def get_user_unique_starts(username: str, sports: str, bookmakers: str, tags: st
     :param bet_status: Comma separated string of bet statuses
     :return: List of distinct starts associated with the given user and filters
     """
-    return conn.query(f"SELECT DISTINCT(starts) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags} AND bet_status IN {bet_status}", ttl=600)['starts'].tolist()
+    return conn.query(f"SELECT DISTINCT(starts) FROM {TABLE_BETS} WHERE user = '{username}' AND sport_name IN {sports} AND bookmaker IN {bookmakers} AND tag IN {tags} AND bet_status IN {bet_status}")['starts'].tolist()
 
 
 def append_bet(data: dict):
