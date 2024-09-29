@@ -72,6 +72,7 @@ if st.session_state.session_id == tools.get_active_session():
 
     if 'initial_df' not in st.session_state:
         st.session_state['initial_df'] = ''
+        st.write('initializing')
     if 'edited_df ' not in st.session_state:
         st.session_state['edited_df '] = ''
 
