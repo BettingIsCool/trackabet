@@ -327,7 +327,9 @@ if st.session_state.session_id == tools.get_active_session():
                         if not st.session_state['initial_df'].equals(st.session_state['edited_df']):
                             
                             update(st.session_state['initial_df'], st.session_state['edited_df'])
-                            st.session_state['initial_df'] = st.session_state['edited_df']
+
+                        st.session_state['initial_df'] = st.session_state['edited_df']
+                        st.write(st.session_state['initial_df'].equals(st.session_state['edited_df']))
                             
                             
                             
