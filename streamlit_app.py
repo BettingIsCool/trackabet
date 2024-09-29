@@ -299,7 +299,7 @@ if st.session_state.session_id == tools.get_active_session():
 
                             for index, row in df.iterrows():
 
-                                if row['ST'] == 'na':
+                                if row['ST'] != edited_df.loc[edited_df['ID'] == row['ID'], 'ST']:
                                     st.write(row['ID'])
                                     st.write(edited_df.loc[edited_df['ID'] == row['ID'], 'ST'])
 
