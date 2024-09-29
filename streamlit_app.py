@@ -299,29 +299,41 @@ if st.session_state.session_id == tools.get_active_session():
 
                             for index, row in df.iterrows():
 
+                                # Check current vs previous bet_status
                                 current_status = row['ST']
                                 try:
                                     previous_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
-                                except:
+                                except Exception as ex:
                                     previous_status = current_status
 
-                                if previous_status == 'na' and current_status != 'na':
+                                if current_status != previous_status:
 
-                                    placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
-                                    time.sleep(5)
-                                    placeholder1.empty()
+                                    if current_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
+                                        db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=current_status, placeholder=placeholder1)
 
-                                else:
+                                    else:
+                                        placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
+                                        time.sleep(5)
+                                        placeholder1.empty()
 
-                                    if current_status != previous_status:
+                                # Check current vs previous home_score
+                                current_home_score = row['SH']
+                                try:
+                                    previous_home_score = edited_df[edited_df['ID'] == row['ID']]['SH'].iloc[0]
+                                except Exception as ex:
+                                    previous_home_score = current_home_score
 
-                                        if current_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
-                                            db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=current_status, placeholder=placeholder1)
+                                if current_home_score != previous_home_score:
 
-                                        else:
-                                            placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
-                                            time.sleep(5)
-                                            placeholder1.empty()
+                                    if isinstance(current_home_score, int) and current_home_score >= 0:
+                                        db.update_bet(dbid=row['ID'], column_name='score_home', column_value=current_home_score, placeholder=placeholder1)
+
+                                    else:
+                                        placeholder1.info('Invalid input. Enter an integer value >= 0')
+                                        time.sleep(5)
+                                        placeholder1.empty()
+
+
 
 
                         def change_state(edited_df):
