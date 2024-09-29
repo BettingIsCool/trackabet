@@ -302,19 +302,23 @@ if st.session_state.session_id == tools.get_active_session():
                                 current_status = row['ST']
                                 previous_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
 
-                                if isinstance(current_status, str):
+                                if previous_status == 'na' and current_status != 'na':
 
-                                    if previous_status == 'na' and current_status != 'na':
-
-                                        placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
-                                        time.sleep(2.5)
-                                        placeholder1.empty()
+                                    placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
+                                    time.sleep(2.5)
+                                    placeholder1.empty()
 
                                 else:
 
-                                    placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
-                                    time.sleep(2.5)
-                                    placeholder1.empty()
+                                    if isinstance(current_status, str):
+
+                                        st.write('alright')
+
+                                    else:
+
+                                        placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
+                                        time.sleep(2.5)
+                                        placeholder1.empty()
 
 
 
