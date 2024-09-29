@@ -297,7 +297,7 @@ if st.session_state.session_id == tools.get_active_session():
 
                         def update(df, edited_df):
 
-                            return df.equals(edited_df)
+                            st.write(df.equals(edited_df))
 
 
                         def change_state(edited_df):
