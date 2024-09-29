@@ -304,7 +304,7 @@ if st.session_state.session_id == tools.get_active_session():
 
                         df = st.session_state['updated_df']
 
-                        st.write(st.session_state['initial_df'].compare(st.session_state['updated_df']))
+                        st.write(st.session_state['initial_df'].equals(st.session_state['updated_df']))
 
 
 
