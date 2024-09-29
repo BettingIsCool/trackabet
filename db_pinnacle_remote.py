@@ -230,10 +230,10 @@ def update_bet(dbid: int, column_name: str, column_value: (str, int, float), pla
     :return: None
     """
     if column_name == 'bet_status':
-        query = f"UPDATE {TABLE_BETS} SET {column_name} = '{column_value}', user_edit = {datetime.now()} WHERE id = '{dbid}'"
+        query = f"UPDATE {TABLE_BETS} SET {column_name} = '{column_value}', user_edit = {datetime.now()} WHERE id = {dbid}"
 
     else:
-        query = f"UPDATE {TABLE_BETS} SET {column_name} = {column_value}, user_edit = {datetime.now()} WHERE id = '{dbid}'"
+        query = f"UPDATE {TABLE_BETS} SET {column_name} = {column_value}, user_edit = {datetime.now()} WHERE id = {dbid}"
 
     with conn.session as session:
         session.execute(text(query))
