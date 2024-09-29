@@ -302,6 +302,8 @@ if st.session_state.session_id == tools.get_active_session():
                                 previous_status = row['ST']
                                 current_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
 
+                                st.write(previous_status, current_status)
+
                                 if previous_status == 'na' and current_status != 'na':
 
                                     st.info.write('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
