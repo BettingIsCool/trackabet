@@ -354,7 +354,7 @@ if st.session_state.session_id == tools.get_active_session():
                         # update(df, edited_df)
                         # df = edited_df
 
-                        bets_to_be_deleted = st.session_state['initial_df'].loc[(df['DEL'] == True), 'ID'].tolist()
+                        bets_to_be_deleted = st.session_state['initial_df'].loc[(st.session_state['initial_df']['DEL'] == True), 'ID'].tolist()
 
     # Place Refresh & Delete button below dataframe
     # Delete button will only be visible if at least one event is selected
