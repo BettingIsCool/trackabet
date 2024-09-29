@@ -307,16 +307,16 @@ if st.session_state.session_id == tools.get_active_session():
                             for index, row in initial_df.iterrows():
 
                                 # Check current vs previous bet_status
-                                current_status = row['ST']
+                                initial_status = row['ST']
                                 try:
-                                    previous_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
+                                    edited_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
                                 except Exception as ex:
-                                    previous_status = current_status
+                                    edited_status = initial_status
 
-                                if current_status != previous_status:
+                                if edited_status != initial_status:
 
-                                    if current_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
-                                        db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=current_status, placeholder=placeholder1)
+                                    if edited_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
+                                        db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=edited_status, placeholder=placeholder1)
 
                                     else:
                                         placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
