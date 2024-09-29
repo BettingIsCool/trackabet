@@ -299,12 +299,12 @@ if st.session_state.session_id == tools.get_active_session():
 
                             for index, row in df.iterrows():
 
-                                previous_status = row['ST']
-                                current_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
+                                current_status = row['ST']
+                                previous_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
 
-                                st.write(previous_status, current_status)
+                                st.write(current_status, previous_status)
 
-                                if previous_status != 'na' and current_status == 'na':
+                                if previous_status == 'na' and current_status != 'na':
 
                                     placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
                                     time.sleep(1.5)
