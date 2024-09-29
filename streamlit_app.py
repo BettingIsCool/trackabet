@@ -345,10 +345,7 @@ if st.session_state.session_id == tools.get_active_session():
                         edited_df = placeholder1.data_editor(edited_df, num_rows='dynamic', on_change=change_state, args=(edited_df,), disabled=True)
                         placeholder1.empty()
                         update(df, edited_df)
-
-
-
-
+                        df = edited_df
 
                         bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
 
