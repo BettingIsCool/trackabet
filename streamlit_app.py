@@ -316,8 +316,8 @@ if st.session_state.session_id == tools.get_active_session():
                         if 'df_value' not in st.session_state:
                             st.session_state.df_value = df
                         edited_df = st.session_state['df_value']
-                        edited_df = placeholder1.data_editor(edited_df, on_change=change_state, args=(edited_df,), disabled=True)
-                        placeholder1.empty()
+                        edited_df = st.data_editor(edited_df, on_change=change_state, args=(edited_df,), disabled=True)
+                        #placeholder1.empty()
                         update(df, edited_df)
 
 
