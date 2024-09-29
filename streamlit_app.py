@@ -297,7 +297,16 @@ if st.session_state.session_id == tools.get_active_session():
 
                         def update(df, edited_df):
 
-                            st.write(df.equals(edited_df))
+                            for index, row in df.iterrows():
+
+                                if row['ST'] != 'na':
+                                    st.write(edited_df.loc[edited_df['ID'] == row['ID'], 'ST'])
+
+                                    #st.info.write('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
+
+
+
+                            #st.write(df.equals(edited_df))
 
 
                         def change_state(edited_df):
