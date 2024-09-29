@@ -310,15 +310,17 @@ if st.session_state.session_id == tools.get_active_session():
 
                                 else:
 
-                                    if isinstance(current_status, str):
+                                    if current_status != previous_status:
 
-                                        st.write('alright')
+                                        if isinstance(current_status, str):
 
-                                    else:
+                                            st.write('alright')
 
-                                        placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
-                                        time.sleep(2.5)
-                                        placeholder1.empty()
+                                        else:
+
+                                            placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
+                                            time.sleep(2.5)
+                                            placeholder1.empty()
 
 
 
