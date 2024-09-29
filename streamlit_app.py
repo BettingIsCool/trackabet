@@ -302,7 +302,7 @@ if st.session_state.session_id == tools.get_active_session():
                                 #if row['ST'] != 'na'
 
                                 #if row['ST'] != edited_df.loc[edited_df['ID'] == row['ID'], 'ST']:
-                                st.write(row['ST'], edited_df.loc[edited_df['ID'] == row['ID'], 'ST'])
+                                st.write(row['ST'], str(edited_df.loc[edited_df['ID'] == row['ID'], 'ST']))
                                 st.write(row['ST'] == edited_df.loc[edited_df['ID'] == row['ID'], 'ST'])
                                 #st.write()
 
