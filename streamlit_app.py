@@ -72,8 +72,8 @@ if st.session_state.session_id == tools.get_active_session():
 
     if 'initial_df' not in st.session_state:
         st.session_state['initial_df'] = ''
-    if 'updated_df ' not in st.session_state:
-        st.session_state['updated_df '] = ''
+    if 'edited_df ' not in st.session_state:
+        st.session_state['edited_df '] = ''
 
     # Welcome message in the sidebar
     st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.4.28")
@@ -300,16 +300,44 @@ if st.session_state.session_id == tools.get_active_session():
 
                         st.session_state['initial_df'] = placeholder1.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.TextColumn("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded"), "TAG": st.column_config.Column("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc."), "SH": st.column_config.Column("SH", help="Score Home"), "SA": st.column_config.Column("SA", help="Score Away"), "STARTS": st.column_config.Column("STARTS", help="Event starting time"), "SPORT": st.column_config.Column("SPORT", help="Sport"), "LEAGUE": st.column_config.Column("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.Column("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.Column("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.Column("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.Column("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.Column("SIDE", help="Selection"), "LINE": st.column_config.Column("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.Column("ODDS", help="Obtained price"), "STAKE": st.column_config.Column("STAKE", help="Risk amount"), "BOOK": st.column_config.Column("BOOK", help="Bookmaker"), "P/L": st.column_config.Column("P/L", help="Actual profit"), "CLS": st.column_config.Column("CLS", help="Closing price"), "CLS_TRUE": st.column_config.Column("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.Column("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.Column("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.Column("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.Column("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
                         placeholder1.empty()
-                        st.session_state['updated_df'] = st.data_editor(st.session_state["initial_df"], num_rows="dynamic", column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.TextColumn("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded"), "TAG": st.column_config.Column("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc."), "SH": st.column_config.Column("SH", help="Score Home"), "SA": st.column_config.Column("SA", help="Score Away"), "STARTS": st.column_config.Column("STARTS", help="Event starting time"), "SPORT": st.column_config.Column("SPORT", help="Sport"), "LEAGUE": st.column_config.Column("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.Column("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.Column("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.Column("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.Column("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.Column("SIDE", help="Selection"), "LINE": st.column_config.Column("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.Column("ODDS", help="Obtained price"), "STAKE": st.column_config.Column("STAKE", help="Risk amount"), "BOOK": st.column_config.Column("BOOK", help="Bookmaker"), "P/L": st.column_config.Column("P/L", help="Actual profit"), "CLS": st.column_config.Column("CLS", help="Closing price"), "CLS_TRUE": st.column_config.Column("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.Column("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.Column("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.Column("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.Column("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
+                        st.session_state['edited_df'] = st.data_editor(st.session_state["initial_df"], num_rows="dynamic", column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.TextColumn("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded"), "TAG": st.column_config.Column("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc."), "SH": st.column_config.Column("SH", help="Score Home"), "SA": st.column_config.Column("SA", help="Score Away"), "STARTS": st.column_config.Column("STARTS", help="Event starting time"), "SPORT": st.column_config.Column("SPORT", help="Sport"), "LEAGUE": st.column_config.Column("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.Column("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.Column("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.Column("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.Column("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.Column("SIDE", help="Selection"), "LINE": st.column_config.Column("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.Column("ODDS", help="Obtained price"), "STAKE": st.column_config.Column("STAKE", help="Risk amount"), "BOOK": st.column_config.Column("BOOK", help="Bookmaker"), "P/L": st.column_config.Column("P/L", help="Actual profit"), "CLS": st.column_config.Column("CLS", help="Closing price"), "CLS_TRUE": st.column_config.Column("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.Column("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.Column("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.Column("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.Column("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
 
-                        #if st.session_state['initial_df'] != st.session_state['updated_df']:
-                        #    st.session_state['updated_df'] = st.session_state['initial_df'].copy()
+                        def update(initial_df, edited_df):
 
-                        df = st.session_state['updated_df']
+                            for index, row in initial_df.iterrows():
 
-                        st.write(st.session_state['initial_df'].equals(st.session_state['updated_df']))
+                                # Check current vs previous bet_status
+                                current_status = row['ST']
+                                try:
+                                    previous_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
+                                except Exception as ex:
+                                    previous_status = current_status
 
-                        st.session_state['initial_df'] = st.session_state['updated_df'].copy()
+                                if current_status != previous_status:
+
+                                    if current_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
+                                        db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=current_status, placeholder=placeholder1)
+
+                                    else:
+                                        placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
+                                        time.sleep(5)
+                                        placeholder1.empty()
+                        
+                        # Update values in database if 
+                        if st.session_state['initial_df'] != st.session_state['edited_df']:
+                            
+                            update(st.session_state['initial_df'], st.session_state['edited_df'])
+                            st.session_state['initial_df'] = st.session_state['edited_df'].copy()
+                            
+                            
+                            
+                            #st.session_state['edited_df'] = st.session_state['initial_df'].copy()
+
+                        df = st.session_state['edited_df']
+
+                        #st.write(st.session_state['initial_df'].equals(st.session_state['edited_df']))
+
+                        #st.session_state['initial_df'] = st.session_state['edited_df'].copy()
 
 
 
