@@ -311,6 +311,7 @@ if st.session_state.session_id == tools.get_active_session():
                                     time.sleep(5)
                                     placeholder1.empty()
                                     edited_df.loc[edited_df['ID'] == row['ID']] = 'na'
+                                    st.write(edited_df)
                                     #df[df['ID'] == ]['ST'] = 'na'
                                     tools.clear_cache()
 
