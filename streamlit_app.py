@@ -302,12 +302,11 @@ if st.session_state.session_id == tools.get_active_session():
                         placeholder1.empty()
                         st.session_state['updated_df'] = st.data_editor(st.session_state["initial_df"], num_rows="dynamic")
 
+                        df = st.session_state['updated_df']
+
                         st.write(st.session_state['initial_df'].compare(st.session_state['updated_df']))
 
-                        if 'initial_df' not in st.session_state:
-                            st.session_state['initial_df'] = ''
-                        if 'updated_df ' not in st.session_state:
-                            st.session_state['updated_df '] = ''
+
 
 
 
@@ -364,7 +363,7 @@ if st.session_state.session_id == tools.get_active_session():
                         # update(df, edited_df)
                         # df = edited_df
 
-                        bets_to_be_deleted = st.session_state['initial_df'].loc[(st.session_state['initial_df']['DEL'] == True), 'ID'].tolist()
+                        bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
 
     # Place Refresh & Delete button below dataframe
     # Delete button will only be visible if at least one event is selected
