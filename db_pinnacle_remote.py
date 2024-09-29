@@ -222,7 +222,13 @@ def get_users():
 
 
 def update_bet(dbid: int, column_name: str, column_value: (str, int, float), placeholder: st.delta_generator.DeltaGenerator):
-
+    """
+    :param dbid: The unique identifier of the bet to be updated.
+    :param column_name: The name of the column to be updated (e.g., 'bet_status').
+    :param column_value: The new value to be set for the specified column. Can be of type str, int, or float.
+    :param placeholder: A Streamlit DeltaGenerator object used for updating the application interface.
+    :return: None
+    """
     if column_name == 'bet_status':
         query = f"UPDATE {TABLE_BETS} SET {column_name} = '{column_value}', user_edit = {datetime.now()} WHERE id = '{dbid}'"
 
