@@ -310,6 +310,8 @@ if st.session_state.session_id == tools.get_active_session():
                                     placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
                                     time.sleep(5)
                                     placeholder1.empty()
+                                    row['ST'] = 'na'
+                                    tools.clear_cache()
 
                                 else:
 
