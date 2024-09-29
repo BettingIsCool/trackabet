@@ -310,7 +310,6 @@ if st.session_state.session_id == tools.get_active_session():
 
                                     if current_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
                                         db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=current_status, placeholder=placeholder1)
-                                        tools.clear_cache()
 
                                     else:
                                         placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
@@ -328,7 +327,6 @@ if st.session_state.session_id == tools.get_active_session():
 
                                     if isinstance(current_home_score, int) and current_home_score >= 0:
                                         db.update_bet(dbid=row['ID'], column_name='score_home', column_value=current_home_score, placeholder=placeholder1)
-                                        tools.clear_cache()
 
                                     else:
                                         placeholder1.info('Invalid input. Enter an integer value >= 0')
