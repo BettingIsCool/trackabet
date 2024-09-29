@@ -304,7 +304,7 @@ if st.session_state.session_id == tools.get_active_session():
 
                                 st.write(previous_status, current_status)
 
-                                if previous_status == 'na' and current_status != 'na':
+                                if previous_status != 'na' and current_status == 'na':
 
                                     st.info.write('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
 
