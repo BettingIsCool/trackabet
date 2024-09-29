@@ -304,6 +304,11 @@ if st.session_state.session_id == tools.get_active_session():
 
                         st.write(st.session_state['initial_df'].compare(st.session_state['updated_df']))
 
+                        if 'initial_df' not in st.session_state:
+                            st.session_state['initial_df'] = ''
+                        if 'updated_df ' not in st.session_state:
+                            st.session_state['updated_df '] = ''
+
 
 
                         #st.session_state.odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display), horizontal=True, on_change=db.set_user_odds_display, args=(username, placeholder1), key='odds_display_key')
