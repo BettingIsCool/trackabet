@@ -305,7 +305,7 @@ if st.session_state.session_id == tools.get_active_session():
                                 except:
                                     previous_status = current_status
 
-                                if previous_status == 'na':
+                                if previous_status == 'na' and current_status != 'na':
 
                                     placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
                                     time.sleep(5)
