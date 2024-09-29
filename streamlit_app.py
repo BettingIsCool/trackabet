@@ -305,7 +305,7 @@ if st.session_state.session_id == tools.get_active_session():
                                 if previous_status == 'na' and current_status != 'na':
 
                                     placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
-                                    time.sleep(2.5)
+                                    time.sleep(5)
                                     placeholder1.empty()
 
                                 else:
@@ -313,15 +313,12 @@ if st.session_state.session_id == tools.get_active_session():
                                     if current_status != previous_status:
 
                                         if current_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
-
-                                            st.write('alright')
+                                            db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=current_status, placeholder=placeholder1)
 
                                         else:
-
                                             placeholder1.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
-                                            time.sleep(2.5)
+                                            time.sleep(5)
                                             placeholder1.empty()
-
 
 
                         def change_state(edited_df):

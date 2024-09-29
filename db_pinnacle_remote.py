@@ -219,3 +219,20 @@ def get_users():
     :rtype: list
     """
     return conn.query(f"SELECT username FROM {TABLE_USERS}")['username'].tolist()
+
+
+def update_bet(dbid: int, column_name: str, column_value: (str, int, float), placeholder: st.delta_generator.DeltaGenerator):
+
+    if column_name == 'bet_status':
+        query = f"UPDATE {TABLE_BETS} SET {column_name} = '{column_value}', user_edit = {datetime.now()} WHERE id = '{dbid}'"
+
+    else:
+        query = f"UPDATE {TABLE_BETS} SET {column_name} = {column_value}, user_edit = {datetime.now()} WHERE id = '{dbid}'"
+
+    with conn.session as session:
+        session.execute(text(query))
+        session.commit()
+
+    placeholder.success(f'{column_name} changed successfully!')
+    time.sleep(2)
+    placeholder.empty()
