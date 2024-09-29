@@ -312,7 +312,7 @@ if st.session_state.session_id == tools.get_active_session():
 
                                     if current_status != previous_status:
 
-                                        if isinstance(current_status, str):
+                                        if current_status in ('W', 'HW', 'L', 'HL', 'P', 'V'):
 
                                             st.write('alright')
 
