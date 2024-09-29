@@ -1,3 +1,6 @@
+# The module 'db_pinnacle_remote.py' uses sqlalchemy as the database connector which is the preferred way for streamlit
+# The module 'db_pinnacle_remote2.py' uses mysql-connector-python
+
 import time
 import streamlit as st
 from sqlalchemy import text

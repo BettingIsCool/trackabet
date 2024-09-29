@@ -1,12 +1,9 @@
-# TODO refactoring
+# TODO refactoring / gold-plating
 # TODO check if cached get_fixtures get updated with new events
-# TODO # This query returns the fixtures without checking for odds & results availability
-#     # return conn.query(f"SELECT DISTINCT(f.event_id), f.league_id, f.league_name, f.starts, f.runner_home, f.runner_away FROM {TABLE_FIXTURES} f, {TABLE_ODDS} o, {TABLE_RESULTS} r WHERE f.sport_id = {sport_id} AND DATE(f.starts) >= '{date_from.strftime('%Y-%m-%d')}' AND DATE(f.starts) <= '{date_to.strftime('%Y-%m-%d')}' AND o.event_id = f.event_id AND r.event_id = f.event_id ORDER BY f.starts", ttl=600)
-# TODO check all queries (with explain) and indexes & try to make them faster
 # TODO move pinnacle.replica2/pinnacle.trackabet to streamlit.trackabet (clean up)
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
-# TODO bet size filter
+# TODO bet size filter / clv filter
 # TODO tutorial video (explanation for export, 'sort rows by clicking on the column header', american/decimal, timezone, filter clear all with 'x' then re-add)
 # TODO custom csv upload (spreadsheet for data validation, AI assisted event mapping), see https://medium.com/@shrinath.suresh/ai-powered-schema-mapping-95f596d31590
 
@@ -91,12 +88,12 @@ if st.session_state.session_id == tools.get_active_session():
             # The event_options dictionary represents the event as a concatenated string (starts - league_name - runner_home - runner_away) with the event_id as key
             # This string is what users see in the dropdown menu
             if selected_to_date:
-                runtime_start = time.time()
+                # runtime_start = time.time()
 
                 offset = tools.tz_diff(home='Europe/Vienna', away=st.session_state.timezone, on=None)
                 events = db.get_fixtures(sport_id=SPORTS[selected_sport], date_from=datetime.datetime.combine(selected_from_date, datetime.datetime.min.time()) - datetime.timedelta(hours=int(offset)), date_to=datetime.datetime.combine(selected_to_date, datetime.datetime.min.time()) - datetime.timedelta(hours=int(offset)))
 
-                st.write(f"Runtime get_fixtures: {round(time.time() - runtime_start, 3)} seconds.")
+                # st.write(f"Runtime get_fixtures: {round(time.time() - runtime_start, 3)} seconds.")
 
                 event_options, event_details = dict(), dict()
                 for index, row in events.iterrows():
@@ -295,13 +292,13 @@ if st.session_state.session_id == tools.get_active_session():
                         else:
                             styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{:,.3f}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{:,.3f}'.format, 'CLS_TRUE': '{:,.3f}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
                             pd.set_option("styler.render.max_elements", 33333333)
-                        df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.Column("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded"), "TAG": st.column_config.Column("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc."), "SH": st.column_config.Column("SH", help="Score Home"), "SA": st.column_config.Column("SA", help="Score Away"), "STARTS": st.column_config.Column("STARTS", help="Event starting time"), "SPORT": st.column_config.Column("SPORT", help="Sport"), "LEAGUE": st.column_config.Column("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.Column("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.Column("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.Column("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.Column("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.Column("SIDE", help="Selection"), "LINE": st.column_config.Column("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.Column("ODDS", help="Obtained price"), "STAKE": st.column_config.Column("STAKE", help="Risk amount"), "BOOK": st.column_config.Column("BOOK", help="Bookmaker"), "P/L": st.column_config.Column("P/L", help="Actual profit"), "CLS": st.column_config.Column("CLS", help="Closing price"), "CLS_TRUE": st.column_config.Column("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.Column("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.Column("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.Column("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.Column("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
+                        df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.TextColumn("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded"), "TAG": st.column_config.Column("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc."), "SH": st.column_config.Column("SH", help="Score Home"), "SA": st.column_config.Column("SA", help="Score Away"), "STARTS": st.column_config.Column("STARTS", help="Event starting time"), "SPORT": st.column_config.Column("SPORT", help="Sport"), "LEAGUE": st.column_config.Column("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.Column("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.Column("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.Column("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.Column("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.Column("SIDE", help="Selection"), "LINE": st.column_config.Column("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.Column("ODDS", help="Obtained price"), "STAKE": st.column_config.Column("STAKE", help="Risk amount"), "BOOK": st.column_config.Column("BOOK", help="Bookmaker"), "P/L": st.column_config.Column("P/L", help="Actual profit"), "CLS": st.column_config.Column("CLS", help="Closing price"), "CLS_TRUE": st.column_config.Column("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.Column("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.Column("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.Column("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.Column("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID'], hide_index=True)
 
                         bets_to_be_deleted = df.loc[(df['DEL'] == True), 'ID'].tolist()
 
     # Place Refresh & Delete button below dataframe
     # Delete button will only be visible if at least one event is selected
-    st.button('Refresh dashboard', on_click=tools.clear_cache)
+    st.button('Refresh', on_click=tools.clear_cache)
     if bets_to_be_deleted:
         st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
