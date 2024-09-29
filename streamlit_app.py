@@ -300,7 +300,10 @@ if st.session_state.session_id == tools.get_active_session():
                             for index, row in df.iterrows():
 
                                 current_status = row['ST']
-                                previous_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
+                                try:
+                                    previous_status = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
+                                except:
+                                    previous_status = current_status
 
                                 if previous_status == 'na' and current_status != 'na':
 
