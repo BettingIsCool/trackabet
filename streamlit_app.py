@@ -310,8 +310,7 @@ if st.session_state.session_id == tools.get_active_session():
                                     placeholder1.info('You can not change the status of an unsettled event. Please wait for the event to be graded and then try again.')
                                     time.sleep(5)
                                     placeholder1.empty()
-                                    edited_df.loc[edited_df['ID'] == row['ID']] = 'na'
-                                    st.write(edited_df)
+                                    edited_df['ID'][edited_df.loc[edited_df['ID'] == row['ID']]] = 'na'
                                     #df[df['ID'] == ]['ST'] = 'na'
                                     tools.clear_cache()
 
