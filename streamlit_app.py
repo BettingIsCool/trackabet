@@ -362,7 +362,7 @@ if st.session_state.session_id == tools.get_active_session():
             chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "Expected P/L": cum_clv}, columns=["bet_no", "Actual P/L", "Expected P/L"])
             st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "Expected P/L"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
 
-    st.sidebar.image(image="/media/logo_sbic.png", use_column_width='auto')
+    st.sidebar.image(image="media/logo_sbic.png", use_column_width='auto')
 
     # Create a radio button for Decimal/American odds format
     odds_display_options = ['Decimal', 'American']
