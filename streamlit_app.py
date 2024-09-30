@@ -307,8 +307,9 @@ if st.session_state.session_id == tools.get_active_session():
                         if not st.session_state['initial_df'].equals(st.session_state['edited_df']):
 
                             tools.update_bet(initial_df=st.session_state['initial_df'], edited_df=st.session_state['edited_df'], placeholder=placeholder1)
-                            st.session_state['initial_df'] = st.session_state['edited_df']
                             st.rerun()
+
+                        st.session_state['initial_df'] = st.session_state['edited_df']
 
                         df = st.session_state['edited_df']
                         # END - Option with editable dataframe
