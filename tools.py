@@ -204,7 +204,6 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
                 time.sleep(2.5)
                 placeholder.empty()
 
-
         # Check & update current vs previous BOOKMAKER
         initial_value = row['BOOK']
         try:
