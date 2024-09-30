@@ -240,5 +240,5 @@ def update_bet(dbid: int, column_name: str, column_value: (str, int, float), pla
         session.commit()
 
     placeholder.success(f'{column_name} successfully updated for bet ID {dbid}!')
-    time.sleep(0.5)
+    time.sleep(0.25)
     placeholder.empty()
