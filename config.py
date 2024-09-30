@@ -4,6 +4,12 @@ TEXT_LANDING_PAGE = """
 
 ## **TRACK-A-BET. Track your bets efficiently.**
 
+For a quick start I recommend watching this 3-part series
+
+#1 Getting Started https://youtu.be/j-J3AL2UFK0
+#2 Editing & deleting a bet https://youtu.be/jzxRzTnCjCQ
+#3 What do all these values mean? https://youtu.be/s-aOSVbuFao
+
 #### THIS TOOL WILL REVEAL YOUR EDGE. INSTANTLY.
 
 👉 Log your bets and keep track of profits + clv (closing line value) with this easy-to-use app.
