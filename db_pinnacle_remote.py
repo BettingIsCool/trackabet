@@ -229,7 +229,7 @@ def update_bet(dbid: int, column_name: str, column_value: (str, int, float), pla
     :param placeholder: A Streamlit DeltaGenerator object used for updating the application interface.
     :return: None
     """
-    if column_name in ('bet_status', 'tag'):
+    if column_name in ('bet_status', 'tag', 'bookmaker', 'score_home', 'score_away'):
         query = f"UPDATE {TABLE_BETS} SET {column_name} = '{column_value}', user_edit = '{datetime.now()}' WHERE id = {dbid}"
 
     else:

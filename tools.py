@@ -220,3 +220,38 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
                 placeholder.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
                 time.sleep(2.5)
                 placeholder.empty()
+
+        # Check & update current vs previous SCORE_HOME
+        initial_value = row['SH']
+        try:
+            edited_value = edited_df[edited_df['ID'] == row['ID']]['SH'].iloc[0]
+        except Exception as ex:
+            edited_value = initial_value
+
+        if edited_value != initial_value:
+
+            if isinstance(edited_value, int):
+                db.update_bet(dbid=row['ID'], column_name='score_home', column_value=edited_value, placeholder=placeholder)
+
+            else:
+                placeholder.info('Invalid input. Please enter a whole number >= 0')
+                time.sleep(2.5)
+                placeholder.empty()
+
+
+        # Check & update current vs previous SCORE_HOME
+        initial_value = row['SA']
+        try:
+            edited_value = edited_df[edited_df['ID'] == row['ID']]['SA'].iloc[0]
+        except Exception as ex:
+            edited_value = initial_value
+
+        if edited_value != initial_value:
+
+            if isinstance(edited_value, int):
+                db.update_bet(dbid=row['ID'], column_name='score_away', column_value=edited_value, placeholder=placeholder)
+
+            else:
+                placeholder.info('Invalid input. Please enter a whole number >= 0')
+                time.sleep(2.5)
+                placeholder.empty()
