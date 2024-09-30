@@ -1,5 +1,5 @@
-from datetime import datetime, timezone
-
+import time
+import pandas as pd
 import pendulum
 import streamlit as st
 import db_pinnacle_remote as db
@@ -182,3 +182,41 @@ def tz_diff(home, away, on=None):
             diff -= 24.0
 
     return diff
+
+
+def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: st.delta_generator.DeltaGenerator):
+    for index, row in initial_df.iterrows():
+
+        # Check & update current vs previous TAG
+        initial_value = row['TAG']
+        try:
+            edited_value = edited_df[edited_df['ID'] == row['ID']]['TAG'].iloc[0]
+        except Exception as ex:
+            edited_value = initial_value
+
+        if edited_value != initial_value:
+
+            if isinstance(edited_value, str):
+                db.update_bet(dbid=row['ID'], column_name='tag', column_value=edited_value, placeholder=placeholder)
+
+            else:
+                placeholder.info('Invalid input. Please enter a string')
+                time.sleep(2.5)
+                placeholder.empty()
+
+        # Check & update current vs previous BET_STATUS
+        initial_value = row['ST']
+        try:
+            edited_value = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
+        except Exception as ex:
+            edited_value = initial_value
+
+        if edited_value != initial_value:
+
+            if edited_value in ('W', 'HW', 'L', 'HL', 'P', 'V'):
+                db.update_bet(dbid=row['ID'], column_name='bet_status', column_value=edited_value, placeholder=placeholder)
+
+            else:
+                placeholder.info('Invalid input. Allowed values are: W, HW, L, HL, P, V')
+                time.sleep(2.5)
+                placeholder.empty()
