@@ -204,6 +204,24 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
                 time.sleep(2.5)
                 placeholder.empty()
 
+
+        # Check & update current vs previous BOOKMAKER
+        initial_value = row['BOOK']
+        try:
+            edited_value = edited_df[edited_df['ID'] == row['ID']]['BOOK'].iloc[0]
+        except Exception as ex:
+            edited_value = initial_value
+
+        if edited_value != initial_value:
+
+            if isinstance(edited_value, str):
+                db.update_bet(dbid=row['ID'], column_name='bookmaker', column_value=edited_value, placeholder=placeholder)
+
+            else:
+                placeholder.info('Invalid input. Please enter a string')
+                time.sleep(2.5)
+                placeholder.empty()
+
         # Check & update current vs previous BET_STATUS
         initial_value = row['ST']
         try:
@@ -239,7 +257,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
                 placeholder.empty()
 
 
-        # Check & update current vs previous SCORE_HOME
+        # Check & update current vs previous SCORE_AWAY
         initial_value = row['SA']
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['SA'].iloc[0]
