@@ -247,7 +247,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
 
         if edited_value != initial_value:
 
-            if isinstance(edited_value, int):
+            if edited_value is not None and edited_value >= 0:
                 db.update_bet(dbid=row['ID'], column_name='score_home', column_value=edited_value, placeholder=placeholder)
 
             else:
@@ -265,7 +265,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
 
         if edited_value != initial_value:
 
-            if isinstance(edited_value, int):
+            if edited_value is not None and edited_value >= 0:
                 db.update_bet(dbid=row['ID'], column_name='score_away', column_value=edited_value, placeholder=placeholder)
 
             else:
