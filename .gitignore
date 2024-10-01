@@ -14,7 +14,7 @@ db_pinnacle_local.py
 db_pinnacle_remote2.py
 config_local.py
 announcements.txt
-/_import_own_bets.py
+/+import_own_bets.py
 /media/logo_sbic_round.png
 /media/logo_sbic_squared.png
 /media/template.potx
@@ -24,3 +24,10 @@ announcements.txt
 /media/tutorial_editing_and_deleting_a_bet.mov
 /media/tutorial_getting_started.mov
 /media/tutorial_values.mov
+/_update_fixtures.py
+/_update_leagues.py
+/_update_odds.py
+/_update_odds_temp.py
+/_update_results.py
+/_update_user_bets.py
+/oddsmath.py

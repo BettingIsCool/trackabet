@@ -1,12 +1,8 @@
-# TODO How-To
 # TODO refactoring / gold-plating
 # TODO check if cached get_fixtures get updated with new events
-# TODO move pinnacle.replica2/pinnacle.trackabet to streamlit.trackabet (clean up)
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO bet size filter / clv filter
-# TODO tutorial video (explanation for export, 'sort rows by clicking on the column header', american/decimal, timezone, filter clear all with 'x' then re-add)
-# TODO custom csv upload (spreadsheet for data validation, AI assisted event mapping), see https://medium.com/@shrinath.suresh/ai-powered-schema-mapping-95f596d31590
 
 import streamlit as st
 
