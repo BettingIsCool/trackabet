@@ -1,8 +1,18 @@
+# TODO set up test environment
+# TODO tag update not working (only after 2nd try)
+# TODO add tennis sets/games explanation
+# TODO color status / pl green-red
+# TODO new layout / styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
+# TODO get rid of rerun (on_change function)
+# TODO Re-arrange 'add a abet', collapse sidebar
+# TODO Improvement idea: filters for leagues and markets.
+# TODO Improvement idea: Have a auto complete on tags too so you can start entering the word like you do with bookmarkers. And maybe add the most recents tags under the form box so you can choose it.
+# TODO session expired after a few minutes
 # TODO refactoring / gold-plating
-# TODO check if cached get_fixtures get updated with new events
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
 # TODO bet size filter / clv filter
+# TODO video covering sorting, exporting, tennis markets (games), future bets,...
 
 import streamlit as st
 

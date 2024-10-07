@@ -31,3 +31,5 @@ announcements.txt
 /_update_results.py
 /_update_user_bets.py
 /oddsmath.py
+/+correct_own_bets.py
+/track-a-bet_replies.txt
