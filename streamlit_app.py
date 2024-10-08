@@ -10,7 +10,20 @@
 # TODO Re-arrange 'add a abet', collapse sidebar
 # TODO Improvement idea: filters for leagues and markets.
 # TODO Improvement idea: Have a auto complete on tags too so you can start entering the word like you do with bookmarkers. And maybe add the most recents tags under the form box so you can choose it.
-# TODO session expired after a few minutes
+# TODO refactoring / gold-plating
+# TODO private github repo (streamlit teams)
+# TODO streamlit-extras lib
+# TODO bet size filter / clv filter
+# TODO video covering sorting, exporting, tennis markets (games), future bets,...
+
+# TODO set up test environment
+# TODO tag update not working (only after 2nd try)
+# TODO add tennis sets/games explanation
+# TODO color status / pl green-red
+# TODO styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
+# TODO get rid of rerun (on_change function)
+# TODO Improvement idea: filters for leagues and markets.
+# TODO Improvement idea: Have a auto complete on tags too so you can start entering the word like you do with bookmarkers. And maybe add the most recents tags under the form box so you can choose it.
 # TODO refactoring / gold-plating
 # TODO private github repo (streamlit teams)
 # TODO streamlit-extras lib
@@ -73,7 +86,6 @@ if 'users_fetched' not in st.session_state:
 # See https://discuss.streamlit.io/t/right-way-to-manage-same-user-opening-multiple-sessions/25608
 
 if st.session_state.session_id == tools.get_active_session(st.session_state.user_id):
-#if True:
 
     # Set odds format
     if 'odds_display' not in st.session_state:
@@ -85,19 +97,23 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
     bets_to_be_deleted, df = set(), set()
 
     # Welcome message in the sidebar
-    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.5.28")
     st.sidebar.title(f"Welcome {username}")
-
-    st.sidebar.subheader('Add a bet')
+    st.sidebar.subheader(f"Apply filters")
+    #st.sidebar.write('Session ID: ', st.session_state.session_id)
 
     # User needs to select sport & date range before fixtures are being fetched from the database
-    selected_sport = st.sidebar.selectbox(label='Select sport', options=SPORTS.keys(), index=None, placeholder='Start typing...', help='41 unique sports supported.')
+    col_sport, col_datefrom, col_dateto = st.columns([4, 2, 2])
+
+    with col_sport:
+        selected_sport = st.selectbox(label='Sport', options=SPORTS.keys(), index=None, placeholder='Add a bet by selecting a sport', help='41 unique sports supported.')
 
     if selected_sport is not None:
-        selected_from_date = st.sidebar.date_input(label='Select start date', value='today', min_value=datetime.date(year=2021, month=1, day=1), help='Specify what date you want to start searching for fixtures. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
+        with col_datefrom:
+            selected_from_date = st.date_input(label='Start date', value='today', min_value=datetime.date(year=2021, month=1, day=1), help='Specify what date you want to start searching for fixtures. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
 
         if selected_from_date:
-            selected_to_date = st.sidebar.date_input(label='Select end date', value=selected_from_date + datetime.timedelta(days=0), min_value=selected_from_date + datetime.timedelta(days=0), max_value=selected_from_date + datetime.timedelta(days=3), help='Specify what date you want to end your search. Please note that a maximum range of 3 days is allowed to avoid excess server load.')
+            with col_dateto:
+                selected_to_date = st.date_input(label='End date', value=selected_from_date + datetime.timedelta(days=0), min_value=selected_from_date + datetime.timedelta(days=0), max_value=selected_from_date + datetime.timedelta(days=3), help='Specify what date you want to end your search. Please note that a maximum range of 3 days is allowed to avoid excess server load.')
 
             # The event_options dictionary represents the event as a concatenated string (starts - league_name - runner_home - runner_away) with the event_id as key
             # This string is what users see in the dropdown menu
@@ -115,18 +131,21 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                         starts_converted_to_timezone = pytz.timezone('Europe/Vienna').localize(row['starts']).astimezone(pytz.timezone(st.session_state.timezone)).replace(tzinfo=None).strftime('%Y-%m-%d %H:%M')
                         event_options.update({row['event_id']: f"{starts_converted_to_timezone} {row['league_name'].upper()} {row['runner_home']} - {row['runner_away']}"})
                         event_details.update({row['event_id']: {'starts': row['starts'], 'league_id': row['league_id'], 'league_name': row['league_name'], 'runner_home': row['runner_home'], 'runner_away': row['runner_away']}})
-                selected_event_id = st.sidebar.selectbox(label='Select event', options=event_options.keys(), index=None, format_func=lambda x: event_options.get(x), placeholder='Start typing...', help='Start searching your fixture by typing any league, home team, away team. Only fixtures with available odds are listed.')
+                selected_event_id = st.selectbox(label='Event', options=event_options.keys(), index=None, format_func=lambda x: event_options.get(x), placeholder='Start typing...', help='Start searching your fixture by typing any league, home team, away team. Only fixtures with available odds are listed.')
 
+                col_market, col_period, col_side, col_line, col_odds, col_stake, col_book, col_tag = st.columns([1, 1, 2, 1, 1, 1, 1, 1])
                 if selected_event_id is not None:
                     odds = db.get_odds(event_id=selected_event_id)
-                    selected_market = st.sidebar.selectbox(label='Select market', options=odds.market.unique(), index=None, help='Only markets with available odds are listed.')
+                    with col_market:
+                        selected_market = st.selectbox(label='Market', options=odds.market.unique(), index=None, help='Only markets with available odds are listed.')
 
                     if selected_market is not None:
                         period_options = dict()
                         for index, row in odds.iterrows():
                             if row['market'] == selected_market and row['period'] not in period_options.keys():
                                 period_options.update({row['period']: PERIODS[(SPORTS[selected_sport], row['period'])]})
-                        selected_period = st.sidebar.selectbox(label='Select period', options=period_options.keys(), index=None, format_func=lambda x: period_options.get(x), help='Only periods with available closing odds are listed.')
+                        with col_period:
+                            selected_period = st.selectbox(label='Period', options=period_options.keys(), index=None, format_func=lambda x: period_options.get(x), help='Only periods with available closing odds are listed.')
 
                         if selected_period is not None:
                             side_options = dict()
@@ -153,7 +172,8 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                             side_options.update({'odds1': 'Over'})
                                         if row['odds2'] is not None:
                                             side_options.update({'odds2': 'Under'})
-                            selected_side = st.sidebar.selectbox(label='Select side', options=side_options.keys(), index=None, format_func=lambda x: side_options.get(x))
+                            with col_side:
+                                selected_side = st.selectbox(label='Side', options=side_options.keys(), index=None, format_func=lambda x: side_options.get(x))
 
                             if selected_side is not None:
                                 selected_line, line_options = None, dict()
@@ -168,23 +188,29 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                                 line_options.update({row['line']: -row['line']})
                                             else:
                                                 line_options.update({row['line']: row['line']})
-                                    selected_line = st.sidebar.selectbox(label='Select line', options=line_options.keys(), index=None, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
+                                    with col_line:
+                                        selected_line = st.selectbox(label='Line', options=line_options.keys(), index=None, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
 
                                 if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
                                     if st.session_state.odds_display == 'American':
-                                        american_odds = st.sidebar.number_input("Enter odds", min_value=-10000, value=100, step=1)
+                                        with col_odds:
+                                            american_odds = st.number_input("Odds", min_value=-10000, value=100, step=1)
                                         odds = tools.get_decimal_odds(american_odds=american_odds)
                                     else:
-                                        odds = st.sidebar.number_input("Enter odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
+                                        with col_odds:
+                                            odds = st.number_input("Odds", min_value=1.001, value=2.000, step=0.01, format="%0.3f")
 
                                     if odds:
-                                        stake = st.sidebar.number_input("Enter stake", min_value=0.01, value=1.00, step=1.00, format="%0.2f")
+                                        with col_stake:
+                                            stake = st.number_input("Stake", min_value=0.01, value=1.00, step=1.00, format="%0.2f")
 
                                         if stake:
-                                            book = st.sidebar.selectbox("Select bookmaker", options=sorted(BOOKS))
+                                            with col_book:
+                                                book = st.selectbox("Book", options=sorted(BOOKS))
 
                                             if book:
-                                                tag = st.sidebar.text_input("Enter tag", max_chars=25, help='You can add a custom string to classify this bet as something that you may want to research in a future analysis. This could be a particular strategy, model or a tipster, etc.')
+                                                with col_tag:
+                                                    tag = st.text_input("Tag", max_chars=25, help='You can add a custom string to classify this bet as something that you may want to research in a future analysis. This could be a particular strategy, model or a tipster, etc.')
 
                                                 data = dict()
                                                 data.update({'user': username})
@@ -223,7 +249,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                                     data.update({'raw_line': 0})
                                                     data.update({'line': 0})
 
-                                                bet_added = st.sidebar.button('Add bet')
+                                                bet_added = st.button('Add bet')
 
                                                 if bet_added:
                                                     db.append_bet(data=data)
@@ -232,34 +258,28 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                                     time.sleep(1.5)
                                                     placeholder1.empty()
 
-    col1, col2, col3, col4, col5, col6 = st.columns([4, 4, 5, 4, 2, 2])
-
     # Apply filter to recorded bets
     user_unique_sports = db.get_user_unique_sports(username=username)
-    with col1:
-        selected_sports = st.multiselect(label='Sports', options=sorted(user_unique_sports), default=user_unique_sports)
+    selected_sports = st.sidebar.multiselect(label='Sports', options=sorted(user_unique_sports), default=user_unique_sports)
     selected_sports = [f"'{s}'" for s in selected_sports]
     selected_sports = f"({','.join(selected_sports)})"
 
     weighted_average_odds = 1.00
     if selected_sports != '()':
         user_unique_bookmakers = db.get_user_unique_bookmakers(username=username, sports=selected_sports)
-        with col2:
-            selected_bookmakers = st.multiselect(label='Bookmakers', options=sorted(user_unique_bookmakers), default=user_unique_bookmakers)
+        selected_bookmakers = st.sidebar.multiselect(label='Bookmakers', options=sorted(user_unique_bookmakers), default=user_unique_bookmakers)
         selected_bookmakers = [f"'{s}'" for s in selected_bookmakers]
         selected_bookmakers = f"({','.join(selected_bookmakers)})"
 
         if selected_bookmakers != '()':
             user_unique_tags = db.get_user_unique_tags(username=username, sports=selected_sports, bookmakers=selected_bookmakers)
-            with col3:
-                selected_tags = st.multiselect(label='Tags', options=sorted(user_unique_tags), default=user_unique_tags)
+            selected_tags = st.sidebar.multiselect(label='Tags', options=sorted(user_unique_tags), default=user_unique_tags)
             selected_tags = [f"'{s}'" for s in selected_tags]
             selected_tags = f"({','.join(selected_tags)})"
 
             if selected_tags != '()':
                 user_unique_bet_status = db.get_user_unique_bet_status(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags)
-                with col4:
-                    selected_bet_status = st.multiselect(label='Status', options=sorted(user_unique_bet_status), default=user_unique_bet_status, help='Select the bet status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded')
+                selected_bet_status = st.sidebar.multiselect(label='Status', options=sorted(user_unique_bet_status), default=user_unique_bet_status, help='Select the bet status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded')
                 selected_bet_status = [f"'{s}'" for s in selected_bet_status]
                 selected_bet_status = f"({','.join(selected_bet_status)})"
 
@@ -267,10 +287,8 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                     user_unique_starts = db.get_user_unique_starts(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, bet_status=selected_bet_status)
 
                     if user_unique_starts is not None:
-                        with col5:
-                            selected_date_from = st.date_input(label='Start', value=min(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the start date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
-                        with col6:
-                            selected_date_to = st.date_input(label='End', value=max(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the end date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
+                        selected_date_from = st.sidebar.date_input(label='Start', value=min(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the start date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
+                        selected_date_to = st.sidebar.date_input(label='End', value=max(user_unique_starts), min_value=min(user_unique_starts), max_value=max(user_unique_starts), help='Specify the end date for analysis. You can either use the calendar or manually enter the date, i.e. 2024/08/19.')
 
                         bets = db.get_bets(username=username, sports=selected_sports, bookmakers=selected_bookmakers, tags=selected_tags, bet_status=selected_bet_status, date_from=selected_date_from, date_to=selected_date_to)
                         bets_df = pd.DataFrame(data=bets)
@@ -375,8 +393,6 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
             chart_data = pd.DataFrame({"bet_no": cum_bets, "Actual P/L": cum_profit, "Expected P/L": cum_clv}, columns=["bet_no", "Actual P/L", "Expected P/L"])
             st.line_chart(chart_data, x="bet_no", y=["Actual P/L", "Expected P/L"], x_label='Bet no', y_label='Actual vs expected profit', color=["#FF0000", "#FFA500"], height=800)
 
-    st.sidebar.image(image="media/logo_sbic.png", use_column_width='auto')
-
     # Create a radio button for Decimal/American odds format
     odds_display_options = ['Decimal', 'American']
     st.session_state.odds_display = st.sidebar.radio(label="Select odds format", options=odds_display_options, index=odds_display_options.index(st.session_state.odds_display), horizontal=True, on_change=db.set_user_odds_display, args=(username, placeholder1), key='odds_display_key')
@@ -385,7 +401,12 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
     timezone_options = pytz.common_timezones
     st.session_state.timezone = st.sidebar.selectbox(label="Select timezone", options=timezone_options, index=timezone_options.index(st.session_state.timezone), on_change=db.set_user_timezone, args=(username, placeholder1), key='timezone_key')
 
+    # Display logo and version
+    st.sidebar.image(image="media/logo_sbic.png", use_column_width='auto')
+    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.5.30")
+
 else:
     st.info('Your session has expired')
     for key in st.session_state.keys():
         del st.session_state[key]
+
