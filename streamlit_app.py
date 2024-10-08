@@ -62,16 +62,18 @@ if 'users_fetched' not in st.session_state:
 
     # Create session token
     else:
+        st.session_state.user_id = username
         st.session_state.session_id = username + '_' + str(datetime.datetime.now())
         tools.get_active_session.clear()
+        aux_active_session = tools.get_active_session(st.session_state.user_id)
 
     st.session_state.users_fetched = True
 
 # Allow only ONE session per user
 # See https://discuss.streamlit.io/t/right-way-to-manage-same-user-opening-multiple-sessions/25608
 
-#if st.session_state.session_id == tools.get_active_session():
-if True:
+if st.session_state.session_id == tools.get_active_session(st.session_state.user_id):
+#if True:
 
     # Set odds format
     if 'odds_display' not in st.session_state:
