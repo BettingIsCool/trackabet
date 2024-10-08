@@ -131,7 +131,7 @@ def get_rating(clv: float):
 
 
 @st.cache_resource()
-def get_active_session():
+def get_active_session(username: str):
     """
     :return: The session ID of the active session for the specified user.
     """
