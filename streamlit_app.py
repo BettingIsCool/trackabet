@@ -1,4 +1,7 @@
 # TODO set up test environment
+# TODO closing odds interpolation for heavy drifting/steaming markets
+# TODO timestamps for current odds
+# TODO add weighted clv to FAQ video
 # TODO tag update not working (only after 2nd try)
 # TODO add tennis sets/games explanation
 # TODO color status / pl green-red
@@ -67,8 +70,8 @@ if 'users_fetched' not in st.session_state:
 # Allow only ONE session per user
 # See https://discuss.streamlit.io/t/right-way-to-manage-same-user-opening-multiple-sessions/25608
 
-#if st.session_state.session_id == tools.get_active_session():
-if True:
+if st.session_state.session_id == tools.get_active_session():
+#if True:
 
     # Set odds format
     if 'odds_display' not in st.session_state:
