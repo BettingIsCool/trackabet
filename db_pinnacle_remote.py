@@ -230,7 +230,7 @@ def set_user_default_tag(username: str, placeholder: st.delta_generator.DeltaGen
     :param placeholder: A DeltaGenerator instance used for displaying success messages.
     :return: None
     """
-    st.session_state.default_book = st.session_state.default_book_key
+    st.session_state.default_tag = st.session_state.default_tag_key
 
     query = f"UPDATE {TABLE_USERS} SET default_tag = '{st.session_state.default_tag}' WHERE username = '{username}'"
 

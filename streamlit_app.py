@@ -14,7 +14,6 @@ import db_pinnacle_remote as db
 from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
 # TODO closing odds extrapolation for heavy drifters/steamers
-# TODO default value for dropdown menus (stored in user database)
 # TODO streamlit-extras lib (add country flags)
 
 # TODO tag update not working (only after 2nd try)
@@ -31,6 +30,12 @@ from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 # TODO recent changes
 # > new layout
 # > enables one session per user
+#* Option to set your DEFAULT SPORT
+#* Option to set your DEFAULT BOOKMAKER
+#* Option to set your DEFAULT TAG
+#* Market defaults to 'moneyline' when adding a bet
+#* Period defaults to 'Full Time' when adding a bet
+#* Side defaults to 'home/over' when adding a bet
 
 placeholder1 = st.empty()
 
