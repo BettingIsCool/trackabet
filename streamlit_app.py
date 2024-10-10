@@ -405,7 +405,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
     st.session_state.default_book = st.sidebar.selectbox(label="Select default bookmaker", options=list(BOOKS), index=list(BOOKS).index(st.session_state.default_book), on_change=db.set_user_default_book, args=(username, placeholder1), key='default_book_key', help="This will be the default bookmaker when adding a bet.")
 
     # Create text input for default tag
-    st.session_state.default_tag = st.sidebar.text_input("Input default tag", max_chars=25, on_change=db.set_user_default_tag, args=(username, placeholder1), key='default_tag_key', help="This will be the default tag when adding a bet.")
+    st.session_state.default_tag = st.sidebar.text_input("Input default tag", value=st.session_state.default_tag, max_chars=25, on_change=db.set_user_default_tag, args=(username, placeholder1), key='default_tag_key', help="This will be the default tag when adding a bet.")
 
     # Display logo and version
     st.sidebar.image(image="media/logo_sbic.png", use_column_width='auto')
