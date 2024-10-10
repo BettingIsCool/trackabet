@@ -186,6 +186,63 @@ def set_user_timezone(username: str, placeholder: st.delta_generator.DeltaGenera
     placeholder.empty()
 
 
+def set_user_default_sport(username: str, placeholder: st.delta_generator.DeltaGenerator):
+    """
+    :param username: The username of the user whose default_sport is being updated.
+    :param placeholder: A DeltaGenerator instance used for displaying success messages.
+    :return: None
+    """
+    st.session_state.default_sport = st.session_state.default_sport_key
+
+    query = f"UPDATE {TABLE_USERS} SET default_sport = '{st.session_state.default_sport}' WHERE username = '{username}'"
+
+    with conn.session as session:
+        session.execute(text(query))
+        session.commit()
+
+    placeholder.success('Default sport changed successfully!')
+    time.sleep(2)
+    placeholder.empty()
+
+
+def set_user_default_book(username: str, placeholder: st.delta_generator.DeltaGenerator):
+    """
+    :param username: The username of the user whose default_sport is being updated.
+    :param placeholder: A DeltaGenerator instance used for displaying success messages.
+    :return: None
+    """
+    st.session_state.default_book = st.session_state.default_book_key
+
+    query = f"UPDATE {TABLE_USERS} SET default_book = '{st.session_state.default_book}' WHERE username = '{username}'"
+
+    with conn.session as session:
+        session.execute(text(query))
+        session.commit()
+
+    placeholder.success('Default bookmaker changed successfully!')
+    time.sleep(2)
+    placeholder.empty()
+
+
+def set_user_default_tag(username: str, placeholder: st.delta_generator.DeltaGenerator):
+    """
+    :param username: The username of the user whose default_sport is being updated.
+    :param placeholder: A DeltaGenerator instance used for displaying success messages.
+    :return: None
+    """
+    st.session_state.default_book = st.session_state.default_book_key
+
+    query = f"UPDATE {TABLE_USERS} SET default_tag = '{st.session_state.default_tag}' WHERE username = '{username}'"
+
+    with conn.session as session:
+        session.execute(text(query))
+        session.commit()
+
+    placeholder.success('Default tag changed successfully!')
+    time.sleep(2)
+    placeholder.empty()
+
+
 def get_user_odds_display(username: str):
     """
     :param username: The username of the user whose odds display is being retrieved.
@@ -202,15 +259,39 @@ def get_user_timezone(username: str):
     return conn.query(f"SELECT timezone FROM {TABLE_USERS} WHERE username = '{username}'")['timezone'].tolist()
 
 
+def get_user_default_sport(username: str):
+    """
+    :param username: The username of the user whose timezone information is to be retrieved
+    :return: The timezone information of the specified user
+    """
+    return conn.query(f"SELECT default_sport FROM {TABLE_USERS} WHERE username = '{username}'")['default_sport'].tolist()
+
+
+def get_user_default_book(username: str):
+    """
+    :param username: The username of the user whose timezone information is to be retrieved
+    :return: The timezone information of the specified user
+    """
+    return conn.query(f"SELECT default_book FROM {TABLE_USERS} WHERE username = '{username}'")['default_book'].tolist()
+
+
+def get_user_default_tag(username: str):
+    """
+    :param username: The username of the user whose timezone information is to be retrieved
+    :return: The timezone information of the specified user
+    """
+    return conn.query(f"SELECT default_tag FROM {TABLE_USERS} WHERE username = '{username}'")['default_tag'].tolist()
+
+
 def append_user(data: dict):
     """
     :param data: Dictionary containing user data with the key 'username'.
     :return: None
     """
-    query = f"INSERT INTO {TABLE_USERS} (username, odds_display, timezone) VALUES(:username, :odds_display, :timezone)"
+    query = f"INSERT INTO {TABLE_USERS} (username, odds_display, timezone, default_sport, default_book, default_tag) VALUES(:username, :odds_display, :timezone, :default_sport, :default_book, :default_tag)"
 
     with conn.session as session:
-        session.execute(text(query), params=dict(username=data['username'], odds_display='Decimal', timezone='Europe/London'))
+        session.execute(text(query), params=dict(username=data['username'], odds_display='Decimal', timezone='Europe/London', default_sport='Soccer', default_book='Pinnacle', default_tag=''))
         session.commit()
 
 

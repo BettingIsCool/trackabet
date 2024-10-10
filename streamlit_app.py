@@ -1,35 +1,3 @@
-# TODO set up test environment
-# TODO closing odds interpolation for heavy drifting/steaming markets
-# TODO timestamps for current odds
-# TODO add weighted clv to FAQ video
-# TODO tag update not working (only after 2nd try)
-# TODO add tennis sets/games explanation
-# TODO color status / pl green-red
-# TODO new layout / styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
-# TODO get rid of rerun (on_change function)
-# TODO Re-arrange 'add a abet', collapse sidebar
-# TODO Improvement idea: filters for leagues and markets.
-# TODO Improvement idea: Have a auto complete on tags too so you can start entering the word like you do with bookmarkers. And maybe add the most recents tags under the form box so you can choose it.
-# TODO refactoring / gold-plating
-# TODO private github repo (streamlit teams)
-# TODO streamlit-extras lib
-# TODO bet size filter / clv filter
-# TODO video covering sorting, exporting, tennis markets (games), future bets,...
-
-# TODO set up test environment
-# TODO tag update not working (only after 2nd try)
-# TODO add tennis sets/games explanation
-# TODO color status / pl green-red
-# TODO styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
-# TODO get rid of rerun (on_change function)
-# TODO Improvement idea: filters for leagues and markets.
-# TODO Improvement idea: Have a auto complete on tags too so you can start entering the word like you do with bookmarkers. And maybe add the most recents tags under the form box so you can choose it.
-# TODO refactoring / gold-plating
-# TODO private github repo (streamlit teams)
-# TODO streamlit-extras lib
-# TODO bet size filter / clv filter
-# TODO video covering sorting, exporting, tennis markets (games), future bets,...
-
 import streamlit as st
 
 # set_page_config() can only be called once per app page, and must be called as the first Streamlit command in your script.
@@ -45,6 +13,25 @@ import db_pinnacle_remote as db
 
 from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
+# TODO closing odds extrapolation for heavy drifters/steamers
+# TODO default value for dropdown menus (stored in user database)
+# TODO streamlit-extras lib (add country flags)
+
+# TODO tag update not working (only after 2nd try)
+# TODO add tennis sets/games explanation
+# TODO styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
+# TODO get rid of rerun (on_change function)
+# TODO Improvement idea: filters for leagues and markets.
+# TODO Improvement idea: Have a auto complete on tags too so you can start entering the word like you do with bookmarkers. And maybe add the most recents tags under the form box so you can choose it.
+# TODO refactoring / gold-plating
+# TODO private github repo (streamlit teams)
+# TODO bet size filter / clv filter
+# TODO video covering sorting, exporting, tennis markets (games), future bets,...
+
+# TODO recent changes
+# > new layout
+# > enables one session per user
+
 placeholder1 = st.empty()
 
 if 'display_landing_page_text' not in st.session_state:
@@ -53,7 +40,7 @@ if 'display_landing_page_text' not in st.session_state:
     placeholder1.markdown(TEXT_LANDING_PAGE)
     st.session_state.display_landing_page_text = True
 
-# Add google authentication (only users with a valid stripe subscription can log in
+# Add google authentication (only users with a valid stripe subscription can log in)
 # Username must match the registered email-address at stripe
 # IMPORTANT: st_paywall is a forked library. This fork supports additional verification, i.e. if the user has a valid subscription for the product
 # The original st_paywall just looks into the stripe account for ANY valid subscription for that particular user, but doesn't care if this subscription is actually valid for a specific app.
@@ -72,6 +59,8 @@ if 'users_fetched' not in st.session_state:
     tools.clear_cache()
     if username not in set(db.get_users()):
         db.append_user(data={'username': username})
+        st.session_state.user_id = username
+        st.session_state.session_id = username + '_' + str(datetime.datetime.now())
 
     # Create session token
     else:
@@ -92,6 +81,12 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
         st.session_state.odds_display = db.get_user_odds_display(username=username)[0]
     if 'timezone' not in st.session_state:
         st.session_state.timezone = db.get_user_timezone(username=username)[0]
+    if 'default_sport' not in st.session_state:
+        st.session_state.default_sport = db.get_user_default_sport(username=username)[0]
+    if 'default_book' not in st.session_state:
+        st.session_state.default_book = db.get_user_default_book(username=username)[0]
+    if 'default_tag' not in st.session_state:
+        st.session_state.default_tag = db.get_user_default_tag(username=username)[0]
 
     # Initialize bets_to_be_deleted & dataframes
     bets_to_be_deleted, df = set(), set()
@@ -99,13 +94,13 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
     # Welcome message in the sidebar
     st.sidebar.title(f"Welcome {username}")
     st.sidebar.subheader(f"Apply filters")
-    #st.sidebar.write('Session ID: ', st.session_state.session_id)
+    # st.sidebar.write('Session ID: ', st.session_state.session_id)
 
     # User needs to select sport & date range before fixtures are being fetched from the database
     col_sport, col_datefrom, col_dateto = st.columns([4, 2, 2])
 
     with col_sport:
-        selected_sport = st.selectbox(label='Sport', options=SPORTS.keys(), index=None, placeholder='Add a bet by selecting a sport', help='41 unique sports supported.')
+        selected_sport = st.selectbox(label='Sport', options=SPORTS.keys(), index=list(SPORTS.keys()).index(st.session_state.default_sport), placeholder='Add a bet by selecting a sport', help='41 unique sports supported.')
 
     if selected_sport is not None:
         with col_datefrom:
@@ -137,7 +132,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                 if selected_event_id is not None:
                     odds = db.get_odds(event_id=selected_event_id)
                     with col_market:
-                        selected_market = st.selectbox(label='Market', options=odds.market.unique(), index=None, help='Only markets with available odds are listed.')
+                        selected_market = st.selectbox(label='Market', options=odds.market.unique(), index=0, help='Only markets with available odds are listed.')
 
                     if selected_market is not None:
                         period_options = dict()
@@ -145,7 +140,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                             if row['market'] == selected_market and row['period'] not in period_options.keys():
                                 period_options.update({row['period']: PERIODS[(SPORTS[selected_sport], row['period'])]})
                         with col_period:
-                            selected_period = st.selectbox(label='Period', options=period_options.keys(), index=None, format_func=lambda x: period_options.get(x), help='Only periods with available closing odds are listed.')
+                            selected_period = st.selectbox(label='Period', options=period_options.keys(), index=0, format_func=lambda x: period_options.get(x), help='Only periods with available closing odds are listed.')
 
                         if selected_period is not None:
                             side_options = dict()
@@ -173,7 +168,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                         if row['odds2'] is not None:
                                             side_options.update({'odds2': 'Under'})
                             with col_side:
-                                selected_side = st.selectbox(label='Side', options=side_options.keys(), index=None, format_func=lambda x: side_options.get(x))
+                                selected_side = st.selectbox(label='Side', options=side_options.keys(), index=0, format_func=lambda x: side_options.get(x))
 
                             if selected_side is not None:
                                 selected_line, line_options = None, dict()
@@ -189,7 +184,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                             else:
                                                 line_options.update({row['line']: row['line']})
                                     with col_line:
-                                        selected_line = st.selectbox(label='Line', options=line_options.keys(), index=None, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
+                                        selected_line = st.selectbox(label='Line', options=line_options.keys(), index=0, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
 
                                 if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
                                     if st.session_state.odds_display == 'American':
@@ -206,11 +201,11 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
 
                                         if stake:
                                             with col_book:
-                                                book = st.selectbox("Book", options=sorted(BOOKS))
+                                                book = st.selectbox("Book", options=sorted(BOOKS), index=list(sorted(BOOKS)).index(st.session_state.default_book))
 
                                             if book:
                                                 with col_tag:
-                                                    tag = st.text_input("Tag", max_chars=25, help='You can add a custom string to classify this bet as something that you may want to research in a future analysis. This could be a particular strategy, model or a tipster, etc.')
+                                                    tag = st.text_input("Tag", value=st.session_state.default_tag, max_chars=25, help='You can add a custom string to classify this bet as something that you may want to research in a future analysis. This could be a particular strategy, model or a tipster, etc.')
 
                                                 data = dict()
                                                 data.update({'user': username})
@@ -325,9 +320,6 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                             styled_df = bets_df.style.applymap(tools.color_cells, subset=['ST', 'P/L', 'EXP_WIN', 'CLV']).format({'LINE': '{:g}'.format, 'ODDS': '{:,.3f}'.format, 'STAKE': '{:,.2f}'.format, 'P/L': '{:,.2f}'.format, 'CLS': '{:,.3f}'.format, 'CLS_TRUE': '{:,.3f}'.format, 'CLS_LIMIT': '{:,.0f}'.format, 'EXP_WIN': '{:,.2f}'.format, 'CLV': '{:,.2%}'.format, 'SH': '{0:g}'.format, 'SA': '{0:g}'.format})
                             pd.set_option("styler.render.max_elements", 33333333)
 
-                        # Option without editable dataframe
-                        #df = st.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.TextColumn("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded"), "TAG": st.column_config.Column("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc."), "SH": st.column_config.Column("SH", help="Score Home"), "SA": st.column_config.Column("SA", help="Score Away"), "STARTS": st.column_config.Column("STARTS", help="Event starting time"), "SPORT": st.column_config.Column("SPORT", help="Sport"), "LEAGUE": st.column_config.Column("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.Column("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.Column("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.Column("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.Column("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.Column("SIDE", help="Selection"), "LINE": st.column_config.Column("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.Column("ODDS", help="Obtained price"), "STAKE": st.column_config.Column("STAKE", help="Risk amount"), "BOOK": st.column_config.Column("BOOK", help="Bookmaker"), "P/L": st.column_config.Column("P/L", help="Actual profit"), "CLS": st.column_config.Column("CLS", help="Closing price"), "CLS_TRUE": st.column_config.Column("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.Column("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.Column("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.Column("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.Column("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID', 'TAG', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L'], key='initial_df_key', hide_index=True)
-
                         # START - Option with editable dataframe
                         if 'initial_df' not in st.session_state:
                             st.session_state['initial_df'] = placeholder1.data_editor(styled_df, column_config={"DEL": st.column_config.CheckboxColumn("DEL", help="Select if you want to delete this bet.", default=False), "ST": st.column_config.TextColumn("ST", help="Bet Status. W = Won, HW = Half Won, L = Lost, HL = Half Lost, P = Push, V = Void, na = ungraded. This will be settled automatically. Please be patient, this can take up to several hours. On rare occasions it is possible that the payout or grading you received from your sportsbook is different (i.e. due to divergent settlement rules if a match is abandoned or due to a retirement of a player). You can edit the value by double-clicking on the cell.", required=True), "TAG": st.column_config.TextColumn("TAG", help="Tag your bets to classify them for future research, i.e. apply a tag filter. This could be a particular strategy, model or a tipster, etc. You can edit the value with a double-click on the cell."), "SH": st.column_config.NumberColumn("SH", help="Score Home. This will be settled automatically. Please be patient, this can take up to several hours. On rare occasions it is possible that the payout or grading you received from your sportsbook is different (i.e. due to divergent settlement rules if a match is abandoned or due to a retirement of a player). You can edit the value by double-clicking on the cell.", required=True, min_value=0, max_value=1000, step=1), "P/L": st.column_config.NumberColumn("P/L", help="Actual profit. This will be settled automatically. Please be patient, this can take up to several hours. On rare occasions it is possible that the payout or grading you received from your sportsbook is different (i.e. due to divergent settlement rules if a match is abandoned or due to a retirement of a player). You can edit the value by double-clicking on the cell.", required=True, min_value=-1000000, max_value=1000000, step=0.01), "SA": st.column_config.NumberColumn("SA", help="Score Away. This will be settled automatically. Please be patient, this can take up to several hours. On rare occasions it is possible that the payout or grading you received from your sportsbook is different (i.e. due to divergent settlement rules if a match is abandoned or due to a retirement of a player). You can edit the value by double-clicking on the cell.", required=True, min_value=0, max_value=1000, step=1), "STARTS": st.column_config.DatetimeColumn("STARTS", help="Event starting time"), "SPORT": st.column_config.TextColumn("SPORT", help="Sport"), "LEAGUE": st.column_config.TextColumn("LEAGUE", help="League"), "RUNNER_HOME": st.column_config.TextColumn("RUNNER_HOME", help="Home Team/Player 1"), "RUNNER_AWAY": st.column_config.TextColumn("RUNNER_AWAY", help="Away Team/Player 2"), "MARKET": st.column_config.TextColumn("MARKET", help="Market. This can be one of the following: MONEYLINE, SPREAD, TOTALS, HOME_TOTALS, AWAY_TOTALS"), "PERIOD": st.column_config.TextColumn("PERIOD", help="Period. This refers to the game section of the bet, i.e. fulltime, halftime, 1st quarter, etc."), "SIDE": st.column_config.TextColumn("SIDE", help="Selection"), "LINE": st.column_config.NumberColumn("LINE", help="Line refers to the handicap for spread & totals markets."), "ODDS": st.column_config.NumberColumn("ODDS", help="Obtained price"), "STAKE": st.column_config.NumberColumn("STAKE", help="Risk amount"), "BOOK": st.column_config.TextColumn("BOOK", help="Bookmaker. You can edit the value with a double-click on the cell."), "CLS": st.column_config.NumberColumn("CLS", help="Closing price"), "CLS_TRUE": st.column_config.NumberColumn("CLS_TRUE", help="Closing price with bookmaker margin removed (= no-vig closing odds)"), "CLS_LIMIT": st.column_config.NumberColumn("CLS_LIMIT", help="Maximum bet size at closing"), "EXP_WIN": st.column_config.NumberColumn("EXP_WIN", help="Expected Win. This is the expected value of your bet. This figure compares obtained odds with no-vig closing odds and takes into account the stake. Quality bets will typically have an exp_win > 0."), "CLV": st.column_config.NumberColumn("CLV", help="Closing line value. This is the expected roi of your bet. This figure compares obtained odds with no-vig closing odds. Quality bets will typically have a clv > 0."), "BET_ADDED": st.column_config.DatetimeColumn("BET_ADDED", help="Timestamp of the recorded bet.")}, disabled=['STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID', 'STAKE'], key='initial_df_key', hide_index=True)
@@ -401,12 +393,20 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
     timezone_options = pytz.common_timezones
     st.session_state.timezone = st.sidebar.selectbox(label="Select timezone", options=timezone_options, index=timezone_options.index(st.session_state.timezone), on_change=db.set_user_timezone, args=(username, placeholder1), key='timezone_key')
 
+    # Create selectbox for default sport
+    st.session_state.default_sport = st.sidebar.selectbox(label="Select default sport", options=list(SPORTS.keys()), index=list(SPORTS.keys()).index(st.session_state.default_sport), on_change=db.set_user_default_sport, args=(username, placeholder1), key='default_sport_key', help="This will be the default sport when adding a bet.")
+
+    # Create selectbox for default book
+    st.session_state.default_book = st.sidebar.selectbox(label="Select default bookmaker", options=list(BOOKS), index=list(BOOKS).index(st.session_state.default_book), on_change=db.set_user_default_book, args=(username, placeholder1), key='default_book_key', help="This will be the default bookmaker when adding a bet.")
+
+    # Create text input for default tag
+    st.session_state.default_tag = st.sidebar.text_input("Input default tag", max_chars=25, on_change=db.set_user_default_tag, args=(username, placeholder1), key='default_tag_key', help="This will be the default tag when adding a bet.")
+
     # Display logo and version
     st.sidebar.image(image="media/logo_sbic.png", use_column_width='auto')
-    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.5.30")
+    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.8.44")
 
 else:
     st.info('Your session has expired')
     for key in st.session_state.keys():
         del st.session_state[key]
-

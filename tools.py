@@ -37,6 +37,8 @@ def color_cells(val: (str, int, float)):
                 color = 'green'
             elif val in ('HL', 'L'):
                 color = 'red'
+            elif val == 'na':
+                color = 'gray'
 
         else:
             if val > 0:
