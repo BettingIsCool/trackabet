@@ -2,7 +2,7 @@ TABLE_LEAGUES, TABLE_FIXTURES, TABLE_ODDS, TABLE_RESULTS, TABLE_BETS, TABLE_USER
 
 TEXT_LANDING_PAGE = """
 
-## **TRACK-A-BET. Track your bets efficiently.**
+## **TRACK-A-BET. Separate the SIGNAL from the noise.**
 
 For a quick start I recommend watching this 3-part series
 
