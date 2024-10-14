@@ -722,6 +722,7 @@ PERIODS.update({(36,3): '3rd Period'})
 PERIODS.update({(36,4): '4th Period'})
 
 BOOKS = set()
+BOOKS.add('0 Private Book')
 BOOKS.add('A Private Book')
 BOOKS.add('Private')
 BOOKS.add('bookmaker.eu')
