@@ -13,11 +13,13 @@ import db_pinnacle_remote as db
 
 from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
-# TODO closing odds extrapolation for heavy drifters/steamers
+# TODO closing odds function for extrapolation
 # TODO streamlit-extras lib (add country flags)
+# TODO add explanation for (Games), (Bookings), (Corners), (Specials) in tool tip
+# TODO import transposed special fixtures/odds/results into DO database
+# TODO add 'use this refresh button. If you refreshing the browser you will be logged out'
 
 # TODO tag update not working (only after 2nd try)
-# TODO add tennis sets/games explanation
 # TODO styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
 # TODO get rid of rerun (on_change function)
 # TODO Improvement idea: filters for leagues and markets.
@@ -26,16 +28,6 @@ from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 # TODO private github repo (streamlit teams)
 # TODO bet size filter / clv filter
 # TODO video covering sorting, exporting, tennis markets (games), future bets,...
-
-# TODO recent changes
-# > new layout
-# > enables one session per user
-#* Option to set your DEFAULT SPORT
-#* Option to set your DEFAULT BOOKMAKER
-#* Option to set your DEFAULT TAG
-#* Market defaults to 'moneyline' when adding a bet
-#* Period defaults to 'Full Time' when adding a bet
-#* Side defaults to 'home/over' when adding a bet
 
 placeholder1 = st.empty()
 

@@ -32,7 +32,11 @@ For a quick start I recommend watching this 3-part series
 
 👉 Fulltime, halftime, quarter markets supported and many more.
 
-👉 moneyline, spread, totals & team_totals supported.
+👉 Moneyline, spread, totals & team_totals supported.
+
+👉 Corners & booking markets supported.
+
+👉 Derivative markets (such as BTTS, etc.), team & player props supported.
 
 👉 Export option allows you to download and share your bets.
 
@@ -45,9 +49,6 @@ For a quick start I recommend watching this 3-part series
 👉 Performance graph showing actual vs expected profits.
 
 👉 Do not get fooled by randomness ever again. Use clv as the ultimate predictor of your profitability.
-
-#### ⚠️ WHAT THIS TOOL CAN NOT DO ⚠️
-It can not track special bets. Hence if you're mainly betting prop markets & exotic derivatives then this tool is not for you.
 
 #### ❓ WHY WOULD I WANT YET ANOTHER BET TRACKER ❓
 **Because it calculates your clv/edge accurately. Probably THE most important thing to know if you want to be a long-term winner.**
@@ -722,7 +723,7 @@ PERIODS.update({(36,3): '3rd Period'})
 PERIODS.update({(36,4): '4th Period'})
 
 BOOKS = set()
-BOOKS.add('0 Private Book')
+BOOKS.add('0 Private Book') # On top of the list
 BOOKS.add('A Private Book')
 BOOKS.add('Private')
 BOOKS.add('bookmaker.eu')

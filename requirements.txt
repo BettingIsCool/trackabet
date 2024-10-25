@@ -4,4 +4,5 @@ pandas
 pendulum
 SQLAlchemy
 mysql-connector-python
+streamlit==1.38.0
 git+https://github.com/bettingiscool/st-paywall_fork.git@main
