@@ -13,11 +13,11 @@ import db_pinnacle_remote as db
 
 from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
+# TODO check indexing
 # TODO cls limit / 2
 # TODO closing odds function for extrapolation
 # TODO streamlit-extras lib (add country flags)
 # TODO add explanation for (Games), (Bookings), (Corners), (Specials) in tool tip
-# TODO import transposed special fixtures/odds/results into DO database
 # TODO add 'use this refresh button. If you refreshing the browser you will be logged out'
 # TODO Bug fix: Column configuration will override any text or number format from pandas.Styler (#9538, #7329, #7977).
 # TODO mknbiz suggestions
@@ -304,7 +304,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                             pass
 
                         bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
-                        bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'BOOK', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BET_ADDED', 'ID']]
+                        bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BOOK', 'BET_ADDED', 'ID']]
 
                         # Calculate weighhted average odds (using decimal odds)
                         sumprod_odds_stake = 0.00
