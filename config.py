@@ -73,7 +73,8 @@ Part I: https://youtube.com/watch?v=-uLJUhbFD_U
 
 Part II: https://youtube.com/watch?v=MZCeHiywKvs
 
-⚠️ WHAT THIS TOOL CAN NOT DO ⚠️
+##### ⚠️ WHAT THIS TOOL CAN NOT DO ⚠️
+
 It can not track special bets. Hence if you're mainly betting prop markets & exotic derivatives then this tool is not for you.
 
 """
