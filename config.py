@@ -36,8 +36,6 @@ For a quick start I recommend watching this 3-part series
 
 👉 Corners & booking markets supported.
 
-👉 Derivative markets (such as BTTS, etc.), team & player props supported.
-
 👉 Export option allows you to download and share your bets.
 
 👉 Clean & simple, no-nonsense interface & interactive dashboard.
@@ -69,35 +67,14 @@ Enter CLV. Closing Line Value.
 
 In a nutshell clv compares the odds you take against the true closing odds. The true closing odds are the odds just before kickoff with the bookmaker margin removed. Since the true closing odds reflect the true probability of an outcome quite accuratey, you will know instantly if you have made a value bet or not.
 
-For the math-savvy, here is the formula.
-
-clv = o / t - 1
-
-where
-
-o...are the obtained odds, i.e. the price you took at your book
-
-t...the true closing price, a.k.a. the no-vig closing price
-
-This means IF THE OBTAINED PRICE IS HIGHER THAN THE NO-VIG CLOSING PRICE YOU MADE A VALUE BET!
-
-**IN OTHER WORDS: NO CLV = NO EDGE!**
-
-Understanding closing line value (= clv) is absolutely vital for aspiring sports bettors. As soon as you get a grasp on this metric you will think completely differently (and properly!) about your bet.
-
-All of a sudden the outcome becomes irrelevant!
-
-If you take a bet at 3.5 and it closes at 2.8. Happy Days. Regardless of whether the bet wins or not.
-
-That's how professional bettors think!
-
-[@nishikoripicks](https://twitter.com/nishikoripicks?lang=en) nails it with his 2-part video!
+[@nishikoripicks](https://twitter.com/nishikoripicks?lang=en) has done a great 2-part video series on closing line value!
 
 Part I: https://youtube.com/watch?v=-uLJUhbFD_U
 
 Part II: https://youtube.com/watch?v=MZCeHiywKvs
 
-Another thing of beauty is that you do not need a very large sample if analysing for clv. Usually 50 - 100 bets will suffice to get a good idea where you are heading. Hence if your clv is +2.50% over 100 bets then you can be pretty confident that this is approximately your expected roi.
+⚠️ WHAT THIS TOOL CAN NOT DO ⚠️
+It can not track special bets. Hence if you're mainly betting prop markets & exotic derivatives then this tool is not for you.
 
 """
 

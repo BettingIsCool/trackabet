@@ -13,11 +13,14 @@ import db_pinnacle_remote as db
 
 from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
+# TODO cls limit / 2
 # TODO closing odds function for extrapolation
 # TODO streamlit-extras lib (add country flags)
 # TODO add explanation for (Games), (Bookings), (Corners), (Specials) in tool tip
 # TODO import transposed special fixtures/odds/results into DO database
 # TODO add 'use this refresh button. If you refreshing the browser you will be logged out'
+# TODO Bug fix: Column configuration will override any text or number format from pandas.Styler (#9538, #7329, #7977).
+# TODO mknbiz suggestions
 
 # TODO tag update not working (only after 2nd try)
 # TODO styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
@@ -47,6 +50,8 @@ if 'display_landing_page_text' not in st.session_state:
 from st_paywall import add_auth
 add_auth(required=True)
 
+# Maybe a short delay helps to avoid "Bad message format - Tried to use SessionInfo before it was initialized"
+time.sleep(0.25)
 username = st.session_state.email
 
 placeholder1.empty()
