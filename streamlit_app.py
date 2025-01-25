@@ -338,6 +338,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
         clv = sum_ev / turnover
 
         implied_win_percentage = (clv + 1) / weighted_average_odds
+        implied_win_percentage = 0.999 if implied_win_percentage >= 1.0 else implied_win_percentage
         if implied_win_percentage > 0:
             yield_standard_deviation = weighted_average_odds * math.sqrt(implied_win_percentage - implied_win_percentage ** 2) / math.sqrt(bet_count)
             luck_factor, comment_luck_factor, color_luck_factor = tools.get_luck_factor(std_dev=yield_standard_deviation, act_roi=act_roi, clv=clv)
