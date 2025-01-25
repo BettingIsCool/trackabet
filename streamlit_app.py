@@ -13,25 +13,6 @@ import db_pinnacle_remote as db
 
 from config import SPORTS, PERIODS, BOOKS, TEXT_LANDING_PAGE
 
-# TODO check indexing
-# TODO cls limit / 2
-# TODO closing odds function for extrapolation
-# TODO streamlit-extras lib (add country flags)
-# TODO add explanation for (Games), (Bookings), (Corners), (Specials) in tool tip
-# TODO add 'use this refresh button. If you refreshing the browser you will be logged out'
-# TODO Bug fix: Column configuration will override any text or number format from pandas.Styler (#9538, #7329, #7977).
-# TODO mknbiz suggestions
-
-# TODO tag update not working (only after 2nd try)
-# TODO styled button -> https://www.youtube.com/watch?v=jbJpAdGlKVY
-# TODO get rid of rerun (on_change function)
-# TODO Improvement idea: filters for leagues and markets.
-# TODO Improvement idea: Have a auto complete on tags too so you can start entering the word like you do with bookmarkers. And maybe add the most recents tags under the form box so you can choose it.
-# TODO refactoring / gold-plating
-# TODO private github repo (streamlit teams)
-# TODO bet size filter / clv filter
-# TODO video covering sorting, exporting, tennis markets (games), future bets,...
-
 placeholder1 = st.empty()
 
 if 'display_landing_page_text' not in st.session_state:
@@ -128,7 +109,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                         starts_converted_to_timezone = pytz.timezone('Europe/Vienna').localize(row['starts']).astimezone(pytz.timezone(st.session_state.timezone)).replace(tzinfo=None).strftime('%Y-%m-%d %H:%M')
                         event_options.update({row['event_id']: f"{starts_converted_to_timezone} {row['league_name'].upper()} {row['runner_home']} - {row['runner_away']}"})
                         event_details.update({row['event_id']: {'starts': row['starts'].to_pydatetime(), 'league_id': row['league_id'], 'league_name': row['league_name'], 'runner_home': row['runner_home'], 'runner_away': row['runner_away']}})
-                selected_event_id = st.selectbox(label='Event', options=event_options.keys(), index=None, format_func=lambda x: event_options.get(x), placeholder='Add a bet. Start typing...', help='Start searching your fixture by typing any league, home team, away team. Only fixtures with available odds are listed.')
+                selected_event_id = st.selectbox(label='Event', options=event_options.keys(), index=None, format_func=lambda x: event_options.get(x), placeholder='Add a bet. Start typing...', help="Start searching your fixture by typing any league, home team, away team. Only fixtures with available odds are listed. Please note that corner & booking markets can be found with the respective suffix, i.e. '(Corners)', '(Bookings)'. Tennis markets with games as the resulting unit (i.e. total number of games) can be found with '(Games)' as the suffix.")
 
                 col_market, col_period, col_side, col_line, col_odds, col_stake, col_book, col_tag = st.columns([1, 1, 2, 1, 1, 1, 1, 1])
                 if selected_event_id is not None:
@@ -342,7 +323,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
 
     # Place Refresh & Delete button below dataframe
     # Delete button will only be visible if at least one event is selected
-    st.button('Refresh', on_click=tools.clear_cache)
+    st.button('Refresh', help='Use this refresh button to update the dataframe. If you are refreshing your browser you will be logged out.', on_click=tools.clear_cache)
     if bets_to_be_deleted:
         st.button('Delete selected bet(s)', on_click=tools.delete_bets, args=(bets_to_be_deleted,), type="primary")
 
@@ -405,8 +386,8 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
     st.session_state.default_tag = st.sidebar.text_input("Input default tag", value=st.session_state.default_tag, max_chars=25, on_change=db.set_user_default_tag, args=(username, placeholder1), key='default_tag_key', help="This will be the default tag when adding a bet.")
 
     # Display logo and version
-    st.sidebar.image(image="media/logo_sbic.png", use_column_width='auto')
-    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.8.46")
+    st.sidebar.image(image="media/logo_sbic.png", use_container_width='auto')
+    st.sidebar.markdown("Track-A-Bet by BettingIsCool v1.8.47")
 
 else:
     st.info('Your session has expired')
