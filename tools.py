@@ -187,6 +187,21 @@ def tz_diff(home, away, on=None):
 
 
 def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: st.delta_generator.DeltaGenerator):
+    """
+    Updates an existing dataset by comparing it with an edited dataset and applying changes
+    if discrepancies are found. The function cross-references specific fields in the provided
+    dataframes and updates the database for any modifications, with input validation for
+    specific fields. Updates are displayed on a streamlit placeholder for interactive feedback.
+
+    :param initial_df: The initial dataframe containing records before any edits.
+    :type initial_df: pd.DataFrame
+    :param edited_df: The edited dataframe containing proposed updates to the records.
+    :type edited_df: pd.DataFrame
+    :param placeholder: A streamlit delta generator for displaying status or alerts during
+        the update process.
+    :type placeholder: st.delta_generator.DeltaGenerator
+    :return: None
+    """
     for index, row in initial_df.iterrows():
 
         # Check & update current vs previous TAG
