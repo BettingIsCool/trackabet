@@ -15,7 +15,7 @@ def get_leagues(sport_id: int):
     """
     Fetches leagues associated with a specific sport from the database.
 
-    This function utilizes the Streamlit caching mechanism to store
+    This function uses the Streamlit caching mechanism to store
     the query results persistently, optimizing performance for recurring
     requests. The function retrieves league IDs and league names matching
     the provided sport ID.
@@ -127,7 +127,7 @@ def get_user_unique_sports(username: str):
 def get_user_unique_leagues(username: str, sports: str):
     """
     Fetches a distinct list of league names based on the specified user and sports.
-    This function utilizes caching to improve performance for repetitive queries.
+    This function uses caching to improve performance for repetitive queries.
 
     :param username: The username of the user whose league data needs to be fetched.
     :type username: str
@@ -181,7 +181,7 @@ def get_user_unique_tags(username: str, sports: str, bookmakers: str):
 def get_user_unique_bet_status(username: str, sports: str, bookmakers: str, tags: str):
     """
     Retrieves the unique bet statuses for a user based on specific criteria including sports,
-    bookmakers, and tags. The function performs a query to obtain distinct bet statuses
+    bookmakers, and tags. The function performs a query to get distinct bet statuses
     from the bets table filtered by the provided user and other criteria. The result is
     then returned as a list of distinct bet statuses.
 
@@ -449,7 +449,7 @@ def get_user_timezone(username: str):
     Fetches the timezone associated with a specific username from the users table in the database.
 
     This function queries the `TABLE_USERS` table to retrieve the timezone value linked to
-    the provided username. It utilizes the database connection `conn` for executing the query,
+    the provided username. It uses the database connection `conn` for executing the query,
     and the resulting timezone is returned as a list.
 
     :param username: The username whose timezone is to be retrieved.
@@ -513,7 +513,7 @@ def append_user(data: dict):
     Adds a new user entry into the database.
 
     This function inserts a new row into the users table with the provided
-    user data. It utilizes the provided data dictionary to extract user
+    user data. It uses the provided data dictionary to extract user
     details such as username, odds display type, timezone, and default
     preferences for sport, book, and tag. The function ensures that the
     changes are committed to the database after the query execution.
