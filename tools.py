@@ -11,7 +11,7 @@ def delete_bets(bets_to_be_deleted: set):
     :return: None
     """
     for key in bets_to_be_deleted:
-        db.delete_bet(id=key)
+        db.delete_bet(key=key)
     st.cache_data.clear()
 
 
@@ -162,7 +162,7 @@ def tz_diff(home, away, on=None):
     It should be a `Pendulum` object.
 
     This function returns the number of hours which must be added to the home time
-    in order to get the away time. For example,
+     to get the away time. For example,
     ```python
     >>> tz_diff('Europe/Berlin', 'America/New_York')
     -6.0
@@ -209,6 +209,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['TAG'].iloc[0]
         except Exception as ex:
+            ex = ex
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -226,6 +227,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['BOOK'].iloc[0]
         except Exception as ex:
+            ex = ex
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -243,6 +245,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
         except Exception as ex:
+            ex = ex
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -260,6 +263,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['SH'].iloc[0]
         except Exception as ex:
+            ex = ex
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -277,6 +281,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['SA'].iloc[0]
         except Exception as ex:
+            ex = ex
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -294,6 +299,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['P/L'].iloc[0]
         except Exception as ex:
+            ex = ex
             edited_value = initial_value
 
         if edited_value != initial_value:
