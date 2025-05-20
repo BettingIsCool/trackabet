@@ -79,7 +79,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
     st.sidebar.subheader(f"Apply filters")
     # st.sidebar.write('Session ID: ', st.session_state.session_id)
 
-    # User needs to select sport and date range before fixtures are being fetched from the database
+    # User needs to select sport & date range before fixtures are being fetched from the database
     col_sport, col_datefrom, col_dateto = st.columns([4, 2, 2])
 
     with col_sport:
@@ -167,7 +167,6 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                             else:
                                                 line_options.update({row['line']: row['line']})
                                     with col_line:
-                                        st.write(line_options)
                                         selected_line = st.selectbox(label='Line', options=line_options.keys(), index=0, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
 
                                 if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
@@ -278,12 +277,12 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                         try:
                             bets_df.starts = bets_df.starts.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
                         except Exception as ex:
-                            ex = ex
+                            pass
 
                         try:
                             bets_df.bet_added = bets_df.bet_added.dt.tz_localize('Europe/Vienna').dt.tz_convert(st.session_state.timezone).dt.tz_localize(None)
                         except Exception as ex:
-                            ex = ex
+                            pass
 
                         bets_df = bets_df.rename(columns={'delete_bet': 'DEL', 'id': 'ID', 'tag': 'TAG', 'starts': 'STARTS', 'sport_name': 'SPORT', 'league_name': 'LEAGUE', 'runner_home': 'RUNNER_HOME', 'runner_away': 'RUNNER_AWAY', 'market': 'MARKET', 'period_name': 'PERIOD', 'side_name': 'SIDE', 'line': 'LINE', 'odds': 'ODDS', 'stake': 'STAKE', 'bookmaker': 'BOOK', 'bet_status': 'ST', 'score_home': 'SH', 'score_away': 'SA', 'profit': 'P/L', 'cls_odds': 'CLS', 'true_cls': 'CLS_TRUE', 'cls_limit': 'CLS_LIMIT', 'ev': 'EXP_WIN', 'clv': 'CLV', 'bet_added': 'BET_ADDED'})
                         bets_df = bets_df[['DEL', 'TAG', 'STARTS', 'SPORT', 'LEAGUE', 'RUNNER_HOME', 'RUNNER_AWAY', 'MARKET', 'PERIOD', 'SIDE', 'LINE', 'ODDS', 'STAKE', 'ST', 'SH', 'SA', 'P/L', 'CLS', 'CLS_TRUE', 'CLS_LIMIT', 'EXP_WIN', 'CLV', 'BOOK', 'BET_ADDED', 'ID']]
@@ -294,7 +293,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                             sumprod_odds_stake += row['ODDS'] * row['STAKE']
                         weighted_average_odds = sumprod_odds_stake / bets_df['STAKE'].sum()
 
-                        # Apply font and background colors to cells, apply number formatting
+                        # Apply font & background colors to cells, apply number formatting
                         if st.session_state.odds_display == 'American':
                             bets_df.ODDS = bets_df.ODDS.apply(tools.get_american_odds)
                             bets_df.CLS = bets_df.CLS.apply(tools.get_american_odds)
