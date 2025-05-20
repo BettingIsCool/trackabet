@@ -167,6 +167,7 @@ if st.session_state.session_id == tools.get_active_session(st.session_state.user
                                             else:
                                                 line_options.update({row['line']: row['line']})
                                     with col_line:
+                                        st.write(line_options)
                                         selected_line = st.selectbox(label='Line', options=line_options.keys(), index=0, format_func=lambda x: line_options.get(x), help='Only lines with available closing odds are listed.')
 
                                 if (selected_line is None and selected_market == 'moneyline') or (selected_line is not None and selected_market != 'moneyline'):
