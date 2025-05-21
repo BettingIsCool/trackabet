@@ -208,8 +208,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         initial_value = row['TAG']
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['TAG'].iloc[0]
-        except Exception as ex:
-            ex = ex
+        except Exception:
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -226,8 +225,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         initial_value = row['BOOK']
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['BOOK'].iloc[0]
-        except Exception as ex:
-            ex = ex
+        except Exception:
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -244,8 +242,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         initial_value = row['ST']
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['ST'].iloc[0]
-        except Exception as ex:
-            ex = ex
+        except Exception:
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -262,8 +259,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         initial_value = row['SH']
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['SH'].iloc[0]
-        except Exception as ex:
-            ex = ex
+        except Exception:
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -280,8 +276,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         initial_value = row['SA']
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['SA'].iloc[0]
-        except Exception as ex:
-            ex = ex
+        except Exception:
             edited_value = initial_value
 
         if edited_value != initial_value:
@@ -298,8 +293,7 @@ def update_bet(initial_df: pd.DataFrame, edited_df: pd.DataFrame, placeholder: s
         initial_value = row['P/L']
         try:
             edited_value = edited_df[edited_df['ID'] == row['ID']]['P/L'].iloc[0]
-        except Exception as ex:
-            ex = ex
+        except Exception:
             edited_value = initial_value
 
         if edited_value != initial_value:
