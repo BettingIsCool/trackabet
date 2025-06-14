@@ -1963,3 +1963,5 @@ BOOKS.add('AFBCash')
 BOOKS.add('Betreels')
 BOOKS.add('Cryptorino')
 BOOKS.add('BetPanda')
+BOOKS.add('BetOnline.ag')
+
